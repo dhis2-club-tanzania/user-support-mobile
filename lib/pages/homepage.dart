@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        userName: userData.messageType,
+                        userName: userData.user!.id,
                         subject: userData.subject,
                         messageContent: userData.displayName,
                         publishDate: '20 may',
