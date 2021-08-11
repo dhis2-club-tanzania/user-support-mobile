@@ -4,14 +4,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 class MessageDescription extends StatelessWidget {
   const MessageDescription({
     Key? key,
-    required this.userName,
+    this.userName,
     required this.subject,
     required this.messageContent,
     required this.publishDate,
     required this.readDuration,
   }) : super(key: key);
 
-  final String userName;
+  final String? userName;
   final String subject;
   final String messageContent;
   final String publishDate;
@@ -33,7 +33,7 @@ class MessageDescription extends StatelessWidget {
               width: 4.0,
             ),
             Text(
-              userName,
+              userName ?? '',
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(

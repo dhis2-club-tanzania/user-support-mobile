@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:user_support_mobile/models/message.dart';
-import 'package:user_support_mobile/services/services.dart';
-import 'package:user_support_mobile/widgets/drawer_nav.dart';
-import 'package:user_support_mobile/widgets/message_card.dart';
+import '../models/message_conversation.dart';
+import '../services/services.dart';
+import '../widgets/drawer_nav.dart';
+import '../widgets/message_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<List<Message>> fetchMessage;
+  late Future<List<MessageConversation>> fetchMessage;
 
   @override
   void initState() {
@@ -30,18 +30,20 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Messaging'),
-        backgroundColor: Color(0xFF1D5288),
+        backgroundColor: const Color(0xFF1D5288),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20),
-        child: FutureBuilder<List<Message>>(
-          initialData: [],
+        child: FutureBuilder<List<MessageConversation>>(
+          initialData: const [],
           future: fetchMessage,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
+                  final userData = snapshot.data![index];
+                  print(userData.user!.displayName);
                   return Center(
                     child: MessageCardWidget(
                         thumbnail: const CircleAvatar(
@@ -54,10 +56,9 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        userName: snapshot.data![index].user!.username,
-                        subject: 'Removal of New Data',
-                        messageContent:
-                            'This is a concern about new data to be assigned to my new center',
+                        userName: userData.messageType,
+                        subject: userData.subject,
+                        messageContent: userData.displayName,
                         publishDate: '20 may',
                         readDuration: '2 min ago'),
                   );
@@ -74,7 +75,9 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
-      drawer: const NavigationDrawer(title: 'Javier Kamara'),
+      drawer: const NavigationDrawer(
+        title: 'Javier Kamara',
+      ),
     );
   }
 }

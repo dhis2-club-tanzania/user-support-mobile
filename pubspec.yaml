@@ -3,12 +3,11 @@ description: A new Flutter project.
 
 publish_to: "none"
 
-
 version: 1.0.0+1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
-
+ 
 dependencies:
   animations: ^2.0.1
   cupertino_icons: ^1.0.2
@@ -17,6 +16,8 @@ dependencies:
   flutter_slidable: ^0.6.0
   flutter_svg: ^0.22.0
   http: ^0.13.3
+  connectivity: ^3.0.6
+  
 
 dev_dependencies:
   flutter_test:

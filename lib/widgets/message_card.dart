@@ -5,7 +5,7 @@ class MessageCardWidget extends StatelessWidget {
   const MessageCardWidget({
     Key? key,
     required this.thumbnail,
-    required this.userName,
+    this.userName,
     required this.subject,
     required this.messageContent,
     required this.publishDate,
@@ -13,7 +13,7 @@ class MessageCardWidget extends StatelessWidget {
   }) : super(key: key);
 
   final Widget thumbnail;
-  final String userName;
+  final String? userName;
   final String subject;
   final String messageContent;
   final String publishDate;
