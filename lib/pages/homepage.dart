@@ -43,8 +43,9 @@ class _HomePageState extends State<HomePage> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
                   final userData = snapshot.data![index];
-                  print(userData.user!.displayName);
-                  return Center(
+                  print(userData.user);
+
+                  return userData.user != null ? Center(
                     child: MessageCardWidget(
                         thumbnail: const CircleAvatar(
                           backgroundColor: Colors.blueAccent,
@@ -61,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                         messageContent: userData.displayName,
                         publishDate: '20 may',
                         readDuration: '2 min ago'),
-                  );
+                  ): Center(child: Text('User information is not defined'),);
                 },
               );
             } else if (snapshot.hasError) {
