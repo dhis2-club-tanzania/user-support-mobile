@@ -10,6 +10,17 @@ class ReadMessagePage extends StatefulWidget {
 class _ReadMessagePageState extends State<ReadMessagePage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Subject of mail'),
+      ),
+      body: Center(
+        child: Container(
+          child: Column(
+            children: const [Text('Mail Subject')],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -1,21 +1,26 @@
+import 'package:user_support_mobile/models/user.dart';
+
 class Message {
   final String displayName;
-  final String user;
+  final User? user;
   final String subject;
+  final String messageType;
 
   Message({
+    required this.messageType,
     required this.displayName,
     required this.user,
     required this.subject,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
-    print('this is a breakpoint');
-    print(json['messageConversations'][0]['user'].toString());
     return Message(
       displayName: json['displayName'].toString(),
-      user: json['messageConversations'][0]['user'].toString(),
-      subject: json['messageConversations'][0]['subject'].toString(),
+      user: json['user'] != null
+          ? User.fromJson(json['user'] as Map<String, dynamic>)
+          : null,
+      subject: json['subject'].toString(),
+      messageType: json['messageType'].toString(),
     );
   }
 }

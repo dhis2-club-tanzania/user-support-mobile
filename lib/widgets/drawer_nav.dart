@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:user_support_mobile/pages/read_message.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key, required this.title}) : super(key: key);
@@ -20,25 +21,41 @@ class NavigationDrawer extends StatelessWidget {
           ListTile(
             title: const Text('Inbox'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return const ReadMessagePage();
+                },
+              ));
             },
           ),
           ListTile(
             title: const Text('Validation'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return const ReadMessagePage();
+                },
+              ));
             },
           ),
           ListTile(
             title: const Text('Ticket'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return const ReadMessagePage();
+                },
+              ));
             },
           ),
           ListTile(
             title: const Text('System'),
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return const ReadMessagePage();
+                },
+              ));
             },
           ),
         ],

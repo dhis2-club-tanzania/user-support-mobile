@@ -13,11 +13,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<Message> fetchMessage;
+  late Future<List<Message>> fetchMessage;
+
   @override
   void initState() {
     super.initState();
-    fetchMessage = fetchAllMessage();
+    fetchMessage = fetchMessages();
   }
 
   Widget thumbnail() => Container(
@@ -33,41 +34,43 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20),
-        child: FutureBuilder<Message>(
+        child: FutureBuilder<List<Message>>(
+          initialData: [],
           future: fetchMessage,
           builder: (context, snapshot) {
-            return ListView.builder(
-                itemCount: 2,
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
-                  if (snapshot.hasData) {
-                    return const Center(
-                      child: MessageCardWidget(
-                          thumbnail: CircleAvatar(
-                            backgroundColor: Colors.blueAccent,
-                            child: Text(
-                              'J',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                  return Center(
+                    child: MessageCardWidget(
+                        thumbnail: const CircleAvatar(
+                          backgroundColor: Colors.blueAccent,
+                          child: Text(
+                            'J',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          userName: 'Javier Kamara II',
-                          subject: 'Removal of New Data',
-                          messageContent:
-                              'This is a concern about new data to be assigned to my new center',
-                          publishDate: '20 may',
-                          readDuration: '2 min ago'),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
-
-                  // By default, show a loading spinner.
-                  return const Center(
-                    child: CircularProgressIndicator(),
+                        ),
+                        userName: snapshot.data![index].user!.username,
+                        subject: 'Removal of New Data',
+                        messageContent:
+                            'This is a concern about new data to be assigned to my new center',
+                        publishDate: '20 may',
+                        readDuration: '2 min ago'),
                   );
-                });
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            } else {
+              // By default, show a loading spinner.
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
           },
         ),
       ),
