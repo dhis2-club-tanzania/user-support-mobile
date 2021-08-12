@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:user_support_mobile/pages/create_message.dart';
+import 'package:user_support_mobile/pages/categories_page.dart';
+import 'package:user_support_mobile/pages/home_page.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key, required this.title}) : super(key: key);
@@ -19,11 +20,21 @@ class NavigationDrawer extends StatelessWidget {
             child: Text(''),
           ),
           ListTile(
+            title: const Text('Home'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return const HomePage();
+                },
+              ));
+            },
+          ),
+          ListTile(
             title: const Text('Inbox'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return const CreateMessagePage();
+                  return const CategoriesPage(categories: 'PRIVATE');
                 },
               ));
             },
@@ -33,7 +44,7 @@ class NavigationDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return const CreateMessagePage();
+                  return const CategoriesPage(categories: 'VALIDATION_RESULT');
                 },
               ));
             },
@@ -43,7 +54,7 @@ class NavigationDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return const CreateMessagePage();
+                  return const CategoriesPage(categories: 'TICKET');
                 },
               ));
             },
@@ -53,7 +64,7 @@ class NavigationDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return const CreateMessagePage();
+                  return const CategoriesPage(categories: 'SYSTEM');
                 },
               ));
             },

@@ -1,36 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:user_support_mobile/pages/compose_page.dart';
+import 'package:user_support_mobile/widgets/page_content.dart';
 
-class CreateMessagePage extends StatefulWidget {
-  const CreateMessagePage({Key? key}) : super(key: key);
+import '../models/message_conversation.dart';
+import '../services/services.dart';
+import '../widgets/drawer_nav.dart';
+
+class CategoriesPage extends StatefulWidget {
+  const CategoriesPage({Key? key, required this.categories}) : super(key: key);
+  final String categories;
 
   @override
-  _CreateMessagePageState createState() => _CreateMessagePageState();
+  _CategoriesPageState createState() => _CategoriesPageState();
 }
 
-class _CreateMessagePageState extends State<CreateMessagePage> {
+class _CategoriesPageState extends State<CategoriesPage> {
+  late Future<List<MessageConversation>> fetchMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMessage = fetchMessages();
+  }
+
+  Widget thumbnail() => Container(
+        color: Colors.black12,
+      );
+
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Message'),
+        title: Text(widget.categories),
+        backgroundColor: const Color(0xFF1D5288),
       ),
-      body: Center(
-        child: Container(
-          width: size.width * 0.9,
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'To',
-                  ),
-                ),
-              )
-            ],
-          ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: FutureBuilder<List<MessageConversation>>(
+          initialData: [],
+          future: fetchMessage,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final userData = snapshot.data![index];
+                  print(userData.user);
+
+                  return userData.messageType == widget.categories
+                      ? Center(
+                          child: PageContentWidget(data: userData),
+                        )
+                      : Container();
+                },
+              );
+            } else if (snapshot.hasError) {
+              return Text('${snapshot.error}');
+            } else {
+              // By default, show a loading spinner.
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
         ),
+      ),
+      drawer: const NavigationDrawer(
+        title: 'Javier Kamara',
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ComposePage()),
+          );
+        },
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:user_support_mobile/pages/homepage.dart';
+import 'package:user_support_mobile/pages/home_page.dart';
 import 'package:user_support_mobile/pages/login_page.dart';
 
 class SplashScreen extends StatefulWidget {

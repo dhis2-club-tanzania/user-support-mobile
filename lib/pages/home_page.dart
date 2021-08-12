@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:user_support_mobile/pages/new_message.dart';
+import 'package:user_support_mobile/pages/compose_page.dart';
+import 'package:user_support_mobile/widgets/page_content.dart';
 
 import '../models/message_conversation.dart';
 import '../services/services.dart';
 import '../widgets/drawer_nav.dart';
-import '../widgets/message_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -48,10 +48,10 @@ class _HomePageState extends State<HomePage> {
 
                   return userData.user != null
                       ? Center(
-                          child: _pageContent(userData),
+                          child: PageContentWidget(data: userData),
                         )
                       : Center(
-                          child: _altenativePageContent(userData),
+                          child: AltenativePageContentWidget(data: userData),
                         );
                 },
               );
@@ -74,50 +74,10 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NewMessage()),
+            MaterialPageRoute(builder: (context) => ComposePage()),
           );
         },
       ),
     );
-  }
-
-  Widget _pageContent(MessageConversation data) {
-    final String firstLetter =
-        data.user!.displayName.substring(0, 1).toUpperCase();
-    return MessageCardWidget(
-        thumbnail: CircleAvatar(
-          backgroundColor: const Color(0xFF1D5288),
-          child: Text(
-            firstLetter,
-            style: const TextStyle(
-              fontSize: 15,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        userName: data.user!.displayName,
-        subject: data.subject,
-        messageContent: data.displayName,
-        publishDate: '20 may',
-        readDuration: '2 min ago');
-  }
-
-  Widget _altenativePageContent(MessageConversation data) {
-    return MessageCardWidget(
-        thumbnail: const CircleAvatar(
-          backgroundColor: Color(0xFF1D5288),
-          child: Text(
-            'S',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        subject: data.subject,
-        messageContent: data.displayName,
-        publishDate: '20 may',
-        readDuration: '2 min ago');
   }
 }

@@ -8,7 +8,7 @@ class MessageConversation {
     required this.user,
   });
 
-  final String messageType;
+  late final String messageType;
   final String displayName;
   final String subject;
   final User? user;
