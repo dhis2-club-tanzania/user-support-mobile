@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:user_support_mobile/pages/read_message.dart';
+import 'package:user_support_mobile/pages/create_message.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key, required this.title}) : super(key: key);
@@ -23,7 +23,7 @@ class NavigationDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return const ReadMessagePage();
+                  return const CreateMessagePage();
                 },
               ));
             },
@@ -33,7 +33,7 @@ class NavigationDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return const ReadMessagePage();
+                  return const CreateMessagePage();
                 },
               ));
             },
@@ -43,7 +43,7 @@ class NavigationDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return const ReadMessagePage();
+                  return const CreateMessagePage();
                 },
               ));
             },
@@ -53,7 +53,7 @@ class NavigationDrawer extends StatelessWidget {
             onTap: () {
               Navigator.push(context, MaterialPageRoute(
                 builder: (context) {
-                  return const ReadMessagePage();
+                  return const CreateMessagePage();
                 },
               ));
             },

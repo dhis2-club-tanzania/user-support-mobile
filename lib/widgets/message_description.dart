@@ -25,26 +25,27 @@ class MessageDescription extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SvgPicture.asset('assets/images/arrow.svg',
-                semanticsLabel: 'Acme Logo'),
-            SizedBox(
-              width: 4.0,
+            Row(
+              children: [
+                SvgPicture.asset('assets/images/arrow.svg',
+                    semanticsLabel: 'Acme Logo'),
+                const SizedBox(
+                  width: 4.0,
+                ),
+                Text(
+                  userName ?? '',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-            Text(
-              userName ?? '',
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              width: size.width * 0.39,
-            ),
-            Text(
+            const Text(
               '12:20 am',
               style: TextStyle(
                 fontSize: 10.0,

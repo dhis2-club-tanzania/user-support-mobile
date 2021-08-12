@@ -5,7 +5,7 @@ class MessageCardWidget extends StatelessWidget {
   const MessageCardWidget({
     Key? key,
     required this.thumbnail,
-    this.userName,
+    this.userName = 'System Notification',
     required this.subject,
     required this.messageContent,
     required this.publishDate,
