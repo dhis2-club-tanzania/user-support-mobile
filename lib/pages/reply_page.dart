@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class ComposePage extends StatefulWidget {
-  const ComposePage({Key? key}) : super(key: key);
+class ReplyPage extends StatefulWidget {
+  const ReplyPage({Key? key}) : super(key: key);
 
   @override
-  _ComposePageState createState() => _ComposePageState();
+  _ReplyPageState createState() => _ReplyPageState();
 }
 
-class _ComposePageState extends State<ComposePage> {
+class _ReplyPageState extends State<ReplyPage> {
   bool isVisible = true;
 
   @override
@@ -42,17 +42,6 @@ class _ComposePageState extends State<ComposePage> {
               padding: const EdgeInsets.only(left: 18),
               child: const Icon(
                 Icons.attachment,
-                color: Colors.black,
-                size: 22,
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.only(left: 18),
-              child: const Icon(
-                Icons.send,
                 color: Colors.black,
                 size: 22,
               ),
@@ -101,15 +90,14 @@ class _ComposePageState extends State<ComposePage> {
                     ),
                   ],
                 ),
-                const TextField(
-                  textAlignVertical: TextAlignVertical.top,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                  decoration: InputDecoration(
-                      border: InputBorder.none, hintText: "Subject"),
+                Container(
+                  color: Colors.grey.shade400,
+                  height: .5,
+                ),
+                Container(
+                  margin: const EdgeInsets.all(20),
+                  height: 100,
+                  child: Text('Text Message Here'),
                 ),
                 Container(
                   color: Colors.grey.shade400,

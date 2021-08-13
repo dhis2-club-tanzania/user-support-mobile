@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:user_support_mobile/pages/compose_page.dart';
+import 'package:user_support_mobile/pages/reply_page.dart';
 import 'package:user_support_mobile/widgets/page_content.dart';
 
 import '../models/message_conversation.dart';
@@ -44,7 +46,6 @@ class _HomePageState extends State<HomePage> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
                   final userData = snapshot.data![index];
-                  print(userData.user);
 
                   return userData.user != null
                       ? Center(
@@ -55,10 +56,9 @@ class _HomePageState extends State<HomePage> {
                         );
                 },
               );
-            } else if (snapshot.hasError) {
+            } else if (snapshot.connectionState != ConnectionState.done) {
               return Text('${snapshot.error}');
             } else {
-              // By default, show a loading spinner.
               return const Center(
                 child: CircularProgressIndicator(),
               );
@@ -67,16 +67,16 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: const NavigationDrawer(
-        title: 'Javier Kamara',
+        title: '',
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ComposePage()),
           );
         },
+        child: const Icon(Icons.add),
       ),
     );
   }

@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:user_support_mobile/pages/home_page.dart';
+import 'package:user_support_mobile/pages/reply_page.dart';
+import 'package:user_support_mobile/pages/splash_page.dart';
 
 void main() {
-  runApp(
-    const MyApp(),
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
+    return MaterialApp(
+      title: 'User Support App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        accentColor: const Color(0xFF1D5288),
+      ),
+      home: SplashScreen(),
     );
   }
 }
