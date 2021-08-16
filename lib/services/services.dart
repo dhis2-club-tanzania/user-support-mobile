@@ -1,18 +1,8 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:user_support_mobile/constants/constants.dart';
 import 'package:user_support_mobile/models/message_conversation.dart';
-
-List<MessageConversation> parsed(String responseBody) {
-  final list =
-      json.decode(responseBody)['messageConversations'] as List<dynamic>;
-  return list
-      .map((model) =>
-          MessageConversation.fromJson(model as Map<String, dynamic>))
-      .toList();
-}
 
 Future<List<MessageConversation>> fetchMessages() async {
   final response = await http.get(
@@ -22,9 +12,14 @@ Future<List<MessageConversation>> fetchMessages() async {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       });
+  final list =
+      json.decode(response.body)['messageConversations'] as List<dynamic>;
 
   if (response.statusCode == 200) {
-    return compute(parsed, response.body);
+    return list
+        .map((model) =>
+            MessageConversation.fromJson(model as Map<String, dynamic>))
+        .toList();
   } else {
     throw Exception('Failed to load Data');
   }

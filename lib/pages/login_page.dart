@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:user_support_mobile/pages/home_page.dart';
+
 import 'package:user_support_mobile/pages/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -81,8 +82,8 @@ class _LoginPageState extends State<LoginPage> {
                       padding: const EdgeInsets.only(bottom: 10, top: 10),
                       child: OutlinedButton(
                         style: const ButtonStyle(),
-                        onPressed: () =>
-                            Navigator.push(context, MaterialPageRoute(
+                        onPressed: () => Navigator.pushReplacement(context,
+                            MaterialPageRoute(
                           builder: (context) {
                             return const HomePage();
                           },

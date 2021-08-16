@@ -97,7 +97,7 @@ class _ReplyPageState extends State<ReplyPage> {
                 Container(
                   margin: const EdgeInsets.all(20),
                   height: 100,
-                  child: Text('Text Message Here'),
+                  child: const Text('Text Message Here'),
                 ),
                 Container(
                   color: Colors.grey.shade400,

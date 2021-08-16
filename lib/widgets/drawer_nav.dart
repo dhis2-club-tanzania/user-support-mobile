@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:user_support_mobile/pages/categories_page.dart';
+
+import 'package:user_support_mobile/pages/home_page.dart';
+import 'package:user_support_mobile/pages/inbox_page.dart';
+import 'package:user_support_mobile/pages/system_page.dart';
+import 'package:user_support_mobile/pages/ticket_page.dart';
+import 'package:user_support_mobile/pages/validation_page.dart';
 
 class NavigationDrawer extends StatelessWidget {
-  const NavigationDrawer({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
+  const NavigationDrawer({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -48,40 +50,110 @@ class NavigationDrawer extends StatelessWidget {
               ),
             ),
           ),
-          listTileButtons('Home', Icons.home, '4', context),
-          listTileButtons('Inbox', Icons.inbox, '20', context),
-          listTileButtons('Validation', Icons.verified, '10', context),
-          listTileButtons('Ticket', Icons.document_scanner, '10', context),
-          listTileButtons('System', Icons.document_scanner, '10', context),
+          ListTile(
+            title: const Text('Home'),
+            leading: const Icon(Icons.home),
+            trailing: const Icon(Icons.arrow_back),
+            onTap: () => Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return const HomePage();
+              },
+            )),
+          ),
+          ListTile(
+            title: Text('Inbox'),
+            leading: Icon(Icons.inbox),
+            trailing: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: const BoxDecoration(
+                  color: Color(0xFF1D5288),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  )),
+              child: Text(
+                '2',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            onTap: () => Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return const InboxPage();
+              },
+            )),
+          ),
+          ListTile(
+            title: Text('Validation'),
+            leading: Icon(Icons.verified_rounded),
+            trailing: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: const BoxDecoration(
+                  color: Color(0xFF1D5288),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  )),
+              child: Text(
+                '2',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            onTap: () => Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return const ValidationPage();
+              },
+            )),
+          ),
+          ListTile(
+            title: Text('Ticket'),
+            leading: Icon(Icons.document_scanner_outlined),
+            trailing: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: const BoxDecoration(
+                  color: Color(0xFF1D5288),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  )),
+              child: const Text(
+                '2',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            onTap: () => Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return const TicketPage();
+              },
+            )),
+          ),
+          ListTile(
+            title: Text('System'),
+            leading: Icon(Icons.system_security_update),
+            trailing: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: const BoxDecoration(
+                  color: Color(0xFF1D5288),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  )),
+              child: Text(
+                '2',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            onTap: () => Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return const SystemPage();
+              },
+            )),
+          ),
         ],
       ),
     );
   }
-}
-
-Widget listTileButtons(
-    String title, IconData icon, String count, BuildContext context) {
-  return ListTile(
-    title: Text(title),
-    leading: Icon(icon),
-    trailing: Container(
-      padding: const EdgeInsets.all(10),
-      decoration: const BoxDecoration(
-          color: Color(0xFF1D5288),
-          borderRadius: BorderRadius.all(
-            Radius.circular(5),
-          )),
-      child: Text(
-        count,
-        style: TextStyle(
-          color: Colors.white,
-        ),
-      ),
-    ),
-    onTap: () => Navigator.push(context, MaterialPageRoute(
-      builder: (context) {
-        return const CategoriesPage(categories: 'VALIDATION_RESULT');
-      },
-    )),
-  );
 }

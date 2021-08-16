@@ -46,3 +46,5 @@ app.*.map.json
 /android/app/release
 
 analysis_options.yaml
+lib/pages/testing.pages.dart
+lib/widgets/message_card.dart

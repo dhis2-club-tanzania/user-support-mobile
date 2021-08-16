@@ -1,83 +1,112 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:provider/provider.dart';
+import 'package:user_support_mobile/providers/provider.dart';
+import 'package:user_support_mobile/widgets/drawer_nav.dart';
+import 'package:user_support_mobile/widgets/message_box.dart';
 
-import 'package:user_support_mobile/pages/compose_page.dart';
-import 'package:user_support_mobile/pages/reply_page.dart';
-import 'package:user_support_mobile/widgets/page_content.dart';
-
-import '../models/message_conversation.dart';
-import '../services/services.dart';
-import '../widgets/drawer_nav.dart';
-
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  late Future<List<MessageConversation>> fetchMessage;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchMessage = fetchMessages();
-  }
-
-  Widget thumbnail() => Container(
-        color: Colors.black12,
-      );
-
-  @override
   Widget build(BuildContext context) {
+    context.read<MessageModel>().fetchAllMessageConversations;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Messaging'),
-        backgroundColor: const Color(0xFF1D5288),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 20),
-        child: FutureBuilder<List<MessageConversation>>(
-          initialData: [],
-          future: fetchMessage,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final userData = snapshot.data![index];
-
-                  return userData.user != null
-                      ? Center(
-                          child: PageContentWidget(data: userData),
-                        )
-                      : Center(
-                          child: AltenativePageContentWidget(data: userData),
-                        );
-                },
-              );
-            } else if (snapshot.connectionState != ConnectionState.done) {
-              return Text('${snapshot.error}');
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await context.read<MessageModel>().fetchAllMessageConversations;
+        },
+        child: Center(
+          child: Consumer<MessageModel>(
+            builder: (context, value, child) {
+              if (value.map.isEmpty && !value.error) {
+                return const CircularProgressIndicator();
+              } else {
+                return value.error
+                    ? Text(
+                        'Oops Somthing is wrong ${value.errorMessage}',
+                        textAlign: TextAlign.center,
+                      )
+                    : ListView.builder(
+                        itemCount: value.allMessageConversation.length,
+                        itemBuilder: (context, index) {
+                          final allconversation =
+                              value.allMessageConversation[index];
+                          return allconversation.user != null
+                              ? Slidable(
+                                  actionPane: const SlidableDrawerActionPane(),
+                                  actions: <Widget>[
+                                    IconSlideAction(
+                                      caption: 'Approve',
+                                      color: Colors.blue,
+                                      icon: Icons.approval,
+                                      onTap: () {},
+                                    ),
+                                  ],
+                                  secondaryActions: <Widget>[
+                                    IconSlideAction(
+                                      caption: 'Reject',
+                                      color: Colors.black45,
+                                      icon: Icons.block,
+                                      onTap: () {},
+                                    ),
+                                    IconSlideAction(
+                                      caption: 'Delete',
+                                      color: Colors.red,
+                                      icon: Icons.delete,
+                                      onTap: () {},
+                                    ),
+                                  ],
+                                  child: MessageBox(
+                                    subject: value
+                                        .allMessageConversation[index].subject,
+                                    displayName: value
+                                        .allMessageConversation[index]
+                                        .user!
+                                        .displayName,
+                                  ),
+                                )
+                              : Slidable(
+                                  actionPane: const SlidableDrawerActionPane(),
+                                  actions: <Widget>[
+                                    IconSlideAction(
+                                      caption: 'Approve',
+                                      color: Colors.blue,
+                                      icon: Icons.approval,
+                                      onTap: () {},
+                                    ),
+                                  ],
+                                  secondaryActions: <Widget>[
+                                    IconSlideAction(
+                                      caption: 'Reject',
+                                      color: Colors.black45,
+                                      icon: Icons.block,
+                                      onTap: () {},
+                                    ),
+                                    IconSlideAction(
+                                      caption: 'Delete',
+                                      color: Colors.red,
+                                      icon: Icons.delete,
+                                      onTap: () {},
+                                    ),
+                                  ],
+                                  child: MessageBox(
+                                    subject: value
+                                        .allMessageConversation[index].subject,
+                                    displayName: 'System Notification',
+                                  ),
+                                );
+                        },
+                      );
+              }
+            },
+          ),
         ),
       ),
-      drawer: const NavigationDrawer(
-        title: '',
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ComposePage()),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
+      drawer: const NavigationDrawer(),
     );
   }
 }
