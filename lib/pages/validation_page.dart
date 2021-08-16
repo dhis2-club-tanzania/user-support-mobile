@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:user_support_mobile/providers/provider.dart';
 import 'package:user_support_mobile/widgets/drawer_nav.dart';
-import 'package:user_support_mobile/widgets/message_box.dart';
+import 'package:user_support_mobile/widgets/message_cards.dart';
 
 class ValidationPage extends StatelessWidget {
   const ValidationPage({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class ValidationPage extends StatelessWidget {
     context.read<MessageModel>().fetchAllMessageConversations;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Messaging'),
+        title: const Text('Validation'),
       ),
       body: RefreshIndicator(
         onRefresh: () async {

@@ -4,17 +4,17 @@ import 'package:provider/provider.dart';
 
 import 'package:user_support_mobile/providers/provider.dart';
 import 'package:user_support_mobile/widgets/drawer_nav.dart';
-import 'package:user_support_mobile/widgets/message_box.dart';
+import 'package:user_support_mobile/widgets/message_cards.dart';
 
-class InboxPage extends StatelessWidget {
-  const InboxPage({Key? key}) : super(key: key);
+class SystemPage extends StatelessWidget {
+  const SystemPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     context.read<MessageModel>().fetchAllMessageConversations;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Inbox'),
+        title: const Text('System'),
       ),
       body: RefreshIndicator(
         onRefresh: () async {

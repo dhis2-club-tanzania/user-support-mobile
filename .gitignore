@@ -47,4 +47,3 @@ app.*.map.json
 
 analysis_options.yaml
 lib/pages/testing.pages.dart
-lib/widgets/message_card.dart

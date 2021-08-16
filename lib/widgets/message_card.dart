@@ -79,7 +79,7 @@ class MessageBox extends StatelessWidget {
                           Container(
                             width: MediaQuery.of(context).size.width * 0.6,
                             child: const Text(
-                              'The best can we the rest',
+                              'There is no text to review',
                               style: TextStyle(
                                   fontWeight: FontWeight.w400,
                                   color: Colors.black54,

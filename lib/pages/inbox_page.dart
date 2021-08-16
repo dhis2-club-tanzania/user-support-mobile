@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:user_support_mobile/providers/provider.dart';
 import 'package:user_support_mobile/widgets/drawer_nav.dart';
-import 'package:user_support_mobile/widgets/message_box.dart';
+import 'package:user_support_mobile/widgets/message_cards.dart';
 
 class InboxPage extends StatelessWidget {
   const InboxPage({Key? key}) : super(key: key);
