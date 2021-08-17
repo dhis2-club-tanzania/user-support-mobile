@@ -4,9 +4,12 @@ import 'package:http/http.dart' as http;
 
 import 'package:user_support_mobile/constants/constants.dart';
 import 'package:user_support_mobile/models/message_conversation.dart';
+import 'package:user_support_mobile/models/user.dart';
 
 class MessageModel with ChangeNotifier {
   List<MessageConversation> _allMessageConversation = [];
+  List<User> _allUsers = [];
+
   Map<String, dynamic> _map = {};
   bool _error = false;
   String _errorMessage = '';
@@ -52,7 +55,41 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> get fetchAllUsers async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/33/users/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+
+    final list = json.decode(response.body)['users'] as List<dynamic>;
+    if (response.statusCode == 200) {
+      try {
+        _map = jsonDecode(response.body) as Map<String, dynamic>;
+        _allUsers = list
+            .map((model) => User.fromJson(model as Map<String, dynamic>))
+            .toList();
+        _error = false;
+      } catch (e) {
+        _error = true;
+        _errorMessage = e.toString();
+        _map = {};
+        _allUsers = [];
+      }
+    } else {
+      _error = true;
+      _errorMessage = "Failed to fetch Data";
+      _map = {};
+      _allUsers = [];
+    }
+    notifyListeners();
+  }
+
   void initialValue() {
+    _allUsers = [];
+
     _allMessageConversation = [];
     _map = {};
     _error = false;

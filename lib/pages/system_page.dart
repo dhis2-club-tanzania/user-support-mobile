@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:user_support_mobile/providers/provider.dart';
 import 'package:user_support_mobile/widgets/drawer_nav.dart';
-import 'package:user_support_mobile/widgets/message_cards.dart';
+import 'package:user_support_mobile/widgets/message_card.dart';
 
 class SystemPage extends StatelessWidget {
   const SystemPage({Key? key}) : super(key: key);
