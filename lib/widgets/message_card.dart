@@ -3,10 +3,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:user_support_mobile/pages/reply_page.dart';
 
 class MessageBox extends StatelessWidget {
-  MessageBox({required this.displayName, required this.subject, Key? key})
+  MessageBox(
+      {required this.lastMessage,
+      required this.read,
+      required this.displayName,
+      required this.subject,
+      Key? key})
       : super(key: key);
+  final bool read;
   final String subject;
   final String displayName;
+  final String lastMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +29,23 @@ class MessageBox extends StatelessWidget {
         child: Row(
           children: [
             Container(
-              width: 50,
-              height: 50,
+              width: 45,
+              height: 45,
               child: CircleAvatar(
                 child: Text(
                   firstLetter(displayName),
-                  style: TextStyle(fontSize: 29, fontWeight: FontWeight.w300),
+                  style: TextStyle(
+                    fontSize: 29,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 15.0),
+                padding: EdgeInsets.only(
+                  left: 15.0,
+                ),
                 child: Column(
                   children: [
                     Row(
@@ -43,20 +55,21 @@ class MessageBox extends StatelessWidget {
                           children: [
                             SvgPicture.asset('assets/images/arrow.svg',
                                 semanticsLabel: 'Acme Logo'),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Text(
                               displayName,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                  fontSize: 17.0),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                                fontSize: 17.0,
+                              ),
                             ),
                           ],
                         ),
                         Text(
-                          '2 min ago',
+                          lastMessage.substring(0, 10),
                           style: const TextStyle(
                               fontWeight: FontWeight.w400,
                               color: Colors.black54,
@@ -76,8 +89,9 @@ class MessageBox extends StatelessWidget {
                                 subject,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w400,
+                                style: TextStyle(
+                                  fontWeight:
+                                      read ? FontWeight.w400 : FontWeight.bold,
                                   color: Colors.black87,
                                   fontSize: 15.5,
                                 ),
@@ -86,7 +100,7 @@ class MessageBox extends StatelessWidget {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.6,
                               child: const Text(
-                                'There is no text to review',
+                                'There is no text to be displayed',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     color: Colors.black54,

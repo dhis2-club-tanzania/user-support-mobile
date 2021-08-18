@@ -11,13 +11,11 @@ class ReplyPage extends StatefulWidget {
 }
 
 class _ReplyPageState extends State<ReplyPage> {
-  TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
   bool isVisible = true;
 
   @override
   Widget build(BuildContext context) {
-    // context.read<MessageModel>().sendMessages();
-
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -55,13 +53,13 @@ class _ReplyPageState extends State<ReplyPage> {
                     keyboardType: TextInputType.multiline,
                     expands: true,
                     style: const TextStyle(fontSize: 18, color: Colors.black),
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: "Compose message",
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Row(
@@ -73,24 +71,24 @@ class _ReplyPageState extends State<ReplyPage> {
                             value.sendMessages();
                             print(_textEditingController.text);
                           },
-                          child: Padding(
+                          child: const Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Text('Reply'),
                           ),
                         );
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     OutlinedButton(
                       onPressed: () {},
-                      child: Padding(
+                      child: const Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Text('Discard'),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 20,
                     ),
                     OutlinedButton(
@@ -99,10 +97,10 @@ class _ReplyPageState extends State<ReplyPage> {
                     )
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 40,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 const Card(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:user_support_mobile/pages/home_page.dart';
+import 'package:user_support_mobile/pages/testing_page.dart';
 import 'package:user_support_mobile/providers/provider.dart';
 
 import './pages/splash_page.dart';
@@ -12,7 +13,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+Widget build(BuildContext context) {
     return ChangeNotifierProvider<MessageModel>(
       create: (_) => MessageModel(),
       child: MaterialApp(
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           accentColor: const Color(0xFF1D5288),
         ),
-        home: const HomePage(),
+        home: const TestingPage(),
       ),
     );
   }

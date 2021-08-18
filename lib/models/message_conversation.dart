@@ -1,32 +1,35 @@
-import 'package:user_support_mobile/models/user.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'message_conversation.g.dart';
+
+@JsonSerializable()
 class MessageConversation {
   MessageConversation({
     required this.messageType,
     required this.displayName,
     required this.subject,
-    required this.user,
+    required this.followUp,
+    // required this.lastUpdated,
+    // required this.created,
+    // required this.messageCount,
+    // required this.id,
+    required this.read,
+    // required this.name,
+    // required this.lastMessage,
   });
 
-  late final String messageType;
-  final String displayName;
+  // final String messageCount;
+  final bool followUp;
+  // final String lastUpdated;
+  // final String id;
+  final bool read;
+  // final String created;
+  // final String name;
   final String subject;
-  final User? user;
+  final String displayName;
+  final String messageType;
+  // final String lastMessage;
 
   factory MessageConversation.fromJson(Map<String, dynamic> json) =>
-      MessageConversation(
-        messageType: json["messageType"].toString(),
-        displayName: json["displayName"].toString(),
-        subject: json["subject"].toString(),
-        user: json["user"] == null
-            ? null
-            : User.fromJson(json["user"] as Map<String, dynamic>),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "messageType": messageType,
-        "displayName": displayName,
-        "subject": subject,
-        "user": user == null ? null : user!.toJson(),
-      };
+      _$MessageConversationFromJson(json);
 }
