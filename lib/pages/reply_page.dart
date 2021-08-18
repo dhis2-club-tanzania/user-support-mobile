@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:user_support_mobile/providers/provider.dart';
 
 class ReplyPage extends StatefulWidget {
   const ReplyPage({Key? key}) : super(key: key);
@@ -10,10 +11,13 @@ class ReplyPage extends StatefulWidget {
 }
 
 class _ReplyPageState extends State<ReplyPage> {
+  TextEditingController _textEditingController = TextEditingController();
   bool isVisible = true;
 
   @override
   Widget build(BuildContext context) {
+    // context.read<MessageModel>().sendMessages();
+
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -35,84 +39,80 @@ class _ReplyPageState extends State<ReplyPage> {
             color: Colors.black,
           ),
         ),
-        actions: [
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.only(left: 18),
-              child: const Icon(
-                Icons.attachment,
-                color: Colors.black,
-                size: 22,
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              padding: const EdgeInsets.only(left: 15, right: 10),
-              child: const Icon(
-                Icons.more_vert,
-                color: Colors.black,
-                size: 22,
-              ),
-            ),
-          ),
-        ],
       ),
       body: SafeArea(
         child: Center(
           child: Container(
             width: size.width * 0.9,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: const Text(
-                        "To",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                            fontSize: 18),
-                      ),
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 18,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
                 Container(
-                  color: Colors.grey.shade400,
-                  height: .5,
-                ),
-                Container(
-                  margin: const EdgeInsets.all(20),
                   height: 100,
-                  child: const Text('Text Message Here'),
-                ),
-                Container(
-                  color: Colors.grey.shade400,
-                  height: .5,
-                ),
-                const Expanded(
-                  child: TextField(
+                  child: TextFormField(
+                    controller: _textEditingController,
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
                     expands: true,
-                    style: TextStyle(fontSize: 18, color: Colors.black),
+                    style: const TextStyle(fontSize: 18, color: Colors.black),
                     decoration: InputDecoration(
-                        border: InputBorder.none, hintText: "Compose message"),
+                      border: InputBorder.none,
+                      hintText: "Compose message",
+                    ),
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    Consumer<MessageModel>(
+                      builder: (context, value, child) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            value.sendMessages();
+                            print(_textEditingController.text);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text('Reply'),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    OutlinedButton(
+                      onPressed: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text('Discard'),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    OutlinedButton(
+                      onPressed: () {},
+                      child: Icon(Icons.attachment_outlined),
+                    )
+                  ],
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                const Card(
+                  child: ListTile(
+                    trailing: Text('20 min'),
+                    title: Text('Message from Tom Wakiki'),
+                    subtitle: Text('The best ways of the creating words'),
+                    isThreeLine: true,
+                  ),
+                )
               ],
             ),
           ),

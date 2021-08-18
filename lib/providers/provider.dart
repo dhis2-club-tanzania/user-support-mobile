@@ -8,6 +8,8 @@ import 'package:user_support_mobile/models/user.dart';
 
 class MessageModel with ChangeNotifier {
   List<MessageConversation> _allMessageConversation = [];
+  List<MessageConversation> _privateMessages = [];
+
   List<User> _allUsers = [];
 
   Map<String, dynamic> _map = {};
@@ -19,6 +21,7 @@ class MessageModel with ChangeNotifier {
   String get errorMessage => _errorMessage;
   List<MessageConversation> get allMessageConversation =>
       _allMessageConversation;
+  List<MessageConversation> get privateMessages => _privateMessages;
 
   Future<void> get fetchAllMessageConversations async {
     final response = await http.get(
@@ -83,6 +86,72 @@ class MessageModel with ChangeNotifier {
       _errorMessage = "Failed to fetch Data";
       _map = {};
       _allUsers = [];
+    }
+    notifyListeners();
+  }
+
+  Future<void> sendMessages() async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/33/messageConversations/qXF4GmtZZrE'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({
+        "subject": "This is was a real deal",
+        "text": "How are you?",
+        "users": [
+          {"id": "OYLGMiazHtW"},
+          {"id": "N3PZBUlN8vq"}
+        ],
+        "userGroups": [
+          {"id": "ZoHNWQajIoe"}
+        ],
+        "organisationUnits": [
+          {"id": "DiszpKrYNg8"}
+        ]
+      }),
+    );
+    print(response.body);
+    if (response.statusCode == 201) {
+      print('The post was successful');
+    } else {
+      print('failed to post data');
+    }
+    notifyListeners();
+  }
+
+  Future<void> get fetchPrivateMessages async {
+    final response = await http.get(
+      Uri.parse(
+          '$baseUrl/33/messageConversations?filter=messageType%3Aeq%3APRIVATE&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+    print(response.body);
+    final list =
+        json.decode(response.body)['messageConversations'] as List<dynamic>;
+    if (response.statusCode == 304) {
+      try {
+        _map = jsonDecode(response.body) as Map<String, dynamic>;
+        _allMessageConversation = list
+            .map((model) =>
+                MessageConversation.fromJson(model as Map<String, dynamic>))
+            .toList();
+        _error = false;
+      } catch (e) {
+        _error = true;
+        _errorMessage = e.toString();
+        _map = {};
+        _allMessageConversation = [];
+      }
+    } else {
+      _error = true;
+      _errorMessage = "Failed to fetch Data";
+      _map = {};
+      _allMessageConversation = [];
     }
     notifyListeners();
   }

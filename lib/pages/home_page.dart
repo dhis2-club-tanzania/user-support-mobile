@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/pages/compose_page.dart';
+
 import 'package:user_support_mobile/providers/provider.dart';
 import 'package:user_support_mobile/widgets/drawer_nav.dart';
 import 'package:user_support_mobile/widgets/message_card.dart';
@@ -11,6 +13,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<MessageModel>().fetchAllMessageConversations;
+    context.read<MessageModel>().fetchPrivateMessages;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Messaging'),
@@ -105,6 +109,14 @@ class HomePage extends StatelessWidget {
             },
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return const ComposePage();
+          },
+        )),
+        child: Icon(Icons.add),
       ),
       drawer: const NavigationDrawer(),
     );
