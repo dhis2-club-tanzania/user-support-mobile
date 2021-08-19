@@ -17,15 +17,13 @@ dependencies:
   flutter_svg: ^0.22.0
   http: ^0.13.3
   provider: ^5.0.0
-  json_annotation: ^4.0.0
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   lint: ^1.5.3
-  build_runner: ^2.0.0
-  json_serializable: ^4.0.0
+ 
 
 flutter:
 

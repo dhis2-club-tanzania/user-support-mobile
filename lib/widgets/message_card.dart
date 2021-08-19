@@ -3,13 +3,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:user_support_mobile/pages/reply_page.dart';
 
 class MessageBox extends StatelessWidget {
-  MessageBox(
+  const MessageBox(
       {required this.lastMessage,
+      required this.messageId,
       required this.read,
       required this.displayName,
       required this.subject,
       Key? key})
       : super(key: key);
+  final String messageId;
   final bool read;
   final String subject;
   final String displayName;
@@ -21,7 +23,7 @@ class MessageBox extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.push(context, MaterialPageRoute(
         builder: (context) {
-          return const ReplyPage();
+          return  ReplyPage(messageId: messageId,);
         },
       )),
       child: Padding(

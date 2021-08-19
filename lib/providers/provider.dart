@@ -8,7 +8,7 @@ import 'package:user_support_mobile/models/message_conversation.dart';
 class MessageModel with ChangeNotifier {
   List<MessageConversation> _allMessageConversation = [];
   List<MessageConversation> _privateMessages = [];
-  List<MessageConversation> _replay = [];
+  late MessageConversation _reply;
 
   Map<String, dynamic> _map = {};
   bool _error = false;
@@ -20,7 +20,7 @@ class MessageModel with ChangeNotifier {
   List<MessageConversation> get allMessageConversation =>
       _allMessageConversation;
   List<MessageConversation> get privateMessages => _privateMessages;
-  List<MessageConversation> get userReply => _replay;
+  MessageConversation get userReply => _reply;
 
   Future<void> get fetchAllMessageConversations async {
     final response = await http.get(
@@ -135,7 +135,8 @@ class MessageModel with ChangeNotifier {
     final list =
         json.decode(response.body)['messageConversations'] as List<dynamic>;
     if (response.statusCode == 200) {
-      print(list);
+      // print(list);
+      // print('Testing response data');
       try {
         _map = jsonDecode(response.body) as Map<String, dynamic>;
         _privateMessages = list
@@ -160,29 +161,24 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> fetchReply(String id) async {
-  //   final response = await http.get(
-  //     Uri.parse(
-  //         '$baseUrl/33/messageConversations/$id?fields=*,assignee%5Bid%2C%20displayName%5D,messages%5B*%2Csender%5Bid%2CdisplayName%5D,attachments%5Bid%2C%20name%2C%20contentLength%5D%5D,userMessages%5Buser%5Bid%2C%20displayName%5D%5D'),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json',
-  //     },
-  //   );
+  Future<void> fetchReply(String id) async {
+    final response = await http.get(
+      Uri.parse(
+          '$baseUrl/33/messageConversations/$id?fields=*,assignee%5Bid%2C%20displayName%5D,messages%5B*%2Csender%5Bid%2CdisplayName%5D,attachments%5Bid%2C%20name%2C%20contentLength%5D%5D,userMessages%5Buser%5Bid%2C%20displayName%5D%5D'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
 
-  //   final list = json.decode(response.body) as List<dynamic>;
-  //   if (response.statusCode == 200) {
-  //     _map = jsonDecode(response.body) as Map<String, dynamic>;
-  //     _replay = list
-  //         .map((model) =>
-  //             MessageConversation.fromJson(model as Map<String, dynamic>))
-  //         .toList();
-  //     _error = false;
-  //   } else {
-  //     throw 'failed to load Data';
-  //   }
-  //   notifyListeners();
-  // }
+    final list = json.decode(response.body);
+    if (response.statusCode == 200) {
+     _reply = MessageConversation.fromJson(list as Map<String,dynamic>);
+    } else {
+      throw 'failed to load Data';
+    }
+    notifyListeners();
+  }
 
   void initialValue() {
     _allMessageConversation = [];

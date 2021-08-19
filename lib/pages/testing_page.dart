@@ -40,6 +40,7 @@ class TestingPage extends StatelessWidget {
                     : ListView.builder(
                         itemCount: value.privateMessages.length,
                         itemBuilder: (context, index) {
+                          var messageData = value.privateMessages[index];
                           return Slidable(
                             actionPane: const SlidableDrawerActionPane(),
                             actions: <Widget>[
@@ -66,11 +67,11 @@ class TestingPage extends StatelessWidget {
                             ],
                             child: MessageBox(
                               lastMessage:
-                                  value.privateMessages[index].displayName,
-                              subject: value.privateMessages[index].subject,
-                              displayName:
-                                  value.privateMessages[index].messageType,
+                                  messageData.lastMessage,
+                              subject: messageData.subject,
+                              displayName: messageData.lastSender.displayName,
                               read: value.privateMessages[index].read,
+                              messageId: messageData.id
                             ),
                           );
                         },
