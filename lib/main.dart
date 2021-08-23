@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:user_support_mobile/pages/home_page.dart';
-import 'package:user_support_mobile/pages/testing_page.dart';
-import 'package:user_support_mobile/providers/provider.dart';
-
 import './pages/splash_page.dart';
+import './providers/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,7 +10,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   @override
-Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return ChangeNotifierProvider<MessageModel>(
       create: (_) => MessageModel(),
       child: MaterialApp(
@@ -22,7 +19,7 @@ Widget build(BuildContext context) {
           primarySwatch: Colors.blue,
           accentColor: const Color(0xFF1D5288),
         ),
-        home: const TestingPage(),
+        home: SplashScreen(),
       ),
     );
   }

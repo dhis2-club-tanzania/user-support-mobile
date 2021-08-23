@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/pages/compose_page.dart';
 
+import 'package:user_support_mobile/pages/compose_page.dart';
 import 'package:user_support_mobile/providers/provider.dart';
 import 'package:user_support_mobile/widgets/drawer_nav.dart';
 import 'package:user_support_mobile/widgets/message_card.dart';
 
-class TestingPage extends StatelessWidget {
-  const TestingPage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class TestingPage extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          context.read<MessageModel>().initialValue();
+          // context.read<MessageModel>().initialValue();
 
           await context.read<MessageModel>().fetchPrivateMessages;
         },

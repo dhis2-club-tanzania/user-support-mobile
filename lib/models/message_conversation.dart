@@ -7,6 +7,7 @@ import 'user.dart';
 
 class MessageConversation {
   MessageConversation({
+    required this.href,
     required this.messageCount,
     required this.followUp,
     required this.lastUpdated,
@@ -36,6 +37,7 @@ class MessageConversation {
     required this.messages,
   });
 
+  final String? href;
   final String messageCount;
   final bool followUp;
   final String lastUpdated;
@@ -67,6 +69,7 @@ class MessageConversation {
     print(json['userMessages']);
     print('The best testing app');
     return MessageConversation(
+      href: json['href'].toString(),
       messageCount: json["messageCount"].toString(),
       followUp: json["followUp"] as bool,
       lastUpdated: json["lastUpdated"] as String,
@@ -91,9 +94,11 @@ class MessageConversation {
       // user: User.fromJson(json["user"] as Map<String,dynamic>),
       // favorites: List<dynamic>.from(json["favorites"].map((x) => x)as Iterable<dynamic>),
       // translations: List<dynamic>.from(json["translations"].map((x) => x)as Iterable<dynamic>),
-      userMessages: json['userMessages'] != null ? List<UserMessages>.from(json["userMessages"]
-              .map((x) => UserMessages.fromJson(x as Map<String, dynamic>))
-          as Iterable) : null,
+      userMessages: json['userMessages'] != null
+          ? List<UserMessages>.from(json["userMessages"]
+                  .map((x) => UserMessages.fromJson(x as Map<String, dynamic>))
+              as Iterable)
+          : null,
 
       // userGroupAccesses: List<dynamic>.from(json["userGroupAccesses"].map((x) => x)as Iterable<dynamic>),
       // attributeValues: List<dynamic>.from(json["attributeValues"].map((x) => x)as Iterable<dynamic>),
@@ -106,151 +111,34 @@ class MessageConversation {
     );
   }
 
-  // Map<String, dynamic> toJson() => {
-  //       // "messageCount": messageCount,
-  //       "followUp": followUp,
-  //       "lastUpdated": lastUpdated,
-  //       "id": id,
-  //       "read": read,
-  //       "created": created,
-  //       "name": name,
-  //       "subject": subject,
-  //       "displayName": displayName,
-  //       "externalAccess": externalAccess,
-  //       "messageType": messageType,
-  //       "lastMessage": lastMessage,
-  //       // "sharing": sharing.toJson(),
-  //       // "priority": priority,
-  //       // "favorite": favorite,
-  //       // "status": status,
-  //       // "access": access.toJson(),
-  //       // "lastSender": lastSender.toJson(),
-  //       // "createdBy": createdBy.toJson(),
-  //       // "user": user.toJson(),
-  //       // "favorites": List<dynamic>.from(favorites.map((x) => x)),
-  //       // "translations": List<dynamic>.from(translations.map((x) => x)),
-  //       // "userMessages": List<dynamic>.from(userMessages.map((x) => x.toJson())),
-  //       // "userGroupAccesses": List<dynamic>.from(userGroupAccesses.map((x) => x)),
-  //       // "attributeValues": List<dynamic>.from(attributeValues.map((x) => x)),
-  //       // "userAccesses": List<dynamic>.from(userAccesses.map((x) => x)),
-  //       // "messages": List<dynamic>.from(messages.map((x) => x.toJson())),
-  //     };
+  Map<String, dynamic> toJson() => {
+        // "messageCount": messageCount,
+        "followUp": followUp,
+        "lastUpdated": lastUpdated,
+        "id": id,
+        "read": read,
+        // "created": created,
+        "name": name,
+        "subject": subject,
+        "displayName": displayName,
+        // "externalAccess": externalAccess,
+        "messageType": messageType,
+        "lastMessage": lastMessage,
+        // "sharing": sharing.toJson(),
+        // "priority": priority,
+        "favorite": favorite,
+        // "status": status,
+        // "access": access.toJson(),
+        "lastSender": lastSender.toJson(),
+        "createdBy": createdBy!.toJson(),
+        // "user": user.toJson(),
+        // "favorites": List<dynamic>.from(favorites.map((x) => x)),
+        // "translations": List<dynamic>.from(translations.map((x) => x)),
+        "userMessages":
+            List<dynamic>.from(userMessages!.map((x) => x.toJson())),
+        // "userGroupAccesses": List<dynamic>.from(userGroupAccesses.map((x) => x)),
+        // "attributeValues": List<dynamic>.from(attributeValues.map((x) => x) as Iterable),
+        // "userAccesses": List<dynamic>.from(userAccesses.map((x) => x) as Iterable),
+        "messages": List<dynamic>.from(messages!.map((x) => x.toJson())),
+      };
 }
-
-
-
-// class CreatedBy {
-//     CreatedBy({
-//         required this.displayName,
-//         required this.name,
-//         required this.id,
-//         required this.username,
-//     });
-
-//     final String displayName;
-//     final String name;
-//     final String id;
-//     final String username;
-
-//     factory CreatedBy.fromJson(Map<String, dynamic> json) => CreatedBy(
-//         displayName: json["displayName"].toString(),
-//         name: json["name"].toString(),
-//         id: json["id"].toString(),
-//         username: json["username"].toString(),
-//     );
-
-//     Map<String, dynamic> toJson() => {
-//         "displayName": displayName,
-//         "name": name,
-//         "id": id,
-//         "username": username,
-//     };
-// }
-
-// class LastSender {
-//     LastSender({
-//         required this.id,
-//     });
-
-//     final String id;
-
-//     factory LastSender.fromJson(Map<String, dynamic> json) => LastSender(
-//         id: json["id"].toString(),
-//     );
-
-//     Map<String, dynamic> toJson() => {
-//         "id": id,
-//     };
-// }
-
-
-
-// class Sender {
-//     Sender({
-//         required this.displayName,
-//         required this.id,
-//     });
-
-//     final String displayName;
-//     final String id;
-
-//     factory Sender.fromJson(Map<String, dynamic> json) => Sender(
-//         displayName: json["displayName"].toString(),
-//         id: json["id"].toString(),
-//     );
-
-//     Map<String, dynamic> toJson() => {
-//         "displayName": displayName,
-//         "id": id,
-//     };
-// }
-
-// class Sharing {
-//     Sharing({
-//         required this.sharingExternal,
-//         required this.users,
-//         required this.userGroups,
-//     });
-
-//     final String sharingExternal;
-//     final User users;
-//     final User userGroups;
-
-//     factory Sharing.fromJson(Map<String, dynamic> json) => Sharing(
-//         sharingExternal: json["external"].toString(),
-//         users: User.fromJson(json["users"] as Map<String,dynamic>),
-//         userGroups: User.fromJson(json["userGroups"]as Map<String,dynamic>),
-//     );
-
-//     Map<String, dynamic> toJson() => {
-//         "external": sharingExternal,
-//         "users": users.toJson(),
-//         "userGroups": userGroups.toJson(),
-//     };
-// }
-
-// class User {
-//     User();
-
-//     factory User.fromJson(Map<String, dynamic> json) => User(
-//     );
-
-//     Map<String, dynamic> toJson() => {
-//     };
-// }
-
-// class UserMessage {
-//     UserMessage({
-//         required this.user,
-//     });
-
-//     final Sender user;
-
-//     factory UserMessage.fromJson(Map<String, dynamic> json) => UserMessage(
-//         user: Sender.fromJson(json["user"] as Map<String,dynamic>),
-//     );
-
-//     Map<String, dynamic> toJson() => {
-//         "user": user.toJson(),
-//     };
-// }

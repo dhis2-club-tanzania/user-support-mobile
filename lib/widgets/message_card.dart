@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+
 import 'package:user_support_mobile/pages/reply_page.dart';
+import 'package:user_support_mobile/providers/provider.dart';
 
 class MessageBox extends StatelessWidget {
   const MessageBox(
@@ -19,6 +22,8 @@ class MessageBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<MessageModel>().fetchMessageThreads(messageId);
+
     final Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () => Navigator.push(context, MaterialPageRoute(

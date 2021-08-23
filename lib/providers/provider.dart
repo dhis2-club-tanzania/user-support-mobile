@@ -7,6 +7,8 @@ import 'package:user_support_mobile/models/message_conversation.dart';
 
 class MessageModel with ChangeNotifier {
   List<MessageConversation> _allMessageConversation = [];
+  List<MessageConversation> _allMessagesThreads = [];
+
   List<MessageConversation> _privateMessages = [];
   late MessageConversation _reply;
 
@@ -22,160 +24,68 @@ class MessageModel with ChangeNotifier {
   List<MessageConversation> get privateMessages => _privateMessages;
   MessageConversation get userReply => _reply;
 
-  Future<void> get fetchAllMessageConversations async {
-    final response = await http.get(
-      Uri.parse(
-          '$baseUrl/33/messageConversations?fields=user,displayName,subject,messageType,messageConversation'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    );
-
-    final list =
-        json.decode(response.body)['messageConversations'] as List<dynamic>;
-    if (response.statusCode == 200) {
-      try {
-        _map = jsonDecode(response.body) as Map<String, dynamic>;
-        _allMessageConversation = list
-            .map((model) =>
-                MessageConversation.fromJson(model as Map<String, dynamic>))
-            .toList();
-        _error = false;
-      } catch (e) {
-        _error = true;
-        _errorMessage = e.toString();
-        _map = {};
-        _allMessageConversation = [];
-      }
-    } else {
-      _error = true;
-      _errorMessage = "Failed to fetch Data";
-      _map = {};
-      _allMessageConversation = [];
-    }
-    notifyListeners();
+  MessageConversation findById(String id) {
+    return _allMessagesThreads.firstWhere((thread) => thread.id == id);
   }
 
-  // Future<void> get fetchAllUsers async {
-  //   final response = await http.get(
-  //     Uri.parse('$baseUrl/33/users/'),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json',
-  //     },
-  //   );
-
-  //   final list = json.decode(response.body)['users'] as List<dynamic>;
-  //   if (response.statusCode == 200) {
-  //     try {
-  //       _map = jsonDecode(response.body) as Map<String, dynamic>;
-  //       _allUsers = list
-  //           .map((model) => User.fromJson(model as Map<String, dynamic>))
-  //           .toList();
-  //       _error = false;
-  //     } catch (e) {
-  //       _error = true;
-  //       _errorMessage = e.toString();
-  //       _map = {};
-  //       _allUsers = [];
-  //     }
-  //   } else {
-  //     _error = true;
-  //     _errorMessage = "Failed to fetch Data";
-  //     _map = {};
-  //     _allUsers = [];
-  //   }
-  //   notifyListeners();
-  // }
-
-  Future<void> sendMessages() async {
+  Future<void> sendMessages(String id, String message) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/33/messageConversations/qXF4GmtZZrE'),
+      Uri.parse('$baseUrl/messageConversations/$id?internal=false'),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
-      body: jsonEncode({
-        "subject": "This is was a real deal",
-        "text": "How are you?",
-        "users": [
-          {"id": "OYLGMiazHtW"},
-          {"id": "N3PZBUlN8vq"}
-        ],
-        "userGroups": [
-          {"id": "ZoHNWQajIoe"}
-        ],
-        "organisationUnits": [
-          {"id": "DiszpKrYNg8"}
-        ]
-      }),
+      body: jsonEncode(message),
     );
     print('this is a body');
     print(response.body);
-    if (response.statusCode == 201) {
-      print('The post was successful');
-    } else {
-      print('failed to post data');
-    }
+
     notifyListeners();
   }
 
   Future<void> get fetchPrivateMessages async {
     final response = await http.get(
       Uri.parse(
-          '$baseUrl/33/messageConversations?filter=messageType%3Aeq%3APRIVATE&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
+          '$baseUrl/messageConversations?filter=messageType%3Aeq%3APRIVATE&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
     );
-    print(response.statusCode);
-    print('-----start of catch block');
     final list =
         json.decode(response.body)['messageConversations'] as List<dynamic>;
     if (response.statusCode == 200) {
-      // print(list);
-      // print('Testing response data');
-      try {
-        _map = jsonDecode(response.body) as Map<String, dynamic>;
-        _privateMessages = list
-            .map((model) =>
-                MessageConversation.fromJson(model as Map<String, dynamic>))
-            .toList();
-        print(_privateMessages);
-        _error = false;
-      } catch (e) {
-        _error = true;
-        _errorMessage = e.toString();
-        _map = {};
-        _allMessageConversation = [];
-      }
-      print('-----end of catch block');
+      _map = jsonDecode(response.body) as Map<String, dynamic>;
+      _privateMessages = list
+          .map((model) =>
+              MessageConversation.fromJson(model as Map<String, dynamic>))
+          .toList();
+      print(_privateMessages);
+      _error = false;
     } else {
-      _error = true;
-      _errorMessage = "Failed to fetch Data";
-      _map = {};
-      _allMessageConversation = [];
+      throw Exception("Failed to Load Data");
     }
     notifyListeners();
   }
 
-  Future<void> fetchReply(String id) async {
+  Future<void> fetchMessageThreads(String id) async {
     final response = await http.get(
       Uri.parse(
-          '$baseUrl/33/messageConversations/$id?fields=*,assignee%5Bid%2C%20displayName%5D,messages%5B*%2Csender%5Bid%2CdisplayName%5D,attachments%5Bid%2C%20name%2C%20contentLength%5D%5D,userMessages%5Buser%5Bid%2C%20displayName%5D%5D'),
+          '$baseUrl/messageConversations/$id?fields=*,assignee%5Bid%2C%20displayName%5D,messages%5B*%2Csender%5Bid%2CdisplayName%5D,attachments%5Bid%2C%20name%2C%20contentLength%5D%5D,userMessages%5Buser%5Bid%2C%20displayName%5D%5D'),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
     );
-
-    final list = json.decode(response.body);
+    final Map<String, dynamic> list =
+        json.decode(response.body) as Map<String, dynamic>;
     if (response.statusCode == 200) {
-     _reply = MessageConversation.fromJson(list as Map<String,dynamic>);
+      _allMessagesThreads.add(MessageConversation.fromJson(list));
+
+      print('The socket is really');
+      print(_allMessageConversation.length);
     } else {
-      throw 'failed to load Data';
+      throw Exception('Failed to Load Data');
     }
     notifyListeners();
   }
