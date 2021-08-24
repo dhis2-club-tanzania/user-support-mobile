@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/models/message_conversation.dart';
-import 'package:user_support_mobile/models/user_messages.dart';
-import 'package:user_support_mobile/providers/provider.dart';
-import 'package:user_support_mobile/widgets/search.dart';
+
+import '../models/message_conversation.dart';
+import '../models/user_messages.dart';
+import '../providers/provider.dart';
+import '../widgets/search.dart';
 
 class ReplyPage extends StatefulWidget {
   const ReplyPage({Key? key, required this.messageId}) : super(key: key);
@@ -16,8 +17,21 @@ class ReplyPage extends StatefulWidget {
 }
 
 class _ReplyPageState extends State<ReplyPage> {
-  final TextEditingController _textEditingController = TextEditingController();
   bool isVisible = true;
+  bool isButtonEnabled = false;
+  final TextEditingController _textEditingController = TextEditingController();
+
+  @override
+  bool isEmpty() {
+    setState(() {
+      if (_textEditingController.text.trim() != "") {
+        isButtonEnabled = true;
+      } else {
+        isButtonEnabled = false;
+      }
+    });
+    return isButtonEnabled;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +79,27 @@ class _ReplyPageState extends State<ReplyPage> {
                       Container(
                         padding: EdgeInsets.only(left: size.width * 0.05),
                         width: size.width * 0.6,
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            hintText: "Add New Participant",
-                            hintStyle: TextStyle(
-                              fontSize: 15,
+                        child: Container(
+                          child: TextFormField(
+                            onTap: () {
+                              showSearch(
+                                  context: context,
+                                  delegate: SearchUser(allUsers: [
+                                    'Tom Wakiki',
+                                    'Wile',
+                                    'Goodluck'
+                                  ], usersSuggestion: [
+                                    'Tom Wakiki',
+                                    'Duke',
+                                    'John Traore',
+                                    'wile'
+                                  ]));
+                            },
+                            decoration: const InputDecoration(
+                              hintText: "Add New Participant",
+                              hintStyle: TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
                           ),
                         ),
@@ -108,11 +138,15 @@ class _ReplyPageState extends State<ReplyPage> {
                       borderRadius: BorderRadius.circular(1),
                       border: Border.all(color: Colors.black26)),
                   child: TextFormField(
+                    onFieldSubmitted: null,
                     controller: _textEditingController,
                     maxLines: null,
                     keyboardType: TextInputType.multiline,
                     expands: true,
                     style: const TextStyle(fontSize: 18, color: Colors.black),
+                    onChanged: (val) {
+                      isEmpty();
+                    },
                     decoration: const InputDecoration(
                       border: InputBorder.none,
                       hintText: "Compose message",
@@ -126,33 +160,75 @@ class _ReplyPageState extends State<ReplyPage> {
                   padding: EdgeInsets.only(left: size.width * 0.05),
                   child: Row(
                     children: [
-                      ElevatedButton(
-                        onPressed: () async{
-                          await replyData.sendMessages(
-                              widget.messageId, _textEditingController.text);
-                          print(_textEditingController.text);
-                        },
-                        child: const Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text('Reply'),
+                      AbsorbPointer(
+                        absorbing: !isButtonEnabled,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: !isButtonEnabled
+                                ? MaterialStateProperty.all(Color(0xFFE0E0E0))
+                                : MaterialStateProperty.all(Color(0xFF235EA0)),
+                          ),
+                          onPressed: () async {
+                            if (_textEditingController.text.trim() != "") {
+                              await replyData.sendMessages(widget.messageId,
+                                  _textEditingController.text);
+                            }
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              'Reply',
+                              style: TextStyle(
+                                color: isButtonEnabled
+                                    ? Colors.white
+                                    : Colors.black38,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(
                         width: 20,
                       ),
-                      OutlinedButton(
-                        onPressed: () {},
-                        child: const Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text('Discard'),
+                      AbsorbPointer(
+                        absorbing: !isButtonEnabled,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: !isButtonEnabled
+                                ? MaterialStateProperty.all(Color(0xFFE0E0E0))
+                                : MaterialStateProperty.all(Color(0xFF235EA0)),
+                          ),
+                          onPressed: () async {
+                            setState(() {
+                              _textEditingController.text = '';
+                              isButtonEnabled = false;
+                            });
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Text(
+                              'Discard',
+                              style: TextStyle(
+                                color: isButtonEnabled
+                                    ? Colors.white
+                                    : Colors.black38,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(
                         width: 20,
                       ),
-                      OutlinedButton(
-                        onPressed: () {},
-                        child: Icon(Icons.attachment_outlined),
+                      AbsorbPointer(
+                        absorbing: !isButtonEnabled,
+                        child: OutlinedButton(
+                          onPressed: () {},
+                          child: Icon(
+                            Icons.attachment_outlined,
+                            color: Colors.black45,
+                          ),
+                        ),
                       )
                     ],
                   ),
@@ -168,79 +244,47 @@ class _ReplyPageState extends State<ReplyPage> {
   }
 
   Widget _messageThread(MessageConversation? messagesData) {
-    return messagesData != null
-        ? Flexible(
-            child: ListView.builder(
-                itemCount: messagesData.messages!.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 15.0),
-                    child: Card(
-                      child: ListTile(
-                        trailing: Text(messagesData.messages![index].lastUpdated
-                            .substring(0, 10)),
-                        title: Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                              'Message from ${messagesData.messages![index].sender.displayName}'),
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            messagesData.messages![index].text,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15,
+    return Container(
+      child: messagesData != null
+          ? Flexible(
+              child: ListView.builder(
+                  itemCount: messagesData.messages!.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      child: Card(
+                        child: ListTile(
+                          trailing: Text(messagesData.messages![index].lastUpdated
+                              .substring(0, 10)),
+                          title: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Text(
+                                'Message from ${messagesData.messages![index].sender.displayName}'),
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Text(
+                              messagesData.messages![index].text,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                              ),
                             ),
                           ),
+                          isThreeLine: true,
                         ),
-                        isThreeLine: true,
                       ),
-                    ),
-                  );
-                }),
-          )
-        : Center(child: CircularProgressIndicator());
+                    );
+                  }),
+            )
+          : Center(child: CircularProgressIndicator()),
+    );
   }
-}
-
-Widget _participantsWrapper(List<UserMessages>? users) {
-  return Expanded(
-    child: ListView(
-        scrollDirection: Axis.horizontal,
-        primary: true,
-        shrinkWrap: true,
-        children: <Widget>[
-          Wrap(
-            spacing: 4.0,
-            runSpacing: 0.0,
-            children: List<Widget>.generate(
-                users!.length, // place the length of the array here
-                (int index) {
-              return Chip(label: Text(users[index].users!.displayName));
-            }).toList(),
-          )
-        ]),
-  );
-}
-
-Widget _participants(List<UserMessages>? users) {
-  return Container(
-    height: 35,
-    child: Expanded(
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: users!.length,
-          itemBuilder: (context, index) {
-            return Chip(label: Text(users[index].users!.displayName));
-          }),
-    ),
-  );
 }
 
 Widget buildParticipantsList(List<UserMessages>? users) {
   return Container(
-    height: 105,
+    height: 50,
     child: SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Wrap(

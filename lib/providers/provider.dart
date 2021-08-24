@@ -31,11 +31,11 @@ class MessageModel with ChangeNotifier {
   Future<void> sendMessages(String id, String message) async {
     final response = await http.post(
       Uri.parse('$baseUrl/messageConversations/$id?internal=false'),
-      headers: {
+      headers:{
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
-      body: jsonEncode(message),
+      body: jsonEncode(<String>{message}),
     );
     print('this is a body');
     print(response.body);
@@ -60,7 +60,6 @@ class MessageModel with ChangeNotifier {
           .map((model) =>
               MessageConversation.fromJson(model as Map<String, dynamic>))
           .toList();
-      print(_privateMessages);
       _error = false;
     } else {
       throw Exception("Failed to Load Data");
@@ -82,8 +81,7 @@ class MessageModel with ChangeNotifier {
     if (response.statusCode == 200) {
       _allMessagesThreads.add(MessageConversation.fromJson(list));
 
-      print('The socket is really');
-      print(_allMessageConversation.length);
+    
     } else {
       throw Exception('Failed to Load Data');
     }
