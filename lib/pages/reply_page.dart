@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:user_support_mobile/widgets/attachment_button.dart';
+import 'package:path/path.dart';
 
 import '../models/message_conversation.dart';
 import '../models/user_messages.dart';
@@ -17,6 +22,8 @@ class ReplyPage extends StatefulWidget {
 }
 
 class _ReplyPageState extends State<ReplyPage> {
+  File? file;
+
   bool isVisible = true;
   bool isButtonEnabled = false;
   final TextEditingController _textEditingController = TextEditingController();
@@ -33,8 +40,19 @@ class _ReplyPageState extends State<ReplyPage> {
     return isButtonEnabled;
   }
 
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+    if (result == null) return;
+    final path = result.files.single.path!;
+
+    setState(() => file = File(path));
+  }
+
   @override
   Widget build(BuildContext context) {
+    final fileName = file != null ? basename(file!.path) : '';
+
     final replyData = Provider.of<MessageModel>(context);
     // context.read<MessageModel>().fetchReply(widget.messageId);
     // var value = context.
@@ -149,13 +167,22 @@ class _ReplyPageState extends State<ReplyPage> {
                     },
                     decoration: const InputDecoration(
                       border: InputBorder.none,
-                      hintText: "Compose message",
+                      hintText: "Compose reply",
                     ),
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 8,
                 ),
+                file != null
+                    ? Text(
+                        fileName,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w500),
+                      )
+                    : Container(),
+                SizedBox(height: 8),
+
                 Container(
                   padding: EdgeInsets.only(left: size.width * 0.05),
                   child: Row(
@@ -168,11 +195,14 @@ class _ReplyPageState extends State<ReplyPage> {
                                 ? MaterialStateProperty.all(Color(0xFFE0E0E0))
                                 : MaterialStateProperty.all(Color(0xFF235EA0)),
                           ),
-                          onPressed: () async {
+                          onPressed: () {
                             if (_textEditingController.text.trim() != "") {
-                              await replyData.sendMessages(widget.messageId,
+                              replyData.sendMessages(widget.messageId,
                                   _textEditingController.text);
                             }
+                            setState(() {
+                              _textEditingController.text = '';
+                            });
                           },
                           child: Padding(
                             padding: EdgeInsets.all(10.0),
@@ -192,11 +222,11 @@ class _ReplyPageState extends State<ReplyPage> {
                       ),
                       AbsorbPointer(
                         absorbing: !isButtonEnabled,
-                        child: ElevatedButton(
+                        child: OutlinedButton(
                           style: ButtonStyle(
                             backgroundColor: !isButtonEnabled
                                 ? MaterialStateProperty.all(Color(0xFFE0E0E0))
-                                : MaterialStateProperty.all(Color(0xFF235EA0)),
+                                : MaterialStateProperty.all(Colors.white),
                           ),
                           onPressed: () async {
                             setState(() {
@@ -210,7 +240,7 @@ class _ReplyPageState extends State<ReplyPage> {
                               'Discard',
                               style: TextStyle(
                                 color: isButtonEnabled
-                                    ? Colors.white
+                                    ? Colors.black
                                     : Colors.black38,
                               ),
                             ),
@@ -220,15 +250,21 @@ class _ReplyPageState extends State<ReplyPage> {
                       const SizedBox(
                         width: 20,
                       ),
-                      AbsorbPointer(
-                        absorbing: !isButtonEnabled,
-                        child: OutlinedButton(
-                          onPressed: () {},
-                          child: Icon(
-                            Icons.attachment_outlined,
-                            color: Colors.black45,
-                          ),
-                        ),
+                      // AbsorbPointer(
+                      //   absorbing: !isButtonEnabled,
+                      //   child: OutlinedButton(
+                      //     onPressed: () => selectFile,
+                      //     child: const Icon(
+                      //       Icons.attachment_outlined,
+                      //       color: Colors.black45,
+                      //     ),
+                      //   ),
+                      // )
+                      Expanded(
+                        child: ButtonWidget(
+                            icon: Icons.attachment_rounded,
+                            text: '',
+                            onClicked: selectFile),
                       )
                     ],
                   ),
@@ -254,7 +290,8 @@ class _ReplyPageState extends State<ReplyPage> {
                       padding: const EdgeInsets.only(bottom: 15.0),
                       child: Card(
                         child: ListTile(
-                          trailing: Text(messagesData.messages![index].lastUpdated
+                          trailing: Text(messagesData
+                              .messages![index].lastUpdated
                               .substring(0, 10)),
                           title: Padding(
                             padding: const EdgeInsets.only(bottom: 8.0),

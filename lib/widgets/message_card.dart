@@ -28,12 +28,10 @@ class MessageBox extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            return ReplyPage(
-              messageId: messageId,
-            );
-          },
-        ));
+        builder: (context) {
+          return  ReplyPage(messageId: messageId,);
+        },
+      ));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 20, 10, 1),

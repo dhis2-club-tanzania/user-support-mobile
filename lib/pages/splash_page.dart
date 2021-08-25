@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/pages/home.dart';
+import 'package:user_support_mobile/pages/inbox_page.dart';
 
 import 'package:user_support_mobile/providers/provider.dart';
 
@@ -13,14 +13,12 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-    
-
   @override
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const HomePage()));
+          MaterialPageRoute(builder: (_) => const InboxPage()));
     });
   }
 

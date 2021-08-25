@@ -25,20 +25,37 @@ class MessageModel with ChangeNotifier {
   MessageConversation get userReply => _reply;
 
   MessageConversation findById(String id) {
-    return _allMessagesThreads.firstWhere((thread) => thread.id == id);
+    return _allMessagesThreads.firstWhere(
+      (thread) => thread.id == id,
+      orElse: () => MessageConversation(
+        messageCount: '',
+        followUp: false,
+        lastUpdated: '',
+        id: '',
+        read: false,
+        name: '',
+        subject: '',
+        displayName: '',
+        messageType: '',
+        lastMessage: '',
+        favorite: false,
+        lastSender: null,
+        userMessages: null,
+      ),
+    );
   }
 
   Future<void> sendMessages(String id, String message) async {
     final response = await http.post(
       Uri.parse('$baseUrl/messageConversations/$id?internal=false'),
-      headers:{
+      headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
-      body: jsonEncode(<String>{message}),
+      body: jsonEncode(message),
     );
-    print('this is a body');
-    print(response.body);
+
+    print(response);
 
     notifyListeners();
   }
@@ -80,8 +97,6 @@ class MessageModel with ChangeNotifier {
         json.decode(response.body) as Map<String, dynamic>;
     if (response.statusCode == 200) {
       _allMessagesThreads.add(MessageConversation.fromJson(list));
-
-    
     } else {
       throw Exception('Failed to Load Data');
     }

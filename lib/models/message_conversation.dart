@@ -7,7 +7,7 @@ import 'user.dart';
 
 class MessageConversation {
   MessageConversation({
-    required this.href,
+    this.href,
     required this.messageCount,
     required this.followUp,
     required this.lastUpdated,
@@ -26,7 +26,7 @@ class MessageConversation {
     // required this.status,
     // required this.access,
     required this.lastSender,
-    required this.createdBy,
+    this.createdBy,
     // required this.user,
     // required this.favorites,
     // required this.translations,
@@ -34,7 +34,7 @@ class MessageConversation {
     // required this.userGroupAccesses,
     // required this.attributeValues,
     // required this.userAccesses,
-    required this.messages,
+    this.messages,
   });
 
   final String? href;
@@ -55,7 +55,7 @@ class MessageConversation {
   final bool favorite;
   // final String status;
   // final Access access;
-  final User lastSender;
+  final User? lastSender;
   final User? createdBy;
   // final User user;
   // final List<dynamic> favorites;
@@ -66,8 +66,7 @@ class MessageConversation {
   // final List<dynamic> userAccesses;
   final List<Message>? messages;
   factory MessageConversation.fromJson(Map<String, dynamic> json) {
-    print(json['userMessages']);
-    print('The best testing app');
+   
     return MessageConversation(
       href: json['href'].toString(),
       messageCount: json["messageCount"].toString(),
@@ -129,7 +128,7 @@ class MessageConversation {
         "favorite": favorite,
         // "status": status,
         // "access": access.toJson(),
-        "lastSender": lastSender.toJson(),
+        // "lastSender": lastSender.toJson(),
         "createdBy": createdBy!.toJson(),
         // "user": user.toJson(),
         // "favorites": List<dynamic>.from(favorites.map((x) => x)),
