@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/pages/inbox_page.dart';
 
+import 'package:user_support_mobile/pages/home_page.dart';
 import 'package:user_support_mobile/providers/provider.dart';
-
 import '../pages/login_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,8 +16,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const InboxPage()));
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
     });
   }
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:user_support_mobile/pages/home_page.dart';
-import 'package:user_support_mobile/pages/inbox_page.dart';
-import 'package:user_support_mobile/pages/system_page.dart';
-import 'package:user_support_mobile/pages/ticket_page.dart';
-import 'package:user_support_mobile/pages/validation_page.dart';
+import '/pages/home_page.dart';
+import '/pages/inbox_page.dart';
+import '/pages/system_page.dart';
+import '/pages/ticket_page.dart';
+import '/pages/validation_page.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key}) : super(key: key);
@@ -56,14 +56,16 @@ class NavigationDrawer extends StatelessWidget {
             trailing: Container(
               padding: const EdgeInsets.all(10),
               decoration: const BoxDecoration(
-                  color: Color(0xFF1D5288),
+                  color: Colors.amberAccent,
                   borderRadius: BorderRadius.all(
-                    Radius.circular(5),
+                    Radius.circular(50),
                   )),
-              child: Text(
-                '2',
+              child: const Text(
+                '2 new',
+                textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white,
+                  fontSize: 15,
+                  color: Colors.black,
                 ),
               ),
             ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import 'package:user_support_mobile/pages/reply_page.dart';
+import 'package:user_support_mobile/pages/message_conversation_page.dart';
 import 'package:user_support_mobile/providers/provider.dart';
 
 class MessageBox extends StatelessWidget {
@@ -29,7 +29,7 @@ class MessageBox extends StatelessWidget {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
         builder: (context) {
-          return  ReplyPage(messageId: messageId,);
+          return  MessageConversationPage(messageId: messageId,);
         },
       ));
       },

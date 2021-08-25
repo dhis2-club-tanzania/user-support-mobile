@@ -12,21 +12,24 @@ import '../models/user_messages.dart';
 import '../providers/provider.dart';
 import '../widgets/search.dart';
 
-class ReplyPage extends StatefulWidget {
-  const ReplyPage({Key? key, required this.messageId}) : super(key: key);
+class MessageConversationPage extends StatefulWidget {
+  const MessageConversationPage({Key? key, required this.messageId})
+      : super(key: key);
 
   final String messageId;
 
   @override
-  _ReplyPageState createState() => _ReplyPageState();
+  _MessageConversationPageState createState() =>
+      _MessageConversationPageState();
 }
 
-class _ReplyPageState extends State<ReplyPage> {
+class _MessageConversationPageState extends State<MessageConversationPage> {
   File? file;
-
+  String? selectedUser;
   bool isVisible = true;
   bool isButtonEnabled = false;
   final TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController1 = TextEditingController();
 
   @override
   bool isEmpty() {
@@ -83,12 +86,11 @@ class _ReplyPageState extends State<ReplyPage> {
       body: SafeArea(
         child: Center(
           child: Container(
+            height: size.height,
             width: size.width * 0.9,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 buildParticipantsList(datas.userMessages),
-                // _participants(datas.userMessages),
                 Flexible(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,19 +101,27 @@ class _ReplyPageState extends State<ReplyPage> {
                         width: size.width * 0.6,
                         child: Container(
                           child: TextFormField(
-                            onTap: () {
-                              showSearch(
-                                  context: context,
-                                  delegate: SearchUser(allUsers: [
-                                    'Tom Wakiki',
-                                    'Wile',
-                                    'Goodluck'
-                                  ], usersSuggestion: [
-                                    'Tom Wakiki',
-                                    'Duke',
-                                    'John Traore',
-                                    'wile'
-                                  ]));
+                            controller: _textEditingController1,
+                            onTap: () async {
+                              if (_textEditingController1.text.trim().isEmpty) {
+                                final user = await showSearch(
+                                    context: context,
+                                    delegate: SearchUser(allUsers: [
+                                      'Tom Wakiki',
+                                      'Wile',
+                                      'Goodluck'
+                                    ], usersSuggestion: [
+                                      'Tom Wakiki',
+                                      'Duke',
+                                      'John Traore',
+                                      'wile'
+                                    ]));
+
+                                setState(() {
+                                  selectedUser = user;
+                                  _textEditingController1.text = selectedUser!;
+                                });
+                              }
                             },
                             decoration: const InputDecoration(
                               hintText: "Add New Participant",
@@ -126,19 +136,28 @@ class _ReplyPageState extends State<ReplyPage> {
                         height: 40,
                         width: size.width * 0.2,
                         child: OutlinedButton(
-                          onPressed: () {
-                            showSearch(
-                                context: context,
-                                delegate: SearchUser(allUsers: [
-                                  'Tom Wakiki',
-                                  'Wile',
-                                  'Goodluck'
-                                ], usersSuggestion: [
-                                  'Tom Wakiki',
-                                  'Duke',
-                                  'John Traore',
-                                  'wile'
-                                ]));
+                          onPressed: () async {
+                            if (_textEditingController1.text.trim().isEmpty) {
+                              final user = await showSearch(
+                                  context: context,
+                                  delegate: SearchUser(allUsers: [
+                                    'Tom Wakiki',
+                                    'Wile',
+                                    'Goodluck'
+                                  ], usersSuggestion: [
+                                    'Tom Wakiki',
+                                    'Duke',
+                                    'John Traore',
+                                    'wile'
+                                  ]));
+
+                              setState(() {
+                                selectedUser = user;
+                                _textEditingController1.text = selectedUser!;
+                              });
+                            } else {
+                              //add new user to the exact convo
+                            }
                           },
                           child: Icon(Icons.add),
                         ),
@@ -147,7 +166,6 @@ class _ReplyPageState extends State<ReplyPage> {
                   ),
                 ),
                 SizedBox(height: 20),
-
                 Container(
                   padding: EdgeInsets.only(left: size.width * 0.05),
                   width: size.width,
@@ -174,15 +192,15 @@ class _ReplyPageState extends State<ReplyPage> {
                 const SizedBox(
                   height: 8,
                 ),
-                file != null
-                    ? Text(
-                        fileName,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
-                      )
-                    : Container(),
-                SizedBox(height: 8),
-
+                if (file != null)
+                  Text(
+                    fileName,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500),
+                  )
+                else
+                  Container(),
+                const SizedBox(height: 8),
                 Container(
                   padding: EdgeInsets.only(left: size.width * 0.05),
                   child: Row(
@@ -250,18 +268,9 @@ class _ReplyPageState extends State<ReplyPage> {
                       const SizedBox(
                         width: 20,
                       ),
-                      // AbsorbPointer(
-                      //   absorbing: !isButtonEnabled,
-                      //   child: OutlinedButton(
-                      //     onPressed: () => selectFile,
-                      //     child: const Icon(
-                      //       Icons.attachment_outlined,
-                      //       color: Colors.black45,
-                      //     ),
-                      //   ),
-                      // )
                       Expanded(
                         child: ButtonWidget(
+                            isButtonEnabled: isButtonEnabled,
                             icon: Icons.attachment_rounded,
                             text: '',
                             onClicked: selectFile),
@@ -282,7 +291,8 @@ class _ReplyPageState extends State<ReplyPage> {
   Widget _messageThread(MessageConversation? messagesData) {
     return Container(
       child: messagesData != null
-          ? Flexible(
+          ? Expanded(
+              flex: 6,
               child: ListView.builder(
                   itemCount: messagesData.messages!.length,
                   itemBuilder: (context, index) {
