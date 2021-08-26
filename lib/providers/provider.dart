@@ -49,7 +49,7 @@ class MessageModel with ChangeNotifier {
     final request = http.MultipartRequest(
       'POST',
       Uri.parse(
-          '$baseUrl/api/34/messageConversations?filter=messageType%3Aeq%3APRIVATE&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
+          '$baseUrl/messageConversations?filter=messageType%3Aeq%3APRIVATE&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
     );
     request.files.add(await http.MultipartFile.fromPath('picture', filename));
     final res = await request.send();
@@ -59,7 +59,7 @@ class MessageModel with ChangeNotifier {
 
   Future<void> sendMessages(String id, String message) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/api/34/messageConversations/$id?internal=false'),
+      Uri.parse('$baseUrl/messageConversations/$id?internal=false'),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -75,7 +75,7 @@ class MessageModel with ChangeNotifier {
   Future<void> get fetchPrivateMessages async {
     final response = await http.get(
       Uri.parse(
-          '$baseUrl/api/34/messageConversations?filter=messageType%3Aeq%3APRIVATE&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
+          '$baseUrl/messageConversations?filter=messageType%3Aeq%3APRIVATE&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
@@ -99,7 +99,7 @@ class MessageModel with ChangeNotifier {
   Future<void> fetchMessageThreads(String id) async {
     final response = await http.get(
       Uri.parse(
-          '$baseUrl/api/34/messageConversations/$id?fields=*,assignee%5Bid%2C%20displayName%5D,messages%5B*%2Csender%5Bid%2CdisplayName%5D,attachments%5Bid%2C%20name%2C%20contentLength%5D%5D,userMessages%5Buser%5Bid%2C%20displayName%5D%5D'),
+          '$baseUrl/messageConversations/$id?fields=*,assignee%5Bid%2C%20displayName%5D,messages%5B*%2Csender%5Bid%2CdisplayName%5D,attachments%5Bid%2C%20name%2C%20contentLength%5D%5D,userMessages%5Buser%5Bid%2C%20displayName%5D%5D'),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

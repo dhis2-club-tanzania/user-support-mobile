@@ -1,15 +1,12 @@
 import 'dart:io';
-
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:user_support_mobile/widgets/attachment_button.dart';
 import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
-import '../models/message_conversation.dart';
-import '../models/user_messages.dart';
 import '../providers/provider.dart';
+import '../widgets/attachment_button.dart';
 import '../widgets/search.dart';
 
 class ComposePage extends StatefulWidget {
@@ -25,6 +22,8 @@ class _ComposePageState extends State<ComposePage> {
   bool isVisible = true;
   bool isButtonEnabled = false;
   final TextEditingController _textEditingController = TextEditingController();
+
+  bool isChecked = false;
 
   @override
   bool isEmpty() {
@@ -69,9 +68,9 @@ class _ComposePageState extends State<ComposePage> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text(
+        title: const Text(
           "Compose",
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.black,
           ),
         ),
@@ -83,44 +82,16 @@ class _ComposePageState extends State<ComposePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Flexible(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: size.width * 0.05),
-                        width: size.width * 0.6,
-                        child: Container(
-                          child: TextFormField(
-                            onTap: () {
-                              showSearch(
-                                  context: context,
-                                  delegate: SearchUser(allUsers: [
-                                    'Tom Wakiki',
-                                    'Wile',
-                                    'Goodluck'
-                                  ], usersSuggestion: [
-                                    'Tom Wakiki',
-                                    'Duke',
-                                    'John Traore',
-                                    'wile'
-                                  ]));
-                            },
-                            decoration: const InputDecoration(
-                              hintText: "To",
-                              hintStyle: TextStyle(
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 40,
-                        width: size.width * 0.2,
-                        child: OutlinedButton(
-                          onPressed: () {
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(left: size.width * 0.05),
+                      width: size.width * 0.6,
+                      child: Container(
+                        child: TextFormField(
+                          onTap: () {
                             showSearch(
                                 context: context,
                                 delegate: SearchUser(allUsers: [
@@ -134,13 +105,103 @@ class _ComposePageState extends State<ComposePage> {
                                   'wile'
                                 ]));
                           },
-                          child: Icon(Icons.add),
+                          decoration: const InputDecoration(
+                            hintText: "To",
+                            hintStyle: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      height: 40,
+                      width: size.width * 0.2,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          showSearch(
+                              context: context,
+                              delegate: SearchUser(allUsers: [
+                                'Tom Wakiki',
+                                'Wile',
+                                'Goodluck'
+                              ], usersSuggestion: [
+                                'Tom Wakiki',
+                                'Duke',
+                                'John Traore',
+                                'wile'
+                              ]));
+                        },
+                        child: Icon(Icons.add),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      checkColor: Colors.white,
+                      fillColor: MaterialStateProperty.all(Colors.blue),
+                      value: isChecked,
+                      shape: CircleBorder(),
+                      onChanged: (bool? value) {
+                        setState(() {
+                          isChecked = value!;
+                        });
+                      },
+                    ),
+                    Text(
+                      'Private Message',
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    ),
+                    Checkbox(
+                      
+                      checkColor: Colors.white,
+                      fillColor: MaterialStateProperty.all(Colors.blue),
+                      value: isChecked,
+                      shape: CircleBorder(),
+                      onChanged: (bool? value) {
+                        setState(() {
+                          isChecked = value!;
+                        });
+                      },
+                    ),
+                    Text(
+                      'Feedback',
+                      style: TextStyle(fontSize: 18, color: Colors.black),
+                    )
+                  ],
                 ),
                 SizedBox(height: 20),
+                Container(
+                  padding: EdgeInsets.only(left: size.width * 0.05),
+                  width: size.width,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(1),
+                      border: Border.all(color: Colors.black26)),
+                  child: TextFormField(
+                    onFieldSubmitted: null,
+                    controller: _textEditingController,
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    expands: true,
+                    style: const TextStyle(fontSize: 18, color: Colors.black),
+                    onChanged: (val) {
+                      isEmpty();
+                    },
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Subject",
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 Container(
                   padding: EdgeInsets.only(left: size.width * 0.05),
                   width: size.width,
@@ -199,7 +260,7 @@ class _ComposePageState extends State<ComposePage> {
                           child: Padding(
                             padding: EdgeInsets.all(10.0),
                             child: Text(
-                              'Reply',
+                              'Send',
                               style: TextStyle(
                                 color: isButtonEnabled
                                     ? Colors.white
@@ -227,7 +288,7 @@ class _ComposePageState extends State<ComposePage> {
                             });
                           },
                           child: Padding(
-                            padding: EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.all(10.0),
                             child: Text(
                               'Discard',
                               style: TextStyle(
@@ -242,16 +303,6 @@ class _ComposePageState extends State<ComposePage> {
                       const SizedBox(
                         width: 20,
                       ),
-                      // AbsorbPointer(
-                      //   absorbing: !isButtonEnabled,
-                      //   child: OutlinedButton(
-                      //     onPressed: () => selectFile,
-                      //     child: const Icon(
-                      //       Icons.attachment_outlined,
-                      //       color: Colors.black45,
-                      //     ),
-                      //   ),
-                      // )
                       Expanded(
                         child: ButtonWidget(
                           icon: Icons.attachment_rounded,
@@ -263,7 +314,6 @@ class _ComposePageState extends State<ComposePage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 22),
               ],
             ),
           ),
