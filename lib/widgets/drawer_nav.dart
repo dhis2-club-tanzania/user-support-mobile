@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/provider.dart';
 import '/pages/home_page.dart';
 import '/pages/inbox_page.dart';
 import '/pages/system_page.dart';
@@ -10,6 +12,8 @@ class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final fetchedData = Provider.of<MessageModel>(context);
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -51,13 +55,24 @@ class NavigationDrawer extends StatelessWidget {
             ),
           ),
           _listTileWidget(
-              context, 'Inbox', '2', Icons.inbox, () => const InboxPage()),
-          _listTileWidget(context, 'Validation', '3', Icons.verified_sharp,
-              () => const InboxPage()),
+            context,
+            'Inbox',
+            fetchedData.privateMessages.length,
+            Icons.inbox,
+            Colors.green.shade200,
+            () => const InboxPage(),
+          ),
           _listTileWidget(
-              context, 'Ticket', '5', Icons.scanner, () => const InboxPage()),
-          _listTileWidget(context, 'System', '4', Icons.system_update,
-              () => const InboxPage()),
+              context,
+              'Validation',
+              fetchedData.validationMessage.length,
+              Icons.verified_sharp,
+              Colors.blue.shade200,
+              () => const ValidationPage()),
+          _listTileWidget(context, 'Ticket', 5, Icons.scanner,
+              Colors.red.shade200, () => const InboxPage()),
+          _listTileWidget(context, 'System', 4, Icons.system_update,
+              Colors.pinkAccent, () => const InboxPage()),
         ],
       ),
     );
@@ -66,8 +81,9 @@ class NavigationDrawer extends StatelessWidget {
   Widget _listTileWidget(
     BuildContext context,
     String title,
-    String count,
+    int count,
     IconData icon,
+    Color? color,
     Widget Function() page,
   ) {
     return ListTile(
@@ -75,8 +91,8 @@ class NavigationDrawer extends StatelessWidget {
         leading: Icon(icon),
         trailing: Container(
           padding: const EdgeInsets.all(10),
-          decoration: const BoxDecoration(
-              color: Colors.amberAccent,
+          decoration: BoxDecoration(
+              color: color,
               borderRadius: BorderRadius.all(
                 Radius.circular(50),
               )),

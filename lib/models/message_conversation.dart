@@ -66,7 +66,6 @@ class MessageConversation {
   // final List<dynamic> userAccesses;
   final List<Message>? messages;
   factory MessageConversation.fromJson(Map<String, dynamic> json) {
-   
     return MessageConversation(
       href: json['href'].toString(),
       messageCount: json["messageCount"].toString(),
@@ -86,7 +85,9 @@ class MessageConversation {
       favorite: json['favorite'] == null ? false : json["favorite"] as bool,
       // status: json["status"].toString(),
       // access: Access.fromJson(json["access"]as Map<String,dynamic>),
-      lastSender: User.fromJson(json["lastSender"] as Map<String, dynamic>),
+      lastSender: json['lastSender'] != null
+          ? User.fromJson(json['lastSender'] as Map<String, dynamic>)
+          : null,
       createdBy: json['createdBy'] != null
           ? User.fromJson(json['createdBy'] as Map<String, dynamic>)
           : null,

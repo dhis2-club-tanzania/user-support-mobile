@@ -22,16 +22,22 @@ class MessageBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<MessageModel>().fetchMessageThreads(messageId);
+    // context.read<MessageModel>().fetchMessageThreads(messageId);
+    final fetchedData = Provider.of<MessageModel>(context);
 
     final Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
+        fetchedData.initialValue();
+        fetchedData.fetchMessageThreadsById(messageId);
+
         Navigator.push(context, MaterialPageRoute(
-        builder: (context) {
-          return  MessageConversationPage(messageId: messageId,);
-        },
-      ));
+          builder: (context) {
+            return MessageConversationPage(
+              fetchedData: fetchedData.fetchedThread,
+            );
+          },
+        ));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(8, 20, 10, 1),

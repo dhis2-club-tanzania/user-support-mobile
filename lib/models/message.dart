@@ -38,7 +38,7 @@ class Message {
   final Sharing? sharing;
   final String favorite;
   final Access access;
-  final User sender;
+  final User? sender;
   final List<dynamic> favorites;
   final List<dynamic> attachments;
   final List<dynamic> translations;
@@ -56,10 +56,14 @@ class Message {
         externalAccess: json["externalAccess"].toString(),
         metaData: json["metaData"].toString(),
         text: json["text"].toString(),
-        sharing:  json["sharing"] !=null ? Sharing.fromJson(json["sharing"] as Map<String, dynamic>) :null,
+        sharing: json["sharing"] != null
+            ? Sharing.fromJson(json["sharing"] as Map<String, dynamic>)
+            : null,
         favorite: json["favorite"].toString(),
         access: Access.fromJson(json["access"] as Map<String, dynamic>),
-        sender: User.fromJson(json["sender"] as Map<String, dynamic>),
+        sender: json["Sender"] != null
+            ? User.fromJson(json["sender"] as Map<String, dynamic>)
+            : null,
         favorites: List<dynamic>.from(
             json["favorites"].map((x) => x) as Iterable<dynamic>),
         attachments: List<dynamic>.from(
@@ -87,7 +91,7 @@ class Message {
         "sharing": sharing!.toJson(),
         "favorite": favorite,
         "access": access.toJson(),
-        "sender": sender.toJson(),
+        // "sender": sender.toJson(),
         "favorites": List<dynamic>.from(favorites.map((x) => x)),
         "attachments": List<dynamic>.from(attachments.map((x) => x)),
         "translations": List<dynamic>.from(translations.map((x) => x)),

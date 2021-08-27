@@ -249,13 +249,12 @@ class _ComposePageState extends State<ComposePage> {
                                 : MaterialStateProperty.all(Color(0xFF235EA0)),
                           ),
                           onPressed: () {
-                            // if (_textEditingController.text.trim() != "") {
-                            //   replyData.sendMessages(widget.messageId,
-                            //       _textEditingController.text);
-                            // }
-                            // setState(() {
-                            //   _textEditingController.text = '';
-                            // });
+                            if (_textEditingController.text.trim() != "") {
+                              replyData.AddNewMessage(fileName);
+                            }
+                            setState(() {
+                              _textEditingController.text = '';
+                            });
                           },
                           child: Padding(
                             padding: EdgeInsets.all(10.0),
