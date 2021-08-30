@@ -39,6 +39,44 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> AddFeedbackMessage(
+      String attachment, String text, String subject) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/messageConversations/feedback?subject=$subject'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: json.encode(
+        {
+          "subject": subject,
+          "users": [
+            {
+              "id": "Onf73mPD6sL",
+              "username": "keita",
+              "firstName": "Seydou",
+              "surname": "Keita",
+              "displayName": "Seydou Keita",
+              "type": "user"
+            }
+          ],
+          "userGroups": [],
+          "organisationUnits": [],
+          "text": text,
+          "attachments": [
+            // {"name": attachment, "contentLength": 153509, "loading": true},
+          ],
+        },
+      ),
+    );
+    print(response.body);
+    if (response.statusCode == 200) {
+      print('is Successfully');
+    }
+    notifyListeners();
+  }
+
+
   Future<void> AddNewMessage(
       String attachment, String text, String subject) async {
     final response = await http.post(

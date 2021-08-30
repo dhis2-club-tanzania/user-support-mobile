@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/widgets/search.dart';
 
 import '../providers/provider.dart';
 import '../widgets/attachment_button.dart';
@@ -52,7 +53,8 @@ class _ComposePageState extends State<ComposePage> {
     final fetchedData = Provider.of<MessageModel>(context);
 
     final Size size = MediaQuery.of(context).size;
-    List<String> selectedUser = ['Name', 'Age'];
+    List<String> selectedUser =
+        isFeedback ? ['Feedback Recipient Group'] : ['me'];
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -81,7 +83,75 @@ class _ComposePageState extends State<ComposePage> {
               width: size.width * 0.9,
               child: ListView(
                 children: [
-                  buildParticipantsList(selectedUser),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text("To"),
+                      buildParticipantsList(selectedUser),
+                    ],
+                  ),
+                  Flexible(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: size.width * 0.05),
+                          width: size.width * 0.6,
+                          child: Container(
+                            child: TextFormField(
+                              controller: _textEditingController1,
+                              onChanged: (query) {
+                                fetchedData.queryUserGroups(query).whenComplete(
+                                      () => fetchedData
+                                          .queryOrgarnizationUnits(query)
+                                          .whenComplete(
+                                            () => fetchedData.queryUser(query),
+                                          ),
+                                    );
+                              },
+                              decoration: const InputDecoration(
+                                hintText: "Add New Participant",
+                                hintStyle: TextStyle(
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 40,
+                          width: size.width * 0.2,
+                          child: OutlinedButton(
+                            onPressed: () async {
+                              if (_textEditingController1.text.trim().isEmpty) {
+                                final user = await showSearch(
+                                    context: context,
+                                    delegate: SearchUser(allUsers: [
+                                      'Tom Wakiki',
+                                      'Wile',
+                                      'Goodluck'
+                                    ], usersSuggestion: [
+                                      'Tom Wakiki',
+                                      'Duke',
+                                      'John Traore',
+                                      'wile'
+                                    ]));
+
+                                setState(() {});
+                              } else {
+                                fetchedData.addParticipant();
+                              }
+                            },
+                            child: Icon(Icons.add),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     children: [
                       Row(
@@ -201,7 +271,8 @@ class _ComposePageState extends State<ComposePage> {
                                       _textEditingController1.text);
                                 }
                                 if (isFeedback) {
-                                  //redireect SomeWhere else
+                                  fetchedData.AddFeedbackMessage(
+                                      'attachment', 'text', 'subject');
                                   print("Iversion");
                                 }
 
@@ -289,7 +360,6 @@ class _ComposePageState extends State<ComposePage> {
                 direction: Axis.vertical,
                 children: users
                     .map((element) => Container(
-                        width: 130,
                         height: 30,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(25)),
