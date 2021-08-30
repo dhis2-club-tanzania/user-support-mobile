@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:user_support_mobile/models/user.dart';
 
-import 'package:user_support_mobile/constants/constants.dart';
-import 'package:user_support_mobile/models/message_conversation.dart';
+import '/constants/constants.dart';
+import '/models/message_conversation.dart';
 
 class MessageModel with ChangeNotifier {
   List<MessageConversation> _allMessageConversation = [];
+  late List<User> _listOfUsers;
   late MessageConversation _fetchedThread;
   List<MessageConversation> _privateMessages = [];
   List<MessageConversation> _validationMessages = [];
-
   late MessageConversation _reply;
   Map<String, dynamic> _map = {};
   bool _error = false;
@@ -21,28 +22,25 @@ class MessageModel with ChangeNotifier {
   String get errorMessage => _errorMessage;
   List<MessageConversation> get allMessageConversation =>
       _allMessageConversation;
+  List<User> get listOfUsers => _listOfUsers;
   List<MessageConversation> get privateMessages => _privateMessages;
   List<MessageConversation> get validationMessage => _validationMessages;
-
   MessageConversation get userReply => _reply;
   MessageConversation get fetchedThread => _fetchedThread;
 
   Future<void> sendMessages(String id, String message) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/messageConversations/$id?internal=false'),
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Accept': 'application/json',
-      },
-      body: json.encode(message),
-    );
-
-    print(response);
-
+        Uri.parse('$baseUrl/messageConversations/$id?internal=false'),
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Accept': 'application/json',
+        },
+        body: json.encode(message));
     notifyListeners();
   }
 
-  Future<void> AddNewMessage(String attachment) async {
+  Future<void> AddNewMessage(
+      String attachment, String text, String subject) async {
     final response = await http.post(
       Uri.parse('$baseUrl/messageConversations'),
       headers: {
@@ -51,16 +49,8 @@ class MessageModel with ChangeNotifier {
       },
       body: json.encode(
         {
-          "subject": "asdfasdfasdfasdf",
+          "subject": subject,
           "users": [
-            {
-              "id": "GOLswS44mh8",
-              "username": "system",
-              "firstName": "Tom",
-              "surname": "Wakiki",
-              "displayName": "Tom Wakiki",
-              "type": "user"
-            },
             {
               "id": "Onf73mPD6sL",
               "username": "keita",
@@ -72,14 +62,64 @@ class MessageModel with ChangeNotifier {
           ],
           "userGroups": [],
           "organisationUnits": [],
-          "text": "sdfasdfasdf",
+          "text": text,
           "attachments": [
             // {"name": attachment, "contentLength": 153509, "loading": true},
           ],
         },
       ),
     );
+    print(response.body);
+    if (response.statusCode == 200) {
+      print('is Successfully');
+    }
     notifyListeners();
+  }
+
+  Future<void> queryUser(String query) async {
+    final url =
+        "$baseUrl/userGroups?fields=id%2C%20displayName&pageSize=10&filter=displayName%3Atoken%3A$query";
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+    print(response.body);
+    // if (response.statusCode==200) {
+
+    // } else {
+    // }
+  }
+
+  Future<void> queryOrgarnizationUnits(String query) async {
+    final url =
+        "$baseUrl/organisationUnits?fields=id,displayName&pageSize=10&filter=displayName%3Atoken%3A$query&filter=users%3Agte%3A1";
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+
+    // if (response.statusCode==200) {
+
+    // } else {
+    // }
+  }
+
+  Future<void> queryUserGroups(String query) async {
+    final url =
+        "$baseUrl/userGroups?fields=id%2C%20displayName&pageSize=10&filter=displayName%3Atoken%3A$query";
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
   }
 
   Future<void> addParticipant() async {
@@ -117,8 +157,6 @@ class MessageModel with ChangeNotifier {
         'Accept': 'application/json',
       },
     );
-    print(response.statusCode);
-
     if (response.statusCode == 200) {
       final list =
           json.decode(response.body)['messageConversations'] as List<dynamic>;
@@ -169,6 +207,7 @@ class MessageModel with ChangeNotifier {
         'Accept': 'application/json',
       },
     );
+    print(response.body);
     print('outside the statuscode');
     if (response.statusCode == 200) {
       print('inside the statuscode');

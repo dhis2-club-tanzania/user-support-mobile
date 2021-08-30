@@ -39,8 +39,8 @@ class MessageConversation {
 
   final String? href;
   final String messageCount;
-  final bool followUp;
-  final String lastUpdated;
+  final bool? followUp;
+  final String? lastUpdated;
   final String id;
   final bool read;
   // final String created;
@@ -69,8 +69,9 @@ class MessageConversation {
     return MessageConversation(
       href: json['href'].toString(),
       messageCount: json["messageCount"].toString(),
-      followUp: json["followUp"] as bool,
-      lastUpdated: json["lastUpdated"] as String,
+      followUp: json['followUp'] != null ? json["followUp"] as bool : null,
+      lastUpdated:
+          json["lastUpdated"] != null ? json["lastUpdated"] as String : null,
       id: json["id"].toString(),
       read: json["read"] as bool,
       // created: json["created"] as String,
@@ -110,35 +111,4 @@ class MessageConversation {
           : null,
     );
   }
-
-  Map<String, dynamic> toJson() => {
-        // "messageCount": messageCount,
-        "followUp": followUp,
-        "lastUpdated": lastUpdated,
-        "id": id,
-        "read": read,
-        // "created": created,
-        "name": name,
-        "subject": subject,
-        "displayName": displayName,
-        // "externalAccess": externalAccess,
-        "messageType": messageType,
-        "lastMessage": lastMessage,
-        // "sharing": sharing.toJson(),
-        // "priority": priority,
-        "favorite": favorite,
-        // "status": status,
-        // "access": access.toJson(),
-        // "lastSender": lastSender.toJson(),
-        "createdBy": createdBy!.toJson(),
-        // "user": user.toJson(),
-        // "favorites": List<dynamic>.from(favorites.map((x) => x)),
-        // "translations": List<dynamic>.from(translations.map((x) => x)),
-        "userMessages":
-            List<dynamic>.from(userMessages!.map((x) => x.toJson())),
-        // "userGroupAccesses": List<dynamic>.from(userGroupAccesses.map((x) => x)),
-        // "attributeValues": List<dynamic>.from(attributeValues.map((x) => x) as Iterable),
-        // "userAccesses": List<dynamic>.from(userAccesses.map((x) => x) as Iterable),
-        "messages": List<dynamic>.from(messages!.map((x) => x.toJson())),
-      };
 }

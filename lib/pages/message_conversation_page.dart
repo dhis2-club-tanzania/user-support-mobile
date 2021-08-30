@@ -1,14 +1,14 @@
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:user_support_mobile/widgets/attachment_button.dart';
 import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
 import '../models/message_conversation.dart';
 import '../models/user_messages.dart';
 import '../providers/provider.dart';
+import '../widgets/attachment_button.dart';
 import '../widgets/search.dart';
 
 class MessageConversationPage extends StatefulWidget {
@@ -101,29 +101,17 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                               child: Container(
                                 child: TextFormField(
                                   controller: _textEditingController1,
-                                  onTap: () async {
-                                    if (_textEditingController1.text
-                                        .trim()
-                                        .isEmpty) {
-                                      final user = await showSearch(
-                                          context: context,
-                                          delegate: SearchUser(allUsers: [
-                                            'Tom Wakiki',
-                                            'Wile',
-                                            'Goodluck'
-                                          ], usersSuggestion: [
-                                            'Tom Wakiki',
-                                            'Duke',
-                                            'John Traore',
-                                            'wile'
-                                          ]));
-
-                                      setState(() {
-                                        selectedUser = user;
-                                        _textEditingController1.text =
-                                            selectedUser!;
-                                      });
-                                    }
+                                  onChanged: (query) {
+                                    fetchedData
+                                        .queryUserGroups(query)
+                                        .whenComplete(
+                                          () => fetchedData
+                                              .queryOrgarnizationUnits(query)
+                                              .whenComplete(
+                                                () => fetchedData
+                                                    .queryUser(query),
+                                              ),
+                                        );
                                   },
                                   decoration: const InputDecoration(
                                     hintText: "Add New Participant",
@@ -224,9 +212,15 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                                 onPressed: () {
                                   if (_textEditingController.text.trim() !=
                                       "") {
-                                    fetchedData.sendMessages(
-                                        widget.fetchedData.id,
-                                        _textEditingController.text);
+                                    fetchedData
+                                        .sendMessages(widget.fetchedData.id,
+                                            _textEditingController.text)
+                                        .whenComplete(() =>
+                                            fetchedData.fetchMessageThreadsById(
+                                                widget.fetchedData.id));
+
+                                    print(
+                                        'This message was loaded successfully');
                                     isButtonEnabled = false;
                                   }
                                   setState(() {
@@ -234,7 +228,7 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                                   });
                                 },
                                 child: Padding(
-                                  padding: EdgeInsets.all(10.0),
+                                  padding: const EdgeInsets.all(10.0),
                                   child: Text(
                                     'Reply',
                                     style: TextStyle(
@@ -361,8 +355,8 @@ Widget buildParticipantsList(List<UserMessages>? users) {
                         borderRadius: BorderRadius.all(Radius.circular(25)),
                         color: Color(0xFFE0E0E0),
                       ),
-                      margin: EdgeInsets.all(5),
-                      padding: EdgeInsets.all(5),
+                      margin: const EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       child: Text(element.users!.displayName,
                           textAlign: TextAlign.center)))
                   .toList(),
