@@ -86,7 +86,14 @@ class _ComposePageState extends State<ComposePage> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text("To"),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          "To",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                      ),
                       buildParticipantsList(selectedUser),
                     ],
                   ),

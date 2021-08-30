@@ -12,6 +12,8 @@ class MessageModel with ChangeNotifier {
   late MessageConversation _fetchedThread;
   List<MessageConversation> _privateMessages = [];
   List<MessageConversation> _validationMessages = [];
+  List<MessageConversation> _ticketMessage = [];
+  List<MessageConversation> _systemMessages = [];
   late MessageConversation _reply;
   Map<String, dynamic> _map = {};
   bool _error = false;
@@ -22,6 +24,8 @@ class MessageModel with ChangeNotifier {
   String get errorMessage => _errorMessage;
   List<MessageConversation> get allMessageConversation =>
       _allMessageConversation;
+  List<MessageConversation> get ticketMessage => _ticketMessage;
+  List<MessageConversation> get systemMessage => _systemMessages;
   List<User> get listOfUsers => _listOfUsers;
   List<MessageConversation> get privateMessages => _privateMessages;
   List<MessageConversation> get validationMessage => _validationMessages;
@@ -75,7 +79,6 @@ class MessageModel with ChangeNotifier {
     }
     notifyListeners();
   }
-
 
   Future<void> AddNewMessage(
       String attachment, String text, String subject) async {
@@ -186,6 +189,30 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> get fetchSystemMessage async {
+    final response = await http.get(
+      Uri.parse(
+          '$baseUrl/messageConversations?filter=messageType%3Aeq%3ASYSTEM&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+    if (response.statusCode == 200) {
+      final list =
+          json.decode(response.body)['messageConversations'] as List<dynamic>;
+      _map = jsonDecode(response.body) as Map<String, dynamic>;
+      _systemMessages = list
+          .map((model) =>
+              MessageConversation.fromJson(model as Map<String, dynamic>))
+          .toList();
+      _error = false;
+    } else {
+      throw Exception("Failed to Load Data");
+    }
+    notifyListeners();
+  }
+
   Future<void> get fetchPrivateMessages async {
     final response = await http.get(
       Uri.parse(
@@ -200,6 +227,32 @@ class MessageModel with ChangeNotifier {
           json.decode(response.body)['messageConversations'] as List<dynamic>;
       _map = jsonDecode(response.body) as Map<String, dynamic>;
       _privateMessages = list
+          .map((model) =>
+              MessageConversation.fromJson(model as Map<String, dynamic>))
+          .toList();
+      _error = false;
+    } else {
+      throw Exception("Failed to Load Data");
+    }
+    notifyListeners();
+  }
+
+  Future<void> get fetchTicketMessages async {
+    final response = await http.get(
+      Uri.parse(
+          '$baseUrl/messageConversations?filter=messageType%3Aeq%3ATICKET&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      final list =
+          json.decode(response.body)['messageConversations'] as List<dynamic>;
+      _map = jsonDecode(response.body) as Map<String, dynamic>;
+      _ticketMessage = list
           .map((model) =>
               MessageConversation.fromJson(model as Map<String, dynamic>))
           .toList();

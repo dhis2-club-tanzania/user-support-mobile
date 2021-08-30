@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/provider.dart';
-import '/pages/home_page.dart';
 import '/pages/inbox_page.dart';
 import '/pages/system_page.dart';
 import '/pages/ticket_page.dart';
@@ -70,9 +69,9 @@ class NavigationDrawer extends StatelessWidget {
               Colors.blue.shade200,
               () => const ValidationPage()),
           _listTileWidget(context, 'Ticket', 5, Icons.scanner,
-              Colors.red.shade200, () => const InboxPage()),
+              Colors.red.shade200, () => const TicketPage()),
           _listTileWidget(context, 'System', 4, Icons.system_update,
-              Colors.pinkAccent, () => const InboxPage()),
+              Colors.pinkAccent, () => const SystemPage()),
         ],
       ),
     );
