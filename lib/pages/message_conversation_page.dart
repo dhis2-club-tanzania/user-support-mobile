@@ -195,7 +195,6 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                         Container(),
                       const SizedBox(height: 8),
                       Container(
-                        // padding: EdgeInsets.only(left: size.width * 0.05),
                         child: Row(
                           children: [
                             AbsorbPointer(
@@ -284,6 +283,9 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        height: 30,
+                      )
                     ],
                   ),
                 ),
@@ -297,6 +299,7 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
     print('inside message thread');
     print("${messagesData.messages!.length}");
     return ListView.builder(
+        physics: ScrollPhysics(),
         shrinkWrap: true,
         itemCount: messagesData.messageCount.isNotEmpty
             ? messagesData.messages!.length

@@ -68,7 +68,7 @@ class TicketPage extends StatelessWidget {
                             child: MessageBox(
                                 lastMessage: messageData.lastMessage,
                                 subject: messageData.subject,
-                                displayName: messageData.lastMessage.isNotEmpty
+                                displayName: messageData.lastSender != null
                                     ? messageData.lastSender!.displayName
                                     : "Ticket",
                                 read: value.ticketMessage[index].read,
