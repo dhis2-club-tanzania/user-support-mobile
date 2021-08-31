@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:user_support_mobile/models/user.dart';
 
 import '/constants/constants.dart';
 import '/models/message_conversation.dart';
+import '/models/user.dart';
 
 class MessageModel with ChangeNotifier {
   List<MessageConversation> _allMessageConversation = [];
@@ -40,10 +40,15 @@ class MessageModel with ChangeNotifier {
           'Accept': 'application/json',
         },
         body: json.encode(message));
+    print("Print the status code");
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print('This message was successful sent');
+    }
     notifyListeners();
   }
 
-  Future<void> AddFeedbackMessage(
+  Future<void> addFeedbackMessage(
       String attachment, String text, String subject) async {
     final response = await http.post(
       Uri.parse('$baseUrl/messageConversations/feedback?subject=$subject'),
@@ -80,7 +85,7 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> AddNewMessage(
+  Future<void> addNewMessage(
       String attachment, String text, String subject) async {
     final response = await http.post(
       Uri.parse('$baseUrl/messageConversations'),
@@ -112,7 +117,7 @@ class MessageModel with ChangeNotifier {
     );
     print(response.body);
     if (response.statusCode == 200) {
-      print('is Successfully');
+      print('This was Successfully');
     }
     notifyListeners();
   }
@@ -128,10 +133,6 @@ class MessageModel with ChangeNotifier {
       },
     );
     print(response.body);
-    // if (response.statusCode==200) {
-
-    // } else {
-    // }
   }
 
   Future<void> queryOrgarnizationUnits(String query) async {
@@ -246,7 +247,6 @@ class MessageModel with ChangeNotifier {
         'Accept': 'application/json',
       },
     );
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
       final list =
@@ -298,14 +298,13 @@ class MessageModel with ChangeNotifier {
         'Accept': 'application/json',
       },
     );
-    print(response.body);
-    print('outside the statuscode');
-    if (response.statusCode == 200) {
-      print('inside the statuscode');
 
+    print(response.body);
+    if (response.statusCode == 200) {
       final Map<String, dynamic> body =
           json.decode(response.body) as Map<String, dynamic>;
       _fetchedThread = MessageConversation.fromJson(body);
+      print(_fetchedThread);
     } else {
       throw Exception('Failed to Load Data');
     }

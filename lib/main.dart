@@ -5,7 +5,7 @@ import './pages/splash_page.dart';
 import './providers/provider.dart';
 
 void main() {
-  runApp(
+runApp(
     MyApp(),
   );
 }

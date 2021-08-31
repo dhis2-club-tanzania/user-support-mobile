@@ -12,10 +12,7 @@ import '../widgets/attachment_button.dart';
 import '../widgets/search.dart';
 
 class MessageConversationPage extends StatefulWidget {
-  const MessageConversationPage({Key? key, required this.fetchedData})
-      : super(key: key);
-
-  final MessageConversation fetchedData;
+  const MessageConversationPage({Key? key}) : super(key: key);
 
   @override
   _MessageConversationPageState createState() =>
@@ -55,8 +52,6 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
     final fileName = file != null ? basename(file!.path) : '';
 
     final fetchedData = Provider.of<MessageModel>(context);
-    // final loading = fetchedData.loading;
-    // var value = context.
     final datas = fetchedData.fetchedThread;
 
     final Size size = MediaQuery.of(context).size;
@@ -87,78 +82,82 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                 child: Container(
                   height: size.height,
                   width: size.width * 0.9,
-                  child: Column(
+                  child: ListView(
                     children: [
                       buildParticipantsList(datas.userMessages),
-                      Flexible(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.only(left: size.width * 0.05),
-                              width: size.width * 0.6,
-                              child: Container(
-                                child: TextFormField(
-                                  controller: _textEditingController1,
-                                  onChanged: (query) {
-                                    fetchedData
-                                        .queryUserGroups(query)
-                                        .whenComplete(
-                                          () => fetchedData
-                                              .queryOrgarnizationUnits(query)
-                                              .whenComplete(
-                                                () => fetchedData
-                                                    .queryUser(query),
-                                              ),
-                                        );
-                                  },
-                                  decoration: const InputDecoration(
-                                    hintText: "Add New Participant",
-                                    hintStyle: TextStyle(
-                                      fontSize: 15,
-                                    ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(left: size.width * 0.05),
+                            width: size.width * 0.6,
+                            child: Container(
+                              child: TextFormField(
+                                controller: _textEditingController1,
+                                onChanged: (query) {
+                                  fetchedData
+                                      .queryUserGroups(query)
+                                      .whenComplete(
+                                        () => fetchedData
+                                            .queryOrgarnizationUnits(query)
+                                            .whenComplete(
+                                              () =>
+                                                  fetchedData.queryUser(query),
+                                            ),
+                                      );
+                                },
+                                decoration: const InputDecoration(
+                                  hintText: "Add New Participant",
+                                  hintStyle: TextStyle(
+                                    fontSize: 15,
                                   ),
                                 ),
                               ),
                             ),
-                            Container(
-                              height: 40,
-                              width: size.width * 0.2,
-                              child: OutlinedButton(
-                                onPressed: () async {
-                                  if (_textEditingController1.text
-                                      .trim()
-                                      .isEmpty) {
-                                    final user = await showSearch(
-                                        context: context,
-                                        delegate: SearchUser(allUsers: [
-                                          'Tom Wakiki',
-                                          'Wile',
-                                          'Goodluck'
-                                        ], usersSuggestion: [
-                                          'Tom Wakiki',
-                                          'Duke',
-                                          'John Traore',
-                                          'wile'
-                                        ]));
+                          ),
+                          Container(
+                            height: 40,
+                            width: size.width * 0.2,
+                            child: OutlinedButton(
+                              onPressed: () async {
+                                if (_textEditingController1.text
+                                    .trim()
+                                    .isEmpty) {
+                                  final user = await showSearch(
+                                    context: context,
+                                    delegate: SearchUser(
+                                      allUsers: [
+                                        'Tom Wakiki',
+                                        'Wile',
+                                        'Goodluck'
+                                      ],
+                                      usersSuggestion: [
+                                        'Tom Wakiki',
+                                        'Duke',
+                                        'John Traore',
+                                        'wile'
+                                      ],
+                                    ),
+                                  );
 
-                                    setState(() {
-                                      selectedUser = user;
-                                      _textEditingController1.text =
-                                          selectedUser!;
-                                    });
-                                  } else {
-                                    fetchedData.addParticipant();
-                                  }
-                                },
-                                child: Icon(Icons.add),
-                              ),
+                                  setState(() {
+                                    selectedUser = user;
+                                    _textEditingController1.text =
+                                        selectedUser!;
+                                  });
+                                } else {
+                                  fetchedData.addParticipant();
+                                }
+                              },
+                              child: const Icon(Icons.add),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 20),
+                      // SizedBox(height: 22),
+                      _messageThread(datas),
                       Container(
                         padding: EdgeInsets.only(left: size.width * 0.05),
                         width: size.width,
@@ -196,7 +195,7 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                         Container(),
                       const SizedBox(height: 8),
                       Container(
-                        padding: EdgeInsets.only(left: size.width * 0.05),
+                        // padding: EdgeInsets.only(left: size.width * 0.05),
                         child: Row(
                           children: [
                             AbsorbPointer(
@@ -213,14 +212,15 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                                   if (_textEditingController.text.trim() !=
                                       "") {
                                     fetchedData
-                                        .sendMessages(widget.fetchedData.id,
+                                        .sendMessages(
+                                            fetchedData.fetchedThread.id,
                                             _textEditingController.text)
-                                        .whenComplete(() =>
-                                            fetchedData.fetchMessageThreadsById(
-                                                widget.fetchedData.id));
-
-                                    print(
-                                        'This message was loaded successfully');
+                                        .whenComplete(
+                                          () => fetchedData
+                                              .fetchMessageThreadsById(
+                                            fetchedData.fetchedThread.id,
+                                          ),
+                                        );
                                     isButtonEnabled = false;
                                   }
                                   setState(() {
@@ -249,7 +249,7 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                                 style: ButtonStyle(
                                   backgroundColor: !isButtonEnabled
                                       ? MaterialStateProperty.all(
-                                          Color(0xFFE0E0E0))
+                                          const Color(0xFFE0E0E0))
                                       : MaterialStateProperty.all(Colors.white),
                                 ),
                                 onPressed: () async {
@@ -284,8 +284,6 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 22),
-                      _messageThread(datas)
                     ],
                   ),
                 ),
@@ -296,44 +294,42 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
   }
 
   Widget _messageThread(MessageConversation messagesData) {
-    return Container(
-      child: Expanded(
-        flex: 6,
-        child: ListView.builder(
-            itemCount: messagesData.messageCount.isNotEmpty
-                ? messagesData.messages!.length
-                : 0,
-            itemBuilder: (context, index) {
-              var messageFrom = messagesData.messages![index].sender != null
-                  ? messagesData.messages![index].sender!.displayName
-                  : "System";
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 15.0),
-                child: Card(
-                  child: ListTile(
-                    trailing: Text(messagesData.messages![index].lastUpdated
-                        .substring(0, 10)),
-                    title: Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Text('Message from $messageFrom'),
+    print('inside message thread');
+    print("${messagesData.messages!.length}");
+    return ListView.builder(
+        shrinkWrap: true,
+        itemCount: messagesData.messageCount.isNotEmpty
+            ? messagesData.messages!.length
+            : 0,
+        itemBuilder: (context, index) {
+          var messageFrom = messagesData.messages![index].sender != null
+              ? messagesData.messages![index].sender!.displayName
+              : "System";
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 15.0),
+            child: Card(
+              child: ListTile(
+                trailing: Text(
+                    messagesData.messages![index].lastUpdated.substring(0, 10)),
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text('Message from $messageFrom'),
+                ),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    messagesData.messages![index].text,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
                     ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Text(
-                        messagesData.messages![index].text,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                    isThreeLine: true,
                   ),
                 ),
-              );
-            }),
-      ),
-    );
+                isThreeLine: true,
+              ),
+            ),
+          );
+        });
   }
 }
 
@@ -348,7 +344,6 @@ Widget buildParticipantsList(List<UserMessages>? users) {
               direction: Axis.vertical,
               children: users
                   .map((element) => Container(
-                      // margin: EdgeInsets.symmetric(horizontal: 5),
                       width: 130,
                       height: 30,
                       decoration: const BoxDecoration(

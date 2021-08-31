@@ -97,64 +97,62 @@ class _ComposePageState extends State<ComposePage> {
                       buildParticipantsList(selectedUser),
                     ],
                   ),
-                  Flexible(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(left: size.width * 0.05),
-                          width: size.width * 0.6,
-                          child: Container(
-                            child: TextFormField(
-                              controller: _textEditingController1,
-                              onChanged: (query) {
-                                fetchedData.queryUserGroups(query).whenComplete(
-                                      () => fetchedData
-                                          .queryOrgarnizationUnits(query)
-                                          .whenComplete(
-                                            () => fetchedData.queryUser(query),
-                                          ),
-                                    );
-                              },
-                              decoration: const InputDecoration(
-                                hintText: "Add New Participant",
-                                hintStyle: TextStyle(
-                                  fontSize: 15,
-                                ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: size.width * 0.05),
+                        width: size.width * 0.6,
+                        child: Container(
+                          child: TextFormField(
+                            controller: _textEditingController1,
+                            onChanged: (query) {
+                              fetchedData.queryUserGroups(query).whenComplete(
+                                    () => fetchedData
+                                        .queryOrgarnizationUnits(query)
+                                        .whenComplete(
+                                          () => fetchedData.queryUser(query),
+                                        ),
+                                  );
+                            },
+                            decoration: const InputDecoration(
+                              hintText: "Add New Participant",
+                              hintStyle: TextStyle(
+                                fontSize: 15,
                               ),
                             ),
                           ),
                         ),
-                        Container(
-                          height: 40,
-                          width: size.width * 0.2,
-                          child: OutlinedButton(
-                            onPressed: () async {
-                              if (_textEditingController1.text.trim().isEmpty) {
-                                final user = await showSearch(
-                                    context: context,
-                                    delegate: SearchUser(allUsers: [
-                                      'Tom Wakiki',
-                                      'Wile',
-                                      'Goodluck'
-                                    ], usersSuggestion: [
-                                      'Tom Wakiki',
-                                      'Duke',
-                                      'John Traore',
-                                      'wile'
-                                    ]));
+                      ),
+                      Container(
+                        height: 40,
+                        width: size.width * 0.2,
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            if (_textEditingController1.text.trim().isEmpty) {
+                              final user = await showSearch(
+                                  context: context,
+                                  delegate: SearchUser(allUsers: [
+                                    'Tom Wakiki',
+                                    'Wile',
+                                    'Goodluck'
+                                  ], usersSuggestion: [
+                                    'Tom Wakiki',
+                                    'Duke',
+                                    'John Traore',
+                                    'wile'
+                                  ]));
 
-                                setState(() {});
-                              } else {
-                                fetchedData.addParticipant();
-                              }
-                            },
-                            child: Icon(Icons.add),
-                          ),
+                              setState(() {});
+                            } else {
+                              fetchedData.addParticipant();
+                            }
+                          },
+                          child: Icon(Icons.add),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 20,
@@ -272,13 +270,13 @@ class _ComposePageState extends State<ComposePage> {
                                 print("print feedback bool $isFeedback");
                                 if (isPrivate) {
                                   print("Inside Private body");
-                                  fetchedData.AddNewMessage(
+                                  fetchedData.addNewMessage(
                                       'attachment',
                                       _textEditingController.text,
                                       _textEditingController1.text);
                                 }
                                 if (isFeedback) {
-                                  fetchedData.AddFeedbackMessage(
+                                  fetchedData.addFeedbackMessage(
                                       'attachment', 'text', 'subject');
                                   print("Iversion");
                                 }

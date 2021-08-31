@@ -24,7 +24,6 @@ class MessageBox extends StatelessWidget {
   Widget build(BuildContext context) {
     // context.read<MessageModel>().fetchMessageThreads(messageId);
     final fetchedData = Provider.of<MessageModel>(context);
-
     final Size size = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
@@ -33,9 +32,7 @@ class MessageBox extends StatelessWidget {
 
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
-            return MessageConversationPage(
-              fetchedData: fetchedData.fetchedThread,
-            );
+            return const MessageConversationPage();
           },
         ));
       },
@@ -49,7 +46,7 @@ class MessageBox extends StatelessWidget {
               child: CircleAvatar(
                 child: Text(
                   firstLetter(displayName),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 29,
                     fontWeight: FontWeight.w500,
                   ),
@@ -58,7 +55,7 @@ class MessageBox extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   left: 15.0,
                 ),
                 child: Column(
