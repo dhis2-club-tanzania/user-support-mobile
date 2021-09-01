@@ -277,7 +277,7 @@ class _ComposePageState extends State<ComposePage> {
                                 }
                                 if (isFeedback) {
                                   fetchedData.addFeedbackMessage(
-                                      'attachment', 'text', 'subject');
+                                       _textEditingController1.text, _textEditingController.text);
                                   print("Iversion");
                                 }
 

@@ -209,7 +209,7 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                                 ),
                                 onPressed: () {
                                   if (_textEditingController.text.trim() !=
-                                      "") {
+                                      '') {
                                     fetchedData
                                         .sendMessages(
                                             fetchedData.fetchedThread.id,

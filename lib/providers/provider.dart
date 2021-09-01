@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -7,7 +8,7 @@ import '/models/message_conversation.dart';
 import '/models/user.dart';
 
 class MessageModel with ChangeNotifier {
-  List<MessageConversation> _allMessageConversation = [];
+  final List<MessageConversation> _allMessageConversation = [];
   late List<User> _listOfUsers;
   late MessageConversation _fetchedThread;
   List<MessageConversation> _privateMessages = [];
@@ -17,7 +18,7 @@ class MessageModel with ChangeNotifier {
   late MessageConversation _reply;
   Map<String, dynamic> _map = {};
   bool _error = false;
-  String _errorMessage = '';
+  final String _errorMessage = '';
 
   Map<String, dynamic> get map => _map;
   bool get error => _error;
@@ -34,50 +35,44 @@ class MessageModel with ChangeNotifier {
 
   Future<void> sendMessages(String id, String message) async {
     final response = await http.post(
-        Uri.parse('$baseUrl/messageConversations/$id?internal=false'),
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          'Accept': 'application/json',
-        },
-        body: json.encode(message));
-    print("Print the status code");
-    print(response.statusCode);
-    if (response.statusCode == 200) {
-      print('This message was successful sent');
-    }
-    notifyListeners();
-  }
-
-  Future<void> addFeedbackMessage(
-      String attachment, String text, String subject) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/messageConversations/feedback?subject=$subject'),
+      Uri.parse('$baseUrl/messageConversations/$id?internal=false'),
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8',
         'Accept': 'application/json',
       },
-      body: json.encode(
-        {
-          "subject": subject,
-          "users": [
-            {
-              "id": "Onf73mPD6sL",
-              "username": "keita",
-              "firstName": "Seydou",
-              "surname": "Keita",
-              "displayName": "Seydou Keita",
-              "type": "user"
-            }
-          ],
-          "userGroups": [],
-          "organisationUnits": [],
-          "text": text,
-          "attachments": [
-            // {"name": attachment, "contentLength": 153509, "loading": true},
-          ],
-        },
-      ),
+      body: message,
     );
+    // print("Print the status code");
+    // print(response.statusCode);
+    // if (response.statusCode == 200) {
+    //   print('This message was successful sent');
+    // }
+    notifyListeners();
+  }
+  
+uploadImageWithhttp(File imageFile, int serialno) async {
+    final postBody= imageFile != null ? base64Encode(imageFile.readAsBytesSync()) : '';
+ 
+
+    final response = await http.post(
+       Uri.parse('$baseUrl/messageConversations/internal=false'),
+      headers: {
+        'Content-Type' : 'application/json',
+      },
+      body: json.encode(postBody),
+    );
+    final responseJson = json.decode(response.body);
+    print(responseJson);
+  }
+
+  Future<void> addFeedbackMessage(String subject, String text) async {
+    final response = await http.post(
+        Uri.parse('$baseUrl/messageConversations/feedback?subject=$subject'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: text);
     print(response.body);
     if (response.statusCode == 200) {
       print('is Successfully');
@@ -115,10 +110,10 @@ class MessageModel with ChangeNotifier {
         },
       ),
     );
-    print(response.body);
-    if (response.statusCode == 200) {
-      print('This was Successfully');
-    }
+    // print(response.body);
+    // if (response.statusCode == 200) {
+    //   print('This was Successfully');
+    // }
     notifyListeners();
   }
 
@@ -298,15 +293,10 @@ class MessageModel with ChangeNotifier {
         'Accept': 'application/json',
       },
     );
-
-    print(response.body);
     if (response.statusCode == 200) {
       final Map<String, dynamic> body =
           json.decode(response.body) as Map<String, dynamic>;
       _fetchedThread = MessageConversation.fromJson(body);
-      print(_fetchedThread);
-    } else {
-      throw Exception('Failed to Load Data');
     }
     notifyListeners();
   }
