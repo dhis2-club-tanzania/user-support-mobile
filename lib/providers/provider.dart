@@ -42,22 +42,22 @@ class MessageModel with ChangeNotifier {
       },
       body: message,
     );
-    // print("Print the status code");
-    // print(response.statusCode);
-    // if (response.statusCode == 200) {
-    //   print('This message was successful sent');
-    // }
+    print("Print the status code");
+    print(response.body);
+    if (response.statusCode == 201) {
+      print('This message was successful sent');
+    }
     notifyListeners();
   }
-  
-uploadImageWithhttp(File imageFile, int serialno) async {
-    final postBody= imageFile != null ? base64Encode(imageFile.readAsBytesSync()) : '';
- 
+
+  uploadImageWithhttp(File imageFile, int serialno) async {
+    final postBody =
+        imageFile != null ? base64Encode(imageFile.readAsBytesSync()) : '';
 
     final response = await http.post(
-       Uri.parse('$baseUrl/messageConversations/internal=false'),
+      Uri.parse('$baseUrl/messageConversations/internal=false'),
       headers: {
-        'Content-Type' : 'application/json',
+        'Content-Type': 'application/json',
       },
       body: json.encode(postBody),
     );
@@ -293,6 +293,8 @@ uploadImageWithhttp(File imageFile, int serialno) async {
         'Accept': 'application/json',
       },
     );
+
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final Map<String, dynamic> body =
           json.decode(response.body) as Map<String, dynamic>;

@@ -31,7 +31,6 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-           
             Image.asset(
               'assets/images/dhis2logo.png',
               color: const Color(0xFF1D5288),

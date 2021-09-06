@@ -75,6 +75,36 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
             color: Colors.black,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.mail,
+              color:  Colors.black87,
+            ),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: Colors.black87,
+            ),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.done,
+              color: Colors.black87,
+            ),
+            onPressed: () {},
+          ),
+          IconButton(
+            color: Colors.black87,
+            icon: Icon(
+              Icons.more_vert,
+            ),
+            onPressed: () {},
+          ),
+        ],
       ),
       body: datas.messageType.trim().isNotEmpty
           ? SafeArea(
@@ -210,16 +240,18 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                                 onPressed: () {
                                   if (_textEditingController.text.trim() !=
                                       '') {
-                                    fetchedData
-                                        .sendMessages(
-                                            fetchedData.fetchedThread.id,
-                                            _textEditingController.text)
-                                        .whenComplete(
-                                          () => fetchedData
-                                              .fetchMessageThreadsById(
-                                            fetchedData.fetchedThread.id,
-                                          ),
-                                        );
+                                    var delaytime = Future.delayed(
+                                        Duration(milliseconds: 2000));
+                                    print(
+                                        "this is a id ${fetchedData.fetchedThread.id}");
+                                    fetchedData.sendMessages(
+                                        fetchedData.fetchedThread.id,
+                                        _textEditingController.text);
+
+                                    fetchedData.fetchMessageThreadsById(
+                                      fetchedData.fetchedThread.id,
+                                    );
+
                                     isButtonEnabled = false;
                                   }
                                   setState(() {
@@ -296,8 +328,6 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
   }
 
   Widget _messageThread(MessageConversation messagesData) {
-    print('inside message thread');
-    print("${messagesData.messages!.length}");
     return ListView.builder(
         physics: ScrollPhysics(),
         shrinkWrap: true,
