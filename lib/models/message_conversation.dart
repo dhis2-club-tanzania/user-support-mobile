@@ -75,7 +75,7 @@ class MessageConversation {
       id: json["id"].toString(),
       read: json["read"] != null ? json["read"] as bool : false,
       // created: json["created"] as String,
-      name: json["name"].toString(),
+      name: json["name"] as String,
       subject: json["subject"].toString(),
       displayName: json["displayName"].toString(),
       // externalAccess: json["externalAccess"] as bool,

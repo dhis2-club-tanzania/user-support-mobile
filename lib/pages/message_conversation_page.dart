@@ -53,6 +53,7 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
 
     final fetchedData = Provider.of<MessageModel>(context);
     final datas = fetchedData.fetchedThread;
+    final messageId = datas.id;
 
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -75,36 +76,40 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
             color: Colors.black,
           ),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.mail,
-              color:  Colors.black87,
-            ),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.delete,
-              color: Colors.black87,
-            ),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.done,
-              color: Colors.black87,
-            ),
-            onPressed: () {},
-          ),
-          IconButton(
-            color: Colors.black87,
-            icon: Icon(
-              Icons.more_vert,
-            ),
-            onPressed: () {},
-          ),
-        ],
+        actions: datas.messageType.trim().isNotEmpty
+            ? [
+                IconButton(
+                  icon: Icon(
+                    Icons.mail,
+                    color: Colors.black87,
+                  ),
+                  onPressed: () => fetchedData.messageUnread(messageId),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.black87,
+                  ),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.done,
+                    color: Colors.black87,
+                  ),
+                  onPressed: () {
+                    fetchedData.messageRead(messageId);
+                  },
+                ),
+                IconButton(
+                  color: Colors.black87,
+                  icon: Icon(
+                    Icons.more_vert,
+                  ),
+                  onPressed: () {},
+                ),
+              ]
+            : [],
       ),
       body: datas.messageType.trim().isNotEmpty
           ? SafeArea(
@@ -186,7 +191,6 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                         ],
                       ),
                       SizedBox(height: 20),
-                      // SizedBox(height: 22),
                       _messageThread(datas),
                       Container(
                         padding: EdgeInsets.only(left: size.width * 0.05),
@@ -244,13 +248,14 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                                         Duration(milliseconds: 2000));
                                     print(
                                         "this is a id ${fetchedData.fetchedThread.id}");
-                                    fetchedData.sendMessages(
-                                        fetchedData.fetchedThread.id,
-                                        _textEditingController.text);
-
-                                    fetchedData.fetchMessageThreadsById(
-                                      fetchedData.fetchedThread.id,
-                                    );
+                                    fetchedData
+                                        .sendMessages(
+                                            fetchedData.fetchedThread.id,
+                                            _textEditingController.text)
+                                        .whenComplete(() =>
+                                            fetchedData.fetchMessageThreadsById(
+                                              fetchedData.fetchedThread.id,
+                                            ));
 
                                     isButtonEnabled = false;
                                   }

@@ -80,6 +80,41 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
+  //post message read
+  Future<void> messageRead(String id) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/messageConversations/read'),
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode([id]),
+    );
+    print(response.body);
+    if (response.statusCode == 200) {
+      print('is Successfully');
+    }
+    notifyListeners();
+  }
+
+   //post message unread
+  Future<void> messageUnread(String id) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/messageConversations/unread'),
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode([id]),
+    );
+    print(response.body);
+    if (response.statusCode == 200) {
+      print('is Successfully');
+    }
+    notifyListeners();
+  }
+
+
   Future<void> addNewMessage(
       String attachment, String text, String subject) async {
     final response = await http.post(
