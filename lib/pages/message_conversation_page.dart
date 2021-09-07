@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +55,7 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
     final fetchedData = Provider.of<MessageModel>(context);
     final datas = fetchedData.fetchedThread;
     final messageId = datas.id;
+    final userId = datas.lastSender != null ? datas.createdBy!.id : '';
 
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -90,7 +92,10 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                     Icons.delete,
                     color: Colors.black87,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    fetchedData.deleteMessage(messageId, userId);
+                    Navigator.of(context).pop();
+                  },
                 ),
                 IconButton(
                   icon: Icon(

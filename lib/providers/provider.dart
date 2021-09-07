@@ -97,7 +97,7 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
-   //post message unread
+  //post message unread
   Future<void> messageUnread(String id) async {
     final response = await http.post(
       Uri.parse('$baseUrl/messageConversations/unread'),
@@ -114,6 +114,23 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
+  //delete message conversation
+  Future<void> deleteMessage(String messageId, String userId) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/messageConversations/$messageId/$userId'),
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Accept': 'application/json',
+      },
+    );
+    print(response.body);
+    if (response.statusCode == 200) {
+      print('is Successfully');
+
+      _allMessageConversation.remove(messageId);
+    }
+    notifyListeners();
+  }
 
   Future<void> addNewMessage(
       String attachment, String text, String subject) async {
