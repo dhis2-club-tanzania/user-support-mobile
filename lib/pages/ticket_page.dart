@@ -8,6 +8,8 @@ import '/widgets/drawer_nav.dart';
 import '/widgets/message_card.dart';
 
 class TicketPage extends StatelessWidget {
+  static const routeName = '/ticket-page';
+
   const TicketPage({Key? key}) : super(key: key);
 
   @override

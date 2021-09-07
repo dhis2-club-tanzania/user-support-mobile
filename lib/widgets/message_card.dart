@@ -109,17 +109,17 @@ class MessageBox extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.6,
-                              child: const Text(
-                                'There is no text to be displayed',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black54,
-                                    fontSize: 15.5),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            )
+                            // Container(
+                            //   width: MediaQuery.of(context).size.width * 0.6,
+                            //   child: const Text(
+                            //     'There is no text to be displayed',
+                            //     style: TextStyle(
+                            //         fontWeight: FontWeight.w400,
+                            //         color: Colors.black54,
+                            //         fontSize: 15.5),
+                            //     overflow: TextOverflow.ellipsis,
+                            //   ),
+                            // )
                           ],
                         ),
                       ],

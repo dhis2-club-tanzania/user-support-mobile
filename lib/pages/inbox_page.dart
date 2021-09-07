@@ -9,6 +9,7 @@ import '../widgets/drawer_nav.dart';
 import '../widgets/message_card.dart';
 
 class InboxPage extends StatefulWidget {
+  static const routeName = '/inbox-page';
   const InboxPage({Key? key}) : super(key: key);
 
   @override
@@ -53,59 +54,7 @@ class _InboxPageState extends State<InboxPage> {
                               SizedBox(
                                 height: 20,
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                    color: Colors.white,
-                                    border: Border.all(color: Colors.black26)),
-                                child: Row(
-                                  children: <Widget>[
-                                    Material(
-                                      type: MaterialType.transparency,
-                                      child: IconButton(
-                                        splashColor: Colors.grey,
-                                        icon: Icon(Icons.menu),
-                                        onPressed: () {
-                                          Scaffold.of(context).openDrawer();
-                                        },
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: TextField(
-                                        cursorColor: Colors.black,
-                                        keyboardType: TextInputType.text,
-                                        textInputAction: TextInputAction.go,
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    horizontal: 15),
-                                            hintText: "Search..."),
-                                        onChanged: (query) {
-                                          query = query.toLowerCase();
-
-                                          if (query.trim() != null) {
-                                            setState(() {
-                                              _searchResult = value
-                                                  .privateMessages
-                                                  .where((element) {
-                                                var messageTitle = element
-                                                    .displayName
-                                                    .toLowerCase();
-                                                return messageTitle
-                                                    .contains(query);
-                                              }).toList();
-                                            });
-                                          } else {
-                                            _searchResult = [];
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              searchBarWidget(context, value),
                               const Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Text(
@@ -115,53 +64,101 @@ class _InboxPageState extends State<InboxPage> {
                                       fontWeight: FontWeight.w500),
                                 ),
                               ),
-                              Expanded(
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: ScrollPhysics(),
-                                  itemCount: _searchResult.isEmpty
-                                      ? value.privateMessages.length
-                                      : _searchResult.length,
-                                  itemBuilder: (context, index) {
-                                    var messageData = _searchResult.isEmpty
-                                        ? value.privateMessages[index]
-                                        : _searchResult[index];
-                                    return Slidable(
-                                      actionPane:
-                                          const SlidableDrawerActionPane(),
-                                      actions: <Widget>[
-                                        IconSlideAction(
-                                          caption: 'Approve',
-                                          color: Colors.blue,
-                                          icon: Icons.approval,
-                                          onTap: () {},
-                                        ),
-                                      ],
-                                      secondaryActions: <Widget>[
-                                        IconSlideAction(
-                                          caption: 'Reject',
-                                          color: Colors.black45,
-                                          icon: Icons.block,
-                                          onTap: () {},
-                                        ),
-                                        IconSlideAction(
-                                          caption: 'Delete',
-                                          color: Colors.red,
-                                          icon: Icons.delete,
-                                          onTap: () {},
-                                        ),
-                                      ],
-                                      child: MessageBox(
-                                          lastMessage: messageData.lastMessage,
-                                          subject: messageData.subject,
-                                          displayName: messageData
-                                              .lastSender!.displayName,
-                                          read:
-                                              value.privateMessages[index].read,
-                                          messageId: messageData.id),
-                                    );
-                                  },
-                                ),
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                itemCount: _searchResult.isEmpty
+                                    ? value.privateMessages.length
+                                    : _searchResult.length,
+                                itemBuilder: (context, index) {
+                                  var messageData = _searchResult.isEmpty
+                                      ? value.privateMessages[index]
+                                      : _searchResult[index];
+                                  return Slidable(
+                                    actionPane:
+                                        const SlidableDrawerActionPane(),
+                                    actions: <Widget>[
+                                      IconSlideAction(
+                                        caption: 'Approve',
+                                        color: Colors.blue,
+                                        icon: Icons.approval,
+                                        onTap: () {},
+                                      ),
+                                    ],
+                                    secondaryActions: <Widget>[
+                                      IconSlideAction(
+                                        caption: 'Reject',
+                                        color: Colors.black45,
+                                        icon: Icons.block,
+                                        onTap: () {},
+                                      ),
+                                      IconSlideAction(
+                                        caption: 'Delete',
+                                        color: Colors.red,
+                                        icon: Icons.delete,
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) {
+                                              return AlertDialog(
+                                                title: Text('Are you sure?'),
+                                                content: Text(
+                                                  'Do you want to delete?',
+                                                ),
+                                                actions: <Widget>[
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop(false);
+                                                    },
+                                                    child: Text('No'),
+                                                  ),
+                                                  OutlinedButton(
+                                                    onPressed: () {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .hideCurrentSnackBar();
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        SnackBar(
+                                                          content: Text(
+                                                              'deleted message'),
+                                                          duration: Duration(
+                                                              seconds: 2),
+                                                          action:
+                                                              SnackBarAction(
+                                                            label: 'UNDO',
+                                                            onPressed: () {},
+                                                          ),
+                                                        ),
+                                                      );
+                                                      value.deleteMessage(value
+                                                          .privateMessages[
+                                                              index]
+                                                          .id);
+
+                                                      Navigator.of(context)
+                                                          .pop(true);
+                                                    },
+                                                    child: const Text('Yes'),
+                                                  )
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                    child: MessageBox(
+                                        lastMessage: messageData.lastMessage,
+                                        subject: messageData.subject,
+                                        displayName:
+                                            messageData.lastSender!.displayName,
+                                        read: value.privateMessages[index].read,
+                                        messageId: messageData.id),
+                                  );
+                                },
                               ),
                             ],
                           ),
@@ -181,6 +178,54 @@ class _InboxPageState extends State<InboxPage> {
         child: const Icon(Icons.add),
       ),
       drawer: const NavigationDrawer(),
+    );
+  }
+
+  Container searchBarWidget(BuildContext context, MessageModel value) {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          color: Colors.white,
+          border: Border.all(color: Colors.black26)),
+      child: Row(
+        children: <Widget>[
+          Material(
+            type: MaterialType.transparency,
+            child: IconButton(
+              splashColor: Colors.grey,
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              cursorColor: Colors.black,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.go,
+              decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 15),
+                  hintText: "Search..."),
+              onChanged: (query) {
+                query = query.toLowerCase();
+
+                if (query.trim() != null) {
+                  setState(() {
+                    _searchResult = value.privateMessages.where((element) {
+                      var messageTitle = element.displayName.toLowerCase();
+                      return messageTitle.contains(query);
+                    }).toList();
+                  });
+                } else {
+                  _searchResult = [];
+                }
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -8,6 +8,8 @@ import '/widgets/drawer_nav.dart';
 import '/widgets/message_card.dart';
 
 class ValidationPage extends StatelessWidget {
+  static const routeName = '/validation-page';
+
   const ValidationPage({Key? key}) : super(key: key);
 
   @override
@@ -82,11 +84,7 @@ class ValidationPage extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            return const ComposePage();
-          },
-        )),
+        onPressed: () => Navigator.of(context).pushNamed(ComposePage.routeName),
         child: const Icon(Icons.add),
       ),
       drawer: const NavigationDrawer(),

@@ -33,6 +33,7 @@ class MessageModel with ChangeNotifier {
   MessageConversation get userReply => _reply;
   MessageConversation get fetchedThread => _fetchedThread;
 
+  //send message to the message conversation
   Future<void> sendMessages(String id, String message) async {
     final response = await http.post(
       Uri.parse('$baseUrl/messageConversations/$id?internal=false'),
@@ -50,7 +51,7 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
-  uploadImageWithhttp(File imageFile, int serialno) async {
+  uploadImageWithHttp(File imageFile, int serialno) async {
     final postBody =
         imageFile != null ? base64Encode(imageFile.readAsBytesSync()) : '';
 
@@ -115,23 +116,26 @@ class MessageModel with ChangeNotifier {
   }
 
   //delete message conversation
-  Future<void> deleteMessage(String messageId, String userId) async {
+  Future<void> deleteMessage(String messageId) async {
     final response = await http.delete(
-      Uri.parse('$baseUrl/messageConversations/$messageId/$userId'),
+      Uri.parse('$baseUrl/messageConversations/$messageId/xE7jOejl9FI'),
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
         'Accept': 'application/json',
       },
     );
-    print(response.body);
+    print(messageId);
+    print(response.statusCode);
+    print('$baseUrl/messageConversations/$messageId/xE7jOejl9FI');
+
     if (response.statusCode == 200) {
       print('is Successfully');
-
-      _allMessageConversation.remove(messageId);
+      _privateMessages.removeWhere((messages) => messages.id == messageId);
     }
     notifyListeners();
   }
 
+  //add new message conversation
   Future<void> addNewMessage(
       String attachment, String text, String subject) async {
     final response = await http.post(
@@ -211,6 +215,7 @@ class MessageModel with ChangeNotifier {
     );
   }
 
+  //add participant
   Future<void> addParticipant() async {
     final response = await http.post(
       Uri.parse('$baseUrl/messageConversation/id/recepients'),
@@ -237,6 +242,7 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
+  //fetch system message
   Future<void> get fetchSystemMessage async {
     final response = await http.get(
       Uri.parse(
@@ -261,6 +267,7 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
+  //fetch private message conversation
   Future<void> get fetchPrivateMessages async {
     final response = await http.get(
       Uri.parse(
@@ -310,6 +317,7 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
+  // fetch validation message
   Future<void> get fetchValidationMessages async {
     final response = await http.get(
       Uri.parse(
@@ -336,6 +344,7 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
+  //fetch message conversation by id
   Future<void> fetchMessageThreadsById(String id) async {
     final response = await http.get(
       Uri.parse(
@@ -353,6 +362,7 @@ class MessageModel with ChangeNotifier {
       _fetchedThread = MessageConversation.fromJson(body);
     }
     notifyListeners();
+    //delete message conversation
   }
 
   void initialValue() {
@@ -361,7 +371,7 @@ class MessageModel with ChangeNotifier {
     // _error = false;
     // _errorMessage = '';
     _fetchedThread = MessageConversation(
-      messageCount: '0',
+      messageCount: '',
       followUp: false,
       lastUpdated: '',
       id: '',
@@ -374,6 +384,7 @@ class MessageModel with ChangeNotifier {
       favorite: false,
       lastSender: null,
       userMessages: null,
+      createdBy: User(displayName: '', name: '', id: '', username: ''),
     );
     notifyListeners();
   }

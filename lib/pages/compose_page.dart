@@ -10,6 +10,8 @@ import '../providers/provider.dart';
 import '../widgets/attachment_button.dart';
 
 class ComposePage extends StatefulWidget {
+  static const routeName = '/compose-page';
+
   const ComposePage({Key? key}) : super(key: key);
 
   @override
@@ -25,6 +27,7 @@ class _ComposePageState extends State<ComposePage> {
   bool isButtonEnabled = false;
   final TextEditingController _textEditingController = TextEditingController();
   final TextEditingController _textEditingController1 = TextEditingController();
+  final TextEditingController _textEditingController2 = TextEditingController();
 
   bool isEmpty() {
     setState(() {
@@ -55,6 +58,8 @@ class _ComposePageState extends State<ComposePage> {
     final Size size = MediaQuery.of(context).size;
     List<String> selectedUser =
         isFeedback ? ['Feedback Recipient Group'] : ['me'];
+    final bool isEnableAll = !isButtonEnabled || !(isPrivate || isFeedback);
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -69,9 +74,9 @@ class _ComposePageState extends State<ComposePage> {
               Navigator.of(context).pop();
             },
           ),
-          title: Text(
+          title: const Text(
             'Compose Message',
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.black,
             ),
           ),
@@ -106,7 +111,7 @@ class _ComposePageState extends State<ComposePage> {
                         width: size.width * 0.6,
                         child: Container(
                           child: TextFormField(
-                            controller: _textEditingController1,
+                            controller: _textEditingController2,
                             onChanged: (query) {
                               fetchedData.queryUserGroups(query).whenComplete(
                                     () => fetchedData
@@ -256,28 +261,37 @@ class _ComposePageState extends State<ComposePage> {
                     child: Row(
                       children: [
                         AbsorbPointer(
-                          absorbing: !isButtonEnabled,
+                          absorbing: isEnableAll,
                           child: ElevatedButton(
                             style: ButtonStyle(
-                              backgroundColor: !isButtonEnabled
+                              backgroundColor: isEnableAll
                                   ? MaterialStateProperty.all(Color(0xFFE0E0E0))
                                   : MaterialStateProperty.all(
                                       Color(0xFF235EA0)),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               if (_textEditingController.text.trim() != "") {
                                 print("print private bool $isPrivate");
                                 print("print feedback bool $isFeedback");
                                 if (isPrivate) {
                                   print("Inside Private body");
-                                  fetchedData.addNewMessage(
-                                      'attachment',
-                                      _textEditingController.text,
-                                      _textEditingController1.text);
+                                  await fetchedData
+                                      .addNewMessage(
+                                          'attachment',
+                                          _textEditingController.text,
+                                          _textEditingController1.text)
+                                      .then(
+                                        (_) => fetchedData.fetchPrivateMessages,
+                                      );
                                 }
                                 if (isFeedback) {
-                                  fetchedData.addFeedbackMessage(
-                                       _textEditingController1.text, _textEditingController.text);
+                                  await fetchedData
+                                      .addFeedbackMessage(
+                                          _textEditingController1.text,
+                                          _textEditingController.text)
+                                      .then(
+                                        (_) => fetchedData.fetchPrivateMessages,
+                                      );
                                   print("Iversion");
                                 }
 
@@ -293,7 +307,7 @@ class _ComposePageState extends State<ComposePage> {
                               child: Text(
                                 'Reply',
                                 style: TextStyle(
-                                  color: isButtonEnabled
+                                  color: !isEnableAll
                                       ? Colors.white
                                       : Colors.black38,
                                 ),
@@ -346,7 +360,9 @@ class _ComposePageState extends State<ComposePage> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 22),
+                  const SizedBox(
+                    height: 22,
+                  ),
                 ],
               ),
             ),

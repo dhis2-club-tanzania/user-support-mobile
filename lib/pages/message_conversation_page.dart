@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
@@ -50,14 +49,12 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
 
   @override
   Widget build(BuildContext context) {
-    final fileName = file != null ? basename(file!.path) : '';
-
+    final fileName = file != null ? basename(file!.path) : "";
     final fetchedData = Provider.of<MessageModel>(context);
     final datas = fetchedData.fetchedThread;
     final messageId = datas.id;
-    final userId = datas.lastSender != null ? datas.createdBy!.id : '';
-
     final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -93,8 +90,45 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                     color: Colors.black87,
                   ),
                   onPressed: () {
-                    fetchedData.deleteMessage(messageId, userId);
-                    Navigator.of(context).pop();
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          title: Text('Are you sure?'),
+                          content: Text(
+                            'Do you want to delete?',
+                          ),
+                          actions: <Widget>[
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              child: Text('No'),
+                            ),
+                            OutlinedButton(
+                              onPressed: () {
+                                ScaffoldMessenger.of(context)
+                                    .hideCurrentSnackBar();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('deleted message'),
+                                    duration: Duration(seconds: 2),
+                                    action: SnackBarAction(
+                                      label: 'UNDO',
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                );
+                                fetchedData.deleteMessage(messageId);
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop(true);
+                              },
+                              child: Text('Yes'),
+                            )
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
                 IconButton(
@@ -117,218 +151,228 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
             : [],
       ),
       body: datas.messageType.trim().isNotEmpty
-          ? SafeArea(
-              child: Center(
-                child: Container(
-                  height: size.height,
-                  width: size.width * 0.9,
-                  child: ListView(
-                    children: [
-                      buildParticipantsList(datas.userMessages),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.only(left: size.width * 0.05),
-                            width: size.width * 0.6,
-                            child: Container(
-                              child: TextFormField(
-                                controller: _textEditingController1,
-                                onChanged: (query) {
-                                  fetchedData
-                                      .queryUserGroups(query)
-                                      .whenComplete(
-                                        () => fetchedData
-                                            .queryOrgarnizationUnits(query)
-                                            .whenComplete(
-                                              () =>
-                                                  fetchedData.queryUser(query),
-                                            ),
-                                      );
-                                },
-                                decoration: const InputDecoration(
-                                  hintText: "Add New Participant",
-                                  hintStyle: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 40,
-                            width: size.width * 0.2,
-                            child: OutlinedButton(
-                              onPressed: () async {
-                                if (_textEditingController1.text
-                                    .trim()
-                                    .isEmpty) {
-                                  final user = await showSearch(
-                                    context: context,
-                                    delegate: SearchUser(
-                                      allUsers: [
-                                        'Tom Wakiki',
-                                        'Wile',
-                                        'Goodluck'
-                                      ],
-                                      usersSuggestion: [
-                                        'Tom Wakiki',
-                                        'Duke',
-                                        'John Traore',
-                                        'wile'
-                                      ],
-                                    ),
-                                  );
-
-                                  setState(() {
-                                    selectedUser = user;
-                                    _textEditingController1.text =
-                                        selectedUser!;
-                                  });
-                                } else {
-                                  fetchedData.addParticipant();
-                                }
-                              },
-                              child: const Icon(Icons.add),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      _messageThread(datas),
-                      Container(
-                        padding: EdgeInsets.only(left: size.width * 0.05),
-                        width: size.width,
-                        height: 100,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(1),
-                            border: Border.all(color: Colors.black26)),
-                        child: TextFormField(
-                          onFieldSubmitted: null,
-                          controller: _textEditingController,
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
-                          expands: true,
-                          style: const TextStyle(
-                              fontSize: 18, color: Colors.black),
-                          onChanged: (val) {
-                            isEmpty();
-                          },
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Compose reply",
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      if (file != null)
-                        Text(
-                          fileName,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        )
-                      else
-                        Container(),
-                      const SizedBox(height: 8),
-                      Container(
-                        child: Row(
+          ? RefreshIndicator(
+              onRefresh: () async {
+                await context
+                    .read<MessageModel>()
+                    .fetchMessageThreadsById(messageId);
+              },
+              child: SafeArea(
+                child: Center(
+                  child: Container(
+                    height: size.height,
+                    width: size.width * 0.9,
+                    child: ListView(
+                      children: [
+                        buildParticipantsList(datas.userMessages),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            AbsorbPointer(
-                              absorbing: !isButtonEnabled,
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: !isButtonEnabled
-                                      ? MaterialStateProperty.all(
-                                          Color(0xFFE0E0E0))
-                                      : MaterialStateProperty.all(
-                                          Color(0xFF235EA0)),
-                                ),
-                                onPressed: () {
-                                  if (_textEditingController.text.trim() !=
-                                      '') {
-                                    var delaytime = Future.delayed(
-                                        Duration(milliseconds: 2000));
-                                    print(
-                                        "this is a id ${fetchedData.fetchedThread.id}");
+                            Container(
+                              padding: EdgeInsets.only(left: size.width * 0.05),
+                              width: size.width * 0.6,
+                              child: Container(
+                                child: TextFormField(
+                                  controller: _textEditingController1,
+                                  onChanged: (query) {
                                     fetchedData
-                                        .sendMessages(
-                                            fetchedData.fetchedThread.id,
-                                            _textEditingController.text)
-                                        .whenComplete(() =>
-                                            fetchedData.fetchMessageThreadsById(
-                                              fetchedData.fetchedThread.id,
-                                            ));
-
-                                    isButtonEnabled = false;
-                                  }
-                                  setState(() {
-                                    _textEditingController.text = '';
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Text(
-                                    'Reply',
-                                    style: TextStyle(
-                                      color: isButtonEnabled
-                                          ? Colors.white
-                                          : Colors.black38,
+                                        .queryUserGroups(query)
+                                        .whenComplete(
+                                          () => fetchedData
+                                              .queryOrgarnizationUnits(query)
+                                              .then(
+                                                (_) => fetchedData
+                                                    .queryUser(query),
+                                              ),
+                                        );
+                                  },
+                                  decoration: const InputDecoration(
+                                    hintText: "Add New Participant",
+                                    hintStyle: TextStyle(
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            AbsorbPointer(
-                              absorbing: !isButtonEnabled,
+                            Container(
+                              height: 40,
+                              width: size.width * 0.2,
                               child: OutlinedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: !isButtonEnabled
-                                      ? MaterialStateProperty.all(
-                                          const Color(0xFFE0E0E0))
-                                      : MaterialStateProperty.all(Colors.white),
-                                ),
                                 onPressed: () async {
-                                  setState(() {
-                                    _textEditingController.text = '';
-                                    isButtonEnabled = false;
-                                  });
+                                  if (_textEditingController1.text
+                                      .trim()
+                                      .isEmpty) {
+                                    final user = await showSearch(
+                                      context: context,
+                                      delegate: SearchUser(
+                                        allUsers: [
+                                          'Tom Wakiki',
+                                          'Wile',
+                                          'Goodluck'
+                                        ],
+                                        usersSuggestion: [
+                                          'Tom Wakiki',
+                                          'Duke',
+                                          'John Traore',
+                                          'wile'
+                                        ],
+                                      ),
+                                    );
+
+                                    setState(() {
+                                      selectedUser = user;
+                                      _textEditingController1.text =
+                                          selectedUser!;
+                                    });
+                                  } else {
+                                    fetchedData.addParticipant();
+                                  }
                                 },
-                                child: Padding(
-                                  padding: EdgeInsets.all(10.0),
-                                  child: Text(
-                                    'Discard',
-                                    style: TextStyle(
-                                      color: isButtonEnabled
-                                          ? Colors.black
-                                          : Colors.black38,
-                                    ),
-                                  ),
-                                ),
+                                child: const Icon(Icons.add),
                               ),
                             ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            Expanded(
-                              child: ButtonWidget(
-                                  isButtonEnabled: isButtonEnabled,
-                                  icon: Icons.attachment_rounded,
-                                  text: '',
-                                  onClicked: selectFile),
-                            )
                           ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      )
-                    ],
+                        SizedBox(
+                          height: 20,
+                        ),
+                        _messageThread(datas),
+                        Container(
+                          padding: EdgeInsets.only(left: size.width * 0.05),
+                          width: size.width,
+                          height: 100,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(1),
+                              border: Border.all(color: Colors.black26)),
+                          child: TextFormField(
+                            onFieldSubmitted: null,
+                            controller: _textEditingController,
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            expands: true,
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.black),
+                            onChanged: (val) {
+                              isEmpty();
+                            },
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Compose reply",
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        if (file != null)
+                          Text(
+                            fileName,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
+                          )
+                        else
+                          Container(),
+                        const SizedBox(height: 8),
+                        Container(
+                          child: Row(
+                            children: [
+                              AbsorbPointer(
+                                absorbing: !isButtonEnabled,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: !isButtonEnabled
+                                        ? MaterialStateProperty.all(
+                                            Color(0xFFE0E0E0))
+                                        : MaterialStateProperty.all(
+                                            Color(0xFF235EA0)),
+                                  ),
+                                  onPressed: () async {
+                                    if (_textEditingController.text.trim() !=
+                                        '') {
+                                      var delaytime = Future.delayed(
+                                          Duration(milliseconds: 2000));
+                                      print(
+                                          "this is a id ${fetchedData.fetchedThread.id}");
+                                      await fetchedData
+                                          .sendMessages(
+                                              fetchedData.fetchedThread.id,
+                                              _textEditingController.text)
+                                          .whenComplete(() => fetchedData
+                                                  .fetchMessageThreadsById(
+                                                fetchedData.fetchedThread.id,
+                                              ));
+
+                                      isButtonEnabled = false;
+                                    }
+                                    setState(() {
+                                      _textEditingController.text = '';
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(
+                                      'Reply',
+                                      style: TextStyle(
+                                        color: isButtonEnabled
+                                            ? Colors.white
+                                            : Colors.black38,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              AbsorbPointer(
+                                absorbing: !isButtonEnabled,
+                                child: OutlinedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor: !isButtonEnabled
+                                        ? MaterialStateProperty.all(
+                                            const Color(0xFFE0E0E0))
+                                        : MaterialStateProperty.all(
+                                            Colors.white),
+                                  ),
+                                  onPressed: () async {
+                                    setState(() {
+                                      _textEditingController.text = '';
+                                      isButtonEnabled = false;
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.all(10.0),
+                                    child: Text(
+                                      'Discard',
+                                      style: TextStyle(
+                                        color: isButtonEnabled
+                                            ? Colors.black
+                                            : Colors.black38,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Expanded(
+                                child: ButtonWidget(
+                                    isButtonEnabled: isButtonEnabled,
+                                    icon: Icons.attachment_rounded,
+                                    text: '',
+                                    onClicked: selectFile),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -345,9 +389,12 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
             ? messagesData.messages!.length
             : 0,
         itemBuilder: (context, index) {
-          var messageFrom = messagesData.messages![index].sender != null
-              ? messagesData.messages![index].sender!.displayName
-              : "System";
+          String messageFrom;
+          if (messagesData.messages![index].sender != null) {
+            messageFrom = messagesData.messages![index].sender!.displayName;
+          } else {
+            messageFrom = "System";
+          }
           return Padding(
             padding: const EdgeInsets.only(bottom: 15.0),
             child: Card(

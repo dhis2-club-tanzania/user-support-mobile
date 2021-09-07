@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/pages/compose_page.dart';
+import 'package:user_support_mobile/pages/inbox_page.dart';
+import 'package:user_support_mobile/pages/system_page.dart';
+import 'package:user_support_mobile/pages/ticket_page.dart';
+import 'package:user_support_mobile/pages/validation_page.dart';
 
 import './pages/splash_page.dart';
 import './providers/provider.dart';
@@ -22,6 +27,13 @@ class MyApp extends StatelessWidget {
           accentColor: const Color(0xFF1D5288),
         ),
         home: SplashScreen(),
+          routes: {
+            InboxPage.routeName: (ctx) => InboxPage(),
+            SystemPage.routeName: (ctx) => SystemPage(),
+            ValidationPage.routeName: (ctx) => ValidationPage(),
+            ComposePage.routeName: (ctx) => ComposePage(),
+            TicketPage.routeName: (ctx) => TicketPage(),
+          }
       ),
     );
   }

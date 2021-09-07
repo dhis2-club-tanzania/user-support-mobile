@@ -8,6 +8,8 @@ import '/widgets/drawer_nav.dart';
 import '/widgets/message_card.dart';
 
 class SystemPage extends StatelessWidget {
+  static const routeName = '/system-page';
+
   const SystemPage({Key? key}) : super(key: key);
 
   @override
