@@ -69,12 +69,6 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
             Navigator.of(context).pop();
           },
         ),
-        title: Text(
-          datas.displayName,
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
         actions: datas.messageType.trim().isNotEmpty
             ? [
                 IconButton(
@@ -164,6 +158,16 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                     width: size.width * 0.9,
                     child: ListView(
                       children: [
+                        Text(
+                          datas.displayName,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w300),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
                         buildParticipantsList(datas.userMessages),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -288,14 +292,14 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                                         : MaterialStateProperty.all(
                                             Color(0xFF235EA0)),
                                   ),
-                                  onPressed: () async {
+                                  onPressed: () {
                                     if (_textEditingController.text.trim() !=
                                         '') {
-                                      var delaytime = Future.delayed(
-                                          Duration(milliseconds: 2000));
-                                      print(
-                                          "this is a id ${fetchedData.fetchedThread.id}");
-                                      await fetchedData
+                                      // var delaytime = Future.delayed(
+                                      //     Duration(milliseconds: 2000));
+                                      // print(
+                                      //     "this is a id ${fetchedData.fetchedThread.id}");
+                                      fetchedData
                                           .sendMessages(
                                               fetchedData.fetchedThread.id,
                                               _textEditingController.text)
@@ -399,11 +403,18 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
             padding: const EdgeInsets.only(bottom: 15.0),
             child: Card(
               child: ListTile(
-                trailing: Text(
-                    messagesData.messages![index].lastUpdated.substring(0, 10)),
+                // trailing: Text(
+                //     messagesData.messages![index].lastUpdated.substring(0, 10)),
                 title: Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text('Message from $messageFrom'),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Message from $messageFrom'),
+                      Text(messagesData.messages![index].lastUpdated
+                          .substring(0, 10)),
+                    ],
+                  ),
                 ),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),

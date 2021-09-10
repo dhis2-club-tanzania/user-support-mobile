@@ -61,7 +61,7 @@ class Message {
             : null,
         favorite: json["favorite"].toString(),
         access: Access.fromJson(json["access"] as Map<String, dynamic>),
-        sender: json["Sender"] != null
+        sender: json["sender"] != null
             ? User.fromJson(json["sender"] as Map<String, dynamic>)
             : null,
         favorites: List<dynamic>.from(
