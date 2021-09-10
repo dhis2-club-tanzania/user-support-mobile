@@ -18,8 +18,6 @@ class NavigationDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           Container(
-            margin: const EdgeInsets.all(0.0),
-            padding: const EdgeInsets.all(0.0),
             height: 120,
             child: DrawerHeader(
               decoration: BoxDecoration(
@@ -56,7 +54,9 @@ class NavigationDrawer extends StatelessWidget {
           _listTileWidget(
             context,
             'Inbox',
-            fetchedData.privateMessages.length,
+            fetchedData.privateMessages
+                .where((product) => product.read == false)
+                .length,
             Icons.inbox,
             Colors.green.shade200,
             () => const InboxPage(),
@@ -64,14 +64,30 @@ class NavigationDrawer extends StatelessWidget {
           _listTileWidget(
               context,
               'Validation',
-              fetchedData.validationMessage.length,
+              fetchedData.validationMessage
+                  .where((product) => product.read == false)
+                  .length,
               Icons.verified_sharp,
               Colors.blue.shade200,
               () => const ValidationPage()),
-          _listTileWidget(context, 'Ticket', fetchedData.ticketMessage.length,
-              Icons.scanner, Colors.red.shade200, () => const TicketPage()),
-          _listTileWidget(context, 'System', fetchedData.systemMessage.length,
-              Icons.system_update, Colors.pinkAccent, () => const SystemPage()),
+          _listTileWidget(
+              context,
+              'Ticket',
+              fetchedData.ticketMessage
+                  .where((product) => product.read == false)
+                  .length,
+              Icons.scanner,
+              Colors.red.shade200,
+              () => const TicketPage()),
+          _listTileWidget(
+              context,
+              'System',
+              fetchedData.systemMessage
+                  .where((product) => product.read == false)
+                  .length,
+              Icons.system_update,
+              Colors.pinkAccent,
+              () => const SystemPage()),
         ],
       ),
     );

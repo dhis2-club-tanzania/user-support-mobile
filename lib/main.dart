@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/helpers/colorTheme.dart';
 
 import '../helpers/textTheme.dart';
 import '../pages/compose_page.dart';

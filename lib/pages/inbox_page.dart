@@ -56,12 +56,12 @@ class _InboxPageState extends State<InboxPage> {
                               ),
                               searchBarWidget(context, value),
                               const Padding(
-                                padding: EdgeInsets.only(left: 8.0, top: 8.0),
+                                padding: EdgeInsets.only(left: 8.0),
                                 child: Text(
                                   'Inbox',
                                   style: TextStyle(
                                       fontSize: 20,
-                                      fontWeight: FontWeight.w400),
+                                      fontWeight: FontWeight.w500),
                                 ),
                               ),
                               ListView.builder(

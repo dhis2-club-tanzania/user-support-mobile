@@ -269,26 +269,31 @@ class MessageModel with ChangeNotifier {
 
   //fetch private message conversation
   Future<void> get fetchPrivateMessages async {
-    final response = await http.get(
-      Uri.parse(
-          '$baseUrl/messageConversations?filter=messageType%3Aeq%3APRIVATE&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    );
-    if (response.statusCode == 200) {
-      final list =
-          json.decode(response.body)['messageConversations'] as List<dynamic>;
-      _map = jsonDecode(response.body) as Map<String, dynamic>;
-      _privateMessages = list
-          .map((model) =>
-              MessageConversation.fromJson(model as Map<String, dynamic>))
-          .toList();
-      _error = false;
-    } else {
-      throw Exception("Failed to Load Data");
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '$baseUrl/messageConversations?filter=messageType%3Aeq%3APRIVATE&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+      if (response.statusCode == 200) {
+        final list =
+            json.decode(response.body)['messageConversations'] as List<dynamic>;
+        _map = jsonDecode(response.body) as Map<String, dynamic>;
+        _privateMessages = list
+            .map((model) =>
+                MessageConversation.fromJson(model as Map<String, dynamic>))
+            .toList();
+        _error = false;
+      } else {
+        throw Exception("Failed to Load Data");
+      }
+    } catch (e) {
+      print('What error is $e');
     }
+
     notifyListeners();
   }
 
@@ -319,28 +324,33 @@ class MessageModel with ChangeNotifier {
 
   // fetch validation message
   Future<void> get fetchValidationMessages async {
-    final response = await http.get(
-      Uri.parse(
-          '$baseUrl/messageConversations?filter=messageType%3Aeq%3AVALIDATION_RESULT&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    );
-    print(response.statusCode);
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '$baseUrl/messageConversations?filter=messageType%3Aeq%3AVALIDATION_RESULT&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+      print(response.statusCode);
 
-    if (response.statusCode == 200) {
-      final list =
-          json.decode(response.body)['messageConversations'] as List<dynamic>;
-      _map = jsonDecode(response.body) as Map<String, dynamic>;
-      _validationMessages = list
-          .map((model) =>
-              MessageConversation.fromJson(model as Map<String, dynamic>))
-          .toList();
-      _error = false;
-    } else {
-      throw Exception("Failed to Load Data");
+      if (response.statusCode == 200) {
+        final list =
+            json.decode(response.body)['messageConversations'] as List<dynamic>;
+        _map = jsonDecode(response.body) as Map<String, dynamic>;
+        _validationMessages = list
+            .map((model) =>
+                MessageConversation.fromJson(model as Map<String, dynamic>))
+            .toList();
+        _error = false;
+      } else {
+        throw Exception("Failed to Load Data");
+      }
+    } catch (e) {
+      print("error $e catched");
     }
+
     notifyListeners();
   }
 

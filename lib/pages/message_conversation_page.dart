@@ -381,13 +381,13 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                 ),
               ),
             )
-          : Center(child: CircularProgressIndicator()),
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 
   Widget _messageThread(MessageConversation messagesData) {
     return ListView.builder(
-        physics: ScrollPhysics(),
+        physics: const ScrollPhysics(),
         shrinkWrap: true,
         itemCount: messagesData.messageCount.isNotEmpty
             ? messagesData.messages!.length
