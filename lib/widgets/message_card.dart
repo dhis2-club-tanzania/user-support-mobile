@@ -72,8 +72,9 @@ class MessageBox extends StatelessWidget {
                             ),
                             Text(
                               displayName,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
+                              style: TextStyle(
+                                fontWeight:
+                                    read ? FontWeight.w400 : FontWeight.bold,
                                 color: Colors.black87,
                                 fontSize: 17.0,
                               ),

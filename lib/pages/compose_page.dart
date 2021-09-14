@@ -269,13 +269,13 @@ class _ComposePageState extends State<ComposePage> {
                                   : MaterialStateProperty.all(
                                       Color(0xFF235EA0)),
                             ),
-                            onPressed: () async {
+                            onPressed: () {
                               if (_textEditingController.text.trim() != "") {
                                 print("print private bool $isPrivate");
                                 print("print feedback bool $isFeedback");
                                 if (isPrivate) {
                                   print("Inside Private body");
-                                  await fetchedData
+                                  fetchedData
                                       .addNewMessage(
                                           'attachment',
                                           _textEditingController.text,
@@ -285,7 +285,7 @@ class _ComposePageState extends State<ComposePage> {
                                       );
                                 }
                                 if (isFeedback) {
-                                  await fetchedData
+                                  fetchedData
                                       .addFeedbackMessage(
                                           _textEditingController1.text,
                                           _textEditingController.text)

@@ -58,7 +58,7 @@ class _ValidationPageState extends State<ValidationPage> {
                               ),
                               searchBarWidget(context, value),
                               const Padding(
-                                padding: EdgeInsets.only(left: 8.0),
+                                padding: EdgeInsets.only(left: 8.0, top: 8.0),
                                 child: Text(
                                   'Validation',
                                   style: TextStyle(

@@ -9,7 +9,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<MessageModel>().fetchPrivateMessages;
+    
+    context.read<MessageModel>().fetchTicketMessages;
+    context.read<MessageModel>().fetchSystemMessage;
 
     return const Scaffold(
       body: InboxPage(),

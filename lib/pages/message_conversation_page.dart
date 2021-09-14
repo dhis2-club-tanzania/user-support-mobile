@@ -257,7 +257,9 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
                             keyboardType: TextInputType.multiline,
                             expands: true,
                             style: const TextStyle(
-                                fontSize: 18, color: Colors.black),
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
                             onChanged: (val) {
                               isEmpty();
                             },

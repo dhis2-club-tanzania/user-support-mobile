@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/widgets/show_loading.dart';
 
 import '../models/message_conversation.dart';
 import '../pages/compose_page.dart';
@@ -36,8 +37,10 @@ class _InboxPageState extends State<InboxPage> {
           child: Center(
             child: Consumer<MessageModel>(
               builder: (context, value, child) {
-                if (value.map.isEmpty && !value.error) {
-                  return const CircularProgressIndicator();
+                if (value.map.isEmpty &&
+                    !value.error &&
+                    value.privateMessages.isEmpty) {
+                  return LoadingListPage();
                 } else {
                   print(value.privateMessages.length);
 
@@ -51,12 +54,12 @@ class _InboxPageState extends State<InboxPage> {
                           child: ListView(
                             // crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               searchBarWidget(context, value),
                               const Padding(
-                                padding: EdgeInsets.only(left: 8.0),
+                                padding: EdgeInsets.only(left: 8.0, top: 8.0),
                                 child: Text(
                                   'Inbox',
                                   style: TextStyle(
@@ -194,9 +197,7 @@ class _InboxPageState extends State<InboxPage> {
             child: IconButton(
               splashColor: Colors.grey,
               icon: Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
+              onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           ),
           Expanded(

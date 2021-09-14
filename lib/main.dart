@@ -22,19 +22,20 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<MessageModel>(
       create: (_) => MessageModel(),
       child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'User Support App',
           theme: ThemeData(
             textTheme: textTheme,
-            primaryColor: Color(0xFF1D5288),
-            accentColor: const Color(0xFF1D5288),
+            primaryColor: const Color(0xFF1D5288),
+            // accentColor: const Color(0xFF1D5288),
           ),
           home: SplashScreen(),
           routes: {
-            InboxPage.routeName: (ctx) => InboxPage(),
-            SystemPage.routeName: (ctx) => SystemPage(),
-            ValidationPage.routeName: (ctx) => ValidationPage(),
-            ComposePage.routeName: (ctx) => ComposePage(),
-            TicketPage.routeName: (ctx) => TicketPage(),
+            InboxPage.routeName: (ctx) => const InboxPage(),
+            SystemPage.routeName: (ctx) =>const SystemPage(),
+            ValidationPage.routeName: (ctx) =>const ValidationPage(),
+            ComposePage.routeName: (ctx) =>const ComposePage(),
+            TicketPage.routeName: (ctx) =>const TicketPage(),
           }),
     );
   }

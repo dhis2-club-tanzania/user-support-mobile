@@ -56,9 +56,9 @@ class _TicketPageState extends State<TicketPage> {
                               ),
                               searchBarWidget(context, value),
                               const Padding(
-                                padding: EdgeInsets.only(left: 8.0),
+                                padding: EdgeInsets.only(left: 8.0, top: 8.0),
                                 child: Text(
-                                  'Inbox',
+                                  'Ticket',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500),
