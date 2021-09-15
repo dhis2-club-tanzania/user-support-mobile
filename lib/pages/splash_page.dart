@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<MessageModel>().fetchPrivateMessages;
+   context.read<MessageModel>().fetchPrivateMessages;
 
     return Scaffold(
       backgroundColor: Colors.white,

@@ -19,9 +19,11 @@ class MessageModel with ChangeNotifier {
   Map<String, dynamic> _map = {};
   bool _error = false;
   final String _errorMessage = '';
+  bool _isLoading = false;
 
   Map<String, dynamic> get map => _map;
   bool get error => _error;
+  bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
   List<MessageConversation> get allMessageConversation =>
       _allMessageConversation;
@@ -35,6 +37,9 @@ class MessageModel with ChangeNotifier {
 
   //send message to the message conversation
   Future<void> sendMessages(String id, String message) async {
+    if (message.isNotEmpty) {
+      _isLoading = true;
+    }
     final response = await http.post(
       Uri.parse('$baseUrl/messageConversations/$id?internal=false'),
       headers: {
@@ -43,10 +48,11 @@ class MessageModel with ChangeNotifier {
       },
       body: message,
     );
-    print("Print the status code");
-    print(response.body);
-    if (response.statusCode == 201) {
-      print('This message was successful sent');
+
+    if (response.statusCode == 200) {
+      _isLoading = false;
+    } else {
+      _isLoading = false;
     }
     notifyListeners();
   }
@@ -297,27 +303,32 @@ class MessageModel with ChangeNotifier {
   }
 
   Future<void> get fetchTicketMessages async {
-    final response = await http.get(
-      Uri.parse(
-          '$baseUrl/messageConversations?filter=messageType%3Aeq%3ATICKET&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    );
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '$baseUrl/messageConversations?filter=messageType%3Aeq%3ATICKET&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
 
-    if (response.statusCode == 200) {
-      final list =
-          json.decode(response.body)['messageConversations'] as List<dynamic>;
-      _map = jsonDecode(response.body) as Map<String, dynamic>;
-      _ticketMessage = list
-          .map((model) =>
-              MessageConversation.fromJson(model as Map<String, dynamic>))
-          .toList();
-      _error = false;
-    } else {
-      throw Exception("Failed to Load Data");
+      if (response.statusCode == 200) {
+        final list =
+            json.decode(response.body)['messageConversations'] as List<dynamic>;
+        _map = jsonDecode(response.body) as Map<String, dynamic>;
+        _ticketMessage = list
+            .map((model) =>
+                MessageConversation.fromJson(model as Map<String, dynamic>))
+            .toList();
+        _error = false;
+      } else {
+        throw Exception("Failed to Load Data");
+      }
+    } catch (e) {
+      print("error $e catched");
     }
+
     notifyListeners();
   }
 
