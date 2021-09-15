@@ -7,6 +7,7 @@ import '../pages/compose_page.dart';
 import '../providers/provider.dart';
 import '../widgets/drawer_nav.dart';
 import '../widgets/message_card.dart';
+import '../widgets/show_loading.dart';
 
 class TicketPage extends StatefulWidget {
   static const routeName = '/ticket-page';
@@ -37,21 +38,19 @@ class _TicketPageState extends State<TicketPage> {
             child: Consumer<MessageModel>(
               builder: (context, value, child) {
                 if (value.map.isEmpty && !value.error) {
-                  return const CircularProgressIndicator();
+                  return LoadingListPage();
                 } else {
-                  print(value.ticketMessage.length);
-
                   return value.error
                       ? Text(
                           'Oops Somthing is wrong ${value.errorMessage}',
                           textAlign: TextAlign.center,
                         )
-                      : Container(
+                      : SizedBox(
                           width: size.width * 0.95,
                           child: ListView(
                             // crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               searchBarWidget(context, value),
@@ -71,7 +70,7 @@ class _TicketPageState extends State<TicketPage> {
                                     ? value.ticketMessage.length
                                     : _searchResult.length,
                                 itemBuilder: (context, index) {
-                                  var messageData = _searchResult.isEmpty
+                                  final messageData = _searchResult.isEmpty
                                       ? value.ticketMessage[index]
                                       : _searchResult[index];
                                   return Slidable(
@@ -101,8 +100,9 @@ class _TicketPageState extends State<TicketPage> {
                                             context: context,
                                             builder: (_) {
                                               return AlertDialog(
-                                                title: Text('Are you sure?'),
-                                                content: Text(
+                                                title:
+                                                    const Text('Are you sure?'),
+                                                content: const Text(
                                                   'Do you want to delete?',
                                                 ),
                                                 actions: <Widget>[
@@ -111,7 +111,7 @@ class _TicketPageState extends State<TicketPage> {
                                                       Navigator.of(context)
                                                           .pop(false);
                                                     },
-                                                    child: Text('No'),
+                                                    child: const Text('No'),
                                                   ),
                                                   OutlinedButton(
                                                     onPressed: () {
@@ -122,10 +122,11 @@ class _TicketPageState extends State<TicketPage> {
                                                               context)
                                                           .showSnackBar(
                                                         SnackBar(
-                                                          content: Text(
+                                                          content: const Text(
                                                               'deleted message'),
-                                                          duration: Duration(
-                                                              seconds: 2),
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 2),
                                                           action:
                                                               SnackBarAction(
                                                             label: 'UNDO',
@@ -152,7 +153,11 @@ class _TicketPageState extends State<TicketPage> {
                                     child: MessageBox(
                                         lastMessage: messageData.lastMessage,
                                         subject: messageData.subject,
-                                        displayName: 'System',
+                                        displayName:
+                                            messageData.lastSender != null
+                                                ? messageData
+                                                    .lastSender!.displayName
+                                                : 'System',
                                         read: value.ticketMessage[index].read,
                                         messageId: messageData.id),
                                   );
@@ -182,7 +187,7 @@ class _TicketPageState extends State<TicketPage> {
   Container searchBarWidget(BuildContext context, MessageModel value) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
           color: Colors.white,
           border: Border.all(color: Colors.black26)),
       child: Row(
@@ -191,7 +196,7 @@ class _TicketPageState extends State<TicketPage> {
             type: MaterialType.transparency,
             child: IconButton(
               splashColor: Colors.grey,
-              icon: Icon(Icons.menu),
+              icon: const Icon(Icons.menu),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
@@ -209,10 +214,10 @@ class _TicketPageState extends State<TicketPage> {
               onChanged: (query) {
                 query = query.toLowerCase();
 
-                if (query.trim() != null) {
+                if (query.trim().isNotEmpty) {
                   setState(() {
                     _searchResult = value.ticketMessage.where((element) {
-                      var messageTitle = element.displayName.toLowerCase();
+                      final messageTitle = element.displayName.toLowerCase();
                       return messageTitle.contains(query);
                     }).toList();
                   });

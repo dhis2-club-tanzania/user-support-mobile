@@ -42,7 +42,7 @@ class MessageConversation {
   final bool? followUp;
   final String? lastUpdated;
   final String id;
-  final bool read;
+  late final bool read;
   // final String created;
   final String name;
   final String subject;

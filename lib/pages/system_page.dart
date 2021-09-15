@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/widgets/show_loading.dart';
 
 import '../models/message_conversation.dart';
 import '../pages/compose_page.dart';
@@ -36,8 +37,10 @@ class _SystemPageState extends State<SystemPage> {
           child: Center(
             child: Consumer<MessageModel>(
               builder: (context, value, child) {
-                if (value.map.isEmpty && !value.error) {
-                  return const CircularProgressIndicator();
+                if (value.map.isNotEmpty &&
+                    !value.error &&
+                    value.systemMessage.length == 0) {
+                  return LoadingListPage();
                 } else {
                   print(value.systemMessage.length);
 
@@ -168,11 +171,7 @@ class _SystemPageState extends State<SystemPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            return const ComposePage();
-          },
-        )),
+        onPressed: () => Navigator.pushNamed(context, ComposePage.routeName),
         child: const Icon(Icons.add),
       ),
       drawer: const NavigationDrawer(),

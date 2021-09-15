@@ -21,7 +21,7 @@ class _InboxPageState extends State<InboxPage> {
   List<MessageConversation> _searchResult = [];
   @override
   Widget build(BuildContext context) {
-    // context.read<MessageModel>().fetchPrivateMessages;
+    context.read<MessageModel>().fetchTicketMessages;
     final size = MediaQuery.of(context).size;
     return Scaffold(
       // appBar: AppBar(
@@ -104,8 +104,9 @@ class _InboxPageState extends State<InboxPage> {
                                             context: context,
                                             builder: (_) {
                                               return AlertDialog(
-                                                title: Text('Are you sure?'),
-                                                content: Text(
+                                                title:
+                                                    const Text('Are you sure?'),
+                                                content: const Text(
                                                   'Do you want to delete?',
                                                 ),
                                                 actions: <Widget>[
@@ -114,7 +115,7 @@ class _InboxPageState extends State<InboxPage> {
                                                       Navigator.of(context)
                                                           .pop(false);
                                                     },
-                                                    child: Text('No'),
+                                                    child: const Text('No'),
                                                   ),
                                                   OutlinedButton(
                                                     onPressed: () {
@@ -125,10 +126,11 @@ class _InboxPageState extends State<InboxPage> {
                                                               context)
                                                           .showSnackBar(
                                                         SnackBar(
-                                                          content: Text(
+                                                          content: const Text(
                                                               'deleted message'),
-                                                          duration: Duration(
-                                                              seconds: 2),
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 2),
                                                           action:
                                                               SnackBarAction(
                                                             label: 'UNDO',
@@ -172,14 +174,16 @@ class _InboxPageState extends State<InboxPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.push(context, MaterialPageRoute(
-          builder: (context) {
-            return const ComposePage();
-          },
-        )),
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: false
+          ? Container()
+          : FloatingActionButton(
+              onPressed: () => Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return const ComposePage();
+                },
+              )),
+              child: const Icon(Icons.add),
+            ),
       drawer: const NavigationDrawer(),
     );
   }
@@ -196,7 +200,7 @@ class _InboxPageState extends State<InboxPage> {
             type: MaterialType.transparency,
             child: IconButton(
               splashColor: Colors.grey,
-              icon: Icon(Icons.menu),
+              icon: const Icon(Icons.menu),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           ),

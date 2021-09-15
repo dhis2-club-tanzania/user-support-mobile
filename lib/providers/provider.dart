@@ -66,7 +66,6 @@ class MessageModel with ChangeNotifier {
     print(responseJson);
   }
 
-
   Future<void> addFeedbackMessage(String subject, String text) async {
     final response = await http.post(
         Uri.parse('$baseUrl/messageConversations/feedback?subject=$subject'),
@@ -109,10 +108,9 @@ class MessageModel with ChangeNotifier {
       },
       body: jsonEncode([id]),
     );
-    print(response.body);
-    if (response.statusCode == 200) {
-      print('is Successfully');
-    }
+    // print(response.body);
+    // if (response.statusCode == 200) {
+    // }
     notifyListeners();
   }
 
@@ -169,7 +167,7 @@ class MessageModel with ChangeNotifier {
     );
     // print(response.body);
     // if (response.statusCode == 200) {
-    //   print('This was Successfully');
+    //   fetchPrivateMessages;
     // }
     notifyListeners();
   }
@@ -247,7 +245,7 @@ class MessageModel with ChangeNotifier {
   Future<void> get fetchSystemMessage async {
     final response = await http.get(
       Uri.parse(
-          '$baseUrl/messageConversations?filter=messageType%3Aeq%3ASYSTEM&pageSize=35&page=1&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
+          '$baseUrl/messageConversations?filter=messageType%3Aeq%3ASYSTEM&fields=id,displayName,subject,messageType,lastSender%5Bid%2C%20displayName%5D,assignee%5Bid%2C%20displayName%5D,status,priority,lastUpdated,read,lastMessage,followUp&order=lastMessage%3Adesc'),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

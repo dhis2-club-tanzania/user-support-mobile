@@ -7,6 +7,7 @@ import '../pages/compose_page.dart';
 import '../providers/provider.dart';
 import '../widgets/drawer_nav.dart';
 import '../widgets/message_card.dart';
+import '../widgets/show_loading.dart';
 
 class ValidationPage extends StatefulWidget {
   static const routeName = '/validation-page';
@@ -39,7 +40,7 @@ class _ValidationPageState extends State<ValidationPage> {
                 if (value.map.isNotEmpty &&
                     !value.error &&
                     value.validationMessage.length == 0) {
-                  return const CircularProgressIndicator();
+                  return LoadingListPage();
                 } else {
                   print(value.validationMessage.length);
 

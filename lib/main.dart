@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/pages/login_page.dart';
 
+import './pages/splash_page.dart';
+import './providers/provider.dart';
 import '../helpers/textTheme.dart';
 import '../pages/compose_page.dart';
 import '../pages/inbox_page.dart';
 import '../pages/system_page.dart';
 import '../pages/ticket_page.dart';
 import '../pages/validation_page.dart';
-import './pages/splash_page.dart';
-import './providers/provider.dart';
 
 void main() {
   runApp(
@@ -36,6 +37,8 @@ class MyApp extends StatelessWidget {
             ValidationPage.routeName: (ctx) =>const ValidationPage(),
             ComposePage.routeName: (ctx) =>const ComposePage(),
             TicketPage.routeName: (ctx) =>const TicketPage(),
+            LoginPage.routeName: (ctx) =>const LoginPage(),
+
           }),
     );
   }

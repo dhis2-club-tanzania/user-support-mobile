@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:user_support_mobile/pages/home_page.dart';
 import 'package:user_support_mobile/providers/provider.dart';
 import '../pages/login_page.dart';
 
@@ -16,15 +15,17 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 3), () {
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (_) => const HomePage()));
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const LoginPage(),
+        ),
+      );
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    context.read<MessageModel>().fetchPrivateMessages.whenComplete(
-        () => context.read<MessageModel>().fetchValidationMessages);
+    context.read<MessageModel>().fetchPrivateMessages;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -40,11 +41,11 @@ class _SplashScreenState extends State<SplashScreen> {
             const SizedBox(
               height: 20,
             ),
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(
-                Color(0xFF1D5288),
-              ),
-            )
+            // const CircularProgressIndicator(
+            //   valueColor: AlwaysStoppedAnimation<Color>(
+            //     Color(0xFF1D5288),
+            //   ),
+            // )
           ],
         ),
       ),
