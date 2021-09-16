@@ -72,14 +72,14 @@ class _MessageConversationPageState extends State<MessageConversationPage> {
         actions: datas.messageType.trim().isNotEmpty
             ? [
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.mail,
                     color: Colors.black87,
                   ),
                   onPressed: () => fetchedData.messageUnread(messageId),
                 ),
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.delete,
                     color: Colors.black87,
                   ),

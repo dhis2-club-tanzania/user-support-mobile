@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 
 import './pages/splash_page.dart';
 import './providers/provider.dart';
-import '../helpers/textTheme.dart';
+import 'helpers/text_theme.dart';
 import '../pages/compose_page.dart';
+import '../pages/compose_painter.dart';
 import '../pages/inbox_page.dart';
 import '../pages/login_page.dart';
 import '../pages/system_page.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
             ComposePage.routeName: (ctx) => const ComposePage(),
             TicketPage.routeName: (ctx) => const TicketPage(),
             LoginPage.routeName: (ctx) => const LoginPage(),
+            AbsorpPainterPage2.routeName: (ctx) => const AbsorpPainterPage2()
           }),
     );
   }

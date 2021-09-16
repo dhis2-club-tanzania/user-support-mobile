@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/pages/compose_painter.dart';
 import 'package:user_support_mobile/widgets/show_loading.dart';
 
 import '../models/message_conversation.dart';
@@ -171,7 +172,8 @@ class _SystemPageState extends State<SystemPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, ComposePage.routeName),
+        onPressed: () =>
+            Navigator.pushNamed(context, AbsorpPainterPage2.routeName),
         child: const Icon(Icons.add),
       ),
       drawer: const NavigationDrawer(),

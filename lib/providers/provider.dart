@@ -73,6 +73,7 @@ class MessageModel with ChangeNotifier {
   }
 
   Future<void> addFeedbackMessage(String subject, String text) async {
+    _isLoading = true;
     final response = await http.post(
         Uri.parse('$baseUrl/messageConversations/feedback?subject=$subject'),
         headers: {
@@ -80,9 +81,12 @@ class MessageModel with ChangeNotifier {
           'Accept': 'application/json',
         },
         body: text);
-    print(response.body);
-    if (response.statusCode == 200) {
+    print(response.statusCode);
+    if (response.statusCode == 201) {
+      _isLoading = false;
       print('is Successfully');
+    } else {
+      _isLoading = false;
     }
     notifyListeners();
   }
@@ -143,6 +147,7 @@ class MessageModel with ChangeNotifier {
   //add new message conversation
   Future<void> addNewMessage(
       String attachment, String text, String subject) async {
+    _isLoading = true;
     final response = await http.post(
       Uri.parse('$baseUrl/messageConversations'),
       headers: {
@@ -171,10 +176,12 @@ class MessageModel with ChangeNotifier {
         },
       ),
     );
-    // print(response.body);
-    // if (response.statusCode == 200) {
-    //   fetchPrivateMessages;
-    // }
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      _isLoading = false;
+    } else {
+      _isLoading = false;
+    }
     notifyListeners();
   }
 
