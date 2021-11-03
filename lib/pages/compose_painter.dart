@@ -187,7 +187,7 @@ class _MyStatelessWidgetState extends State<MyStatelessWidget> {
                         SizedBox(
                           height: 20,
                         ),
-                        Row(
+                        Column(
                           children: [
                             Row(
                               children: [

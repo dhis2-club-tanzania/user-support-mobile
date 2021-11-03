@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import './pages/splash_page.dart';
 import './providers/provider.dart';
-import 'helpers/text_theme.dart';
 import '../pages/compose_page.dart';
 import '../pages/compose_painter.dart';
 import '../pages/inbox_page.dart';
@@ -11,6 +10,7 @@ import '../pages/login_page.dart';
 import '../pages/system_page.dart';
 import '../pages/ticket_page.dart';
 import '../pages/validation_page.dart';
+import 'helpers/text_theme.dart';
 
 void main() {
   runApp(
