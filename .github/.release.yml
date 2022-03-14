@@ -1,4 +1,4 @@
-name: App Release
+name: User Support App
 on:
   pull_request:
     branches:
