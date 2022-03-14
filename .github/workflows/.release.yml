@@ -23,7 +23,7 @@ jobs:
         with:
           artifacts: 'build/app/outputs/flutter-apk/app.apk'
           tag: v0.0.${{ github.run_number }}
-          token: ${{ secrets.GH_PAGES_DEPLOY }}
+          token: ${{ secrets.TOKEN }}
       
       - name: Merge Pull Request
         uses: BaharaJr/merge-pr@0.0.1
