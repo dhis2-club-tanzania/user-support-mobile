@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/pages/data_approval_detail.dart';
 
 import 'package:user_support_mobile/pages/message_conversation_page.dart';
 import 'package:user_support_mobile/pages/testing_page.dart';
 import 'package:user_support_mobile/providers/provider.dart';
 
 class MessageBox extends StatelessWidget {
-  const MessageBox(
+  MessageBox(
       {required this.lastMessage,
+      this.isDataApproval,
       required this.messageId,
       required this.read,
       required this.displayName,
@@ -17,6 +19,7 @@ class MessageBox extends StatelessWidget {
       : super(key: key);
   final String messageId;
   final bool read;
+  bool? isDataApproval = false;
   final String subject;
   final String displayName;
   final String lastMessage;
@@ -33,7 +36,7 @@ class MessageBox extends StatelessWidget {
 
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
-            return const AbsorpPainterPage();
+            return  isDataApproval==false ?  const AbsorpPainterPage() : DataApprovalDetailPage();
           },
         ));
       },

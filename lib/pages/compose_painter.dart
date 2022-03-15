@@ -1,9 +1,7 @@
 import 'dart:io';
 
-// import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
@@ -11,15 +9,15 @@ import '../providers/provider.dart';
 import '../widgets/attachment_button.dart';
 import '../widgets/search.dart';
 
-class AbsorpPainterPage2 extends StatefulWidget {
-  const AbsorpPainterPage2({Key? key}) : super(key: key);
+class ComposePainter extends StatefulWidget {
+  const ComposePainter({Key? key}) : super(key: key);
   static const String routeName = '/page-testing';
 
   @override
-  AbsorpPainterPage2State createState() => AbsorpPainterPage2State();
+  ComposePainterState createState() => ComposePainterState();
 }
 
-class AbsorpPainterPage2State extends State<AbsorpPainterPage2> {
+class ComposePainterState extends State<ComposePainter> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

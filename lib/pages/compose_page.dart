@@ -51,7 +51,7 @@ class _ComposePageState extends State<ComposePage> {
 
   @override
   Widget build(BuildContext context) {
-    final fileName = file != null ? basename(file!.path) : '';
+    // final fileName = file != null ? basename(file!.path) : '';
 
     final fetchedData = Provider.of<MessageModel>(context);
 
@@ -248,14 +248,14 @@ class _ComposePageState extends State<ComposePage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  if (file != null)
-                    Text(
-                      fileName,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w500),
-                    )
-                  else
-                    Container(),
+                  // if (file != null)
+                  //   Text(
+                  //     fileName,
+                  //     style: const TextStyle(
+                  //         fontSize: 16, fontWeight: FontWeight.w500),
+                  //   )
+                  // else
+                  //   Container(),
                   const SizedBox(height: 8),
                   Container(
                     child: Row(
