@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:user_support_mobile/pages/inbox_page.dart';
 
-
 import '../pages/home_page.dart';
 import '../pages/signup_page.dart';
 import '../providers/provider.dart';
@@ -39,9 +38,29 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Container(
+                padding: const EdgeInsets.only(
+                  top: 10.0,
+                  bottom: 10.0,
+                ),
                 color: Colors.white,
                 width: size.width * 0.8,
                 child: const TextField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Server',
+                    contentPadding: EdgeInsets.all(10.0),
+                  ),
+                ),
+              ),
+              Container(
+                color: Colors.white,
+                padding: const EdgeInsets.only(
+                  top: 10.0,
+                  bottom: 10.0,
+                ),
+                width: size.width * 0.8,
+                child: const TextField(
+                  obscureText: true,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: 'Username',
@@ -53,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.white,
                 padding: const EdgeInsets.only(
                   top: 10.0,
-                  bottom: 20.0,
+                  bottom: 10.0,
                 ),
                 width: size.width * 0.8,
                 child: const TextField(
@@ -120,19 +139,19 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 25.0,
                     ),
-                    GestureDetector(
-                      onTap: () => Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                          return const SignUpPage();
-                        },
-                      )),
-                      child: const Text(
-                        'Create account',
-                        style: TextStyle(
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () => Navigator.push(context, MaterialPageRoute(
+                    //     builder: (context) {
+                    //       return const SignUpPage();
+                    //     },
+                    //   )),
+                    //   child: const Text(
+                    //     'Create account',
+                    //     style: TextStyle(
+                    //       color: Colors.black87,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

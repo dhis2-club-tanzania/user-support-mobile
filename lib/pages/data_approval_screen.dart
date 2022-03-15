@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/pages/compose_painter.dart';
-import 'package:user_support_mobile/widgets/show_loading.dart';
 
 import '../models/message_conversation.dart';
-import '../pages/compose_page.dart';
 import '../providers/provider.dart';
 import '../widgets/drawer_nav.dart';
 import '../widgets/message_card.dart';
+import '../widgets/show_loading.dart';
+import 'compose_painter.dart';
 
-class SystemPage extends StatefulWidget {
-  static const routeName = '/system-page';
-  const SystemPage({Key? key}) : super(key: key);
+class DataApprovalScreen extends StatefulWidget {
+  const DataApprovalScreen({Key? key}) : super(key: key);
 
+  static const routeName = '/data-approval-page';
   @override
-  _SystemPageState createState() => _SystemPageState();
+  _DataApprovalScreenState createState() => _DataApprovalScreenState();
 }
 
-class _SystemPageState extends State<SystemPage> {
+class _DataApprovalScreenState extends State<DataApprovalScreen> {
   List<MessageConversation> _searchResult = [];
   @override
   Widget build(BuildContext context) {
-    context.read<MessageModel>().fetchSystemMessage;
+    context.read<MessageModel>().fetchTicketMessages;
     final size = MediaQuery.of(context).size;
     return Scaffold(
       // appBar: AppBar(
@@ -32,37 +31,33 @@ class _SystemPageState extends State<SystemPage> {
       body: RefreshIndicator(
         onRefresh: () async {
           // context.read<MessageModel>().initialValue();
-          await context.read<MessageModel>().fetchSystemMessage;
+          await context.read<MessageModel>().fetchTicketMessages;
         },
         child: SafeArea(
           child: Center(
             child: Consumer<MessageModel>(
               builder: (context, value, child) {
-                if (value.map.isNotEmpty &&
-                    !value.error &&
-                    value.systemMessage.length == 0) {
+                if (value.map.isEmpty && !value.error) {
                   return LoadingListPage();
                 } else {
-                  print(value.systemMessage.length);
-
                   return value.error
                       ? Text(
                           'Oops Somthing is wrong ${value.errorMessage}',
                           textAlign: TextAlign.center,
                         )
-                      : Container(
+                      : SizedBox(
                           width: size.width * 0.95,
                           child: ListView(
                             // crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              SizedBox(
+                              const SizedBox(
                                 height: 20,
                               ),
                               searchBarWidget(context, value),
                               const Padding(
                                 padding: EdgeInsets.only(left: 8.0, top: 8.0),
                                 child: Text(
-                                  'System',
+                                  'Data Approval',
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w500),
@@ -70,13 +65,13 @@ class _SystemPageState extends State<SystemPage> {
                               ),
                               ListView.builder(
                                 shrinkWrap: true,
-                                physics: ScrollPhysics(),
+                                physics: const ScrollPhysics(),
                                 itemCount: _searchResult.isEmpty
-                                    ? value.systemMessage.length
+                                    ? value.ticketMessage.length
                                     : _searchResult.length,
                                 itemBuilder: (context, index) {
-                                  var messageData = _searchResult.isEmpty
-                                      ? value.systemMessage[index]
+                                  final messageData = _searchResult.isEmpty
+                                      ? value.ticketMessage[index]
                                       : _searchResult[index];
                                   return Slidable(
                                     actionPane:
@@ -105,8 +100,9 @@ class _SystemPageState extends State<SystemPage> {
                                             context: context,
                                             builder: (_) {
                                               return AlertDialog(
-                                                title: Text('Are you sure?'),
-                                                content: Text(
+                                                title:
+                                                    const Text('Are you sure?'),
+                                                content: const Text(
                                                   'Do you want to delete?',
                                                 ),
                                                 actions: <Widget>[
@@ -115,7 +111,7 @@ class _SystemPageState extends State<SystemPage> {
                                                       Navigator.of(context)
                                                           .pop(false);
                                                     },
-                                                    child: Text('No'),
+                                                    child: const Text('No'),
                                                   ),
                                                   OutlinedButton(
                                                     onPressed: () {
@@ -126,10 +122,11 @@ class _SystemPageState extends State<SystemPage> {
                                                               context)
                                                           .showSnackBar(
                                                         SnackBar(
-                                                          content: Text(
+                                                          content: const Text(
                                                               'deleted message'),
-                                                          duration: Duration(
-                                                              seconds: 2),
+                                                          duration:
+                                                              const Duration(
+                                                                  seconds: 2),
                                                           action:
                                                               SnackBarAction(
                                                             label: 'UNDO',
@@ -138,7 +135,7 @@ class _SystemPageState extends State<SystemPage> {
                                                         ),
                                                       );
                                                       value.deleteMessage(value
-                                                          .systemMessage[index]
+                                                          .ticketMessage[index]
                                                           .id);
 
                                                       Navigator.of(context)
@@ -156,8 +153,12 @@ class _SystemPageState extends State<SystemPage> {
                                     child: MessageBox(
                                         lastMessage: messageData.lastMessage,
                                         subject: messageData.subject,
-                                        displayName: 'System',
-                                        read: value.systemMessage[index].read,
+                                        displayName:
+                                            messageData.lastSender != null
+                                                ? messageData
+                                                    .lastSender!.displayName
+                                                : 'System',
+                                        read: value.ticketMessage[index].read,
                                         messageId: messageData.id),
                                   );
                                 },
@@ -183,7 +184,7 @@ class _SystemPageState extends State<SystemPage> {
   Container searchBarWidget(BuildContext context, MessageModel value) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
           color: Colors.white,
           border: Border.all(color: Colors.black26)),
       child: Row(
@@ -192,7 +193,7 @@ class _SystemPageState extends State<SystemPage> {
             type: MaterialType.transparency,
             child: IconButton(
               splashColor: Colors.grey,
-              icon: Icon(Icons.menu),
+              icon: const Icon(Icons.menu),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
@@ -210,10 +211,10 @@ class _SystemPageState extends State<SystemPage> {
               onChanged: (query) {
                 query = query.toLowerCase();
 
-                if (query.trim() != null) {
+                if (query.trim().isNotEmpty) {
                   setState(() {
-                    _searchResult = value.systemMessage.where((element) {
-                      var messageTitle = element.displayName.toLowerCase();
+                    _searchResult = value.ticketMessage.where((element) {
+                      final messageTitle = element.displayName.toLowerCase();
                       return messageTitle.contains(query);
                     }).toList();
                   });

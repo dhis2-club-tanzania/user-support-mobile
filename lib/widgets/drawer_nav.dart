@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/pages/data_approval_screen.dart';
 
 import '../providers/provider.dart';
 import '/pages/inbox_page.dart';
@@ -88,19 +89,24 @@ class NavigationDrawer extends StatelessWidget {
               Icons.system_update,
               Colors.pinkAccent,
               () => const SystemPage()),
+          _listTileWidget(
+              context,
+              'Data Approval',
+              fetchedData.systemMessage
+                  .where((product) => product.read == false)
+                  .length,
+              Icons.done,
+              Colors.pinkAccent,
+              () => const DataApprovalScreen(),
+              isDataApproval: true),
         ],
       ),
     );
   }
 
-  Widget _listTileWidget(
-    BuildContext context,
-    String title,
-    int count,
-    IconData icon,
-    Color? color,
-    Widget Function() page,
-  ) {
+  Widget _listTileWidget(BuildContext context, String title, int count,
+      IconData icon, Color? color, Widget Function() page,
+      {bool? isDataApproval = false}) {
     return ListTile(
         title: Text(title),
         leading: Icon(icon),

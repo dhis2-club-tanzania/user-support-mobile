@@ -415,7 +415,8 @@ class _MyStatelessWidgetState extends State<MyStatelessWidget> {
                                           isButtonEnabled: isButtonEnabled,
                                           icon: Icons.attachment_rounded,
                                           text: '',
-                                          onClicked: selectFile),
+                                          onClicked: selectFile,
+                                          ),
                                     )
                                   ],
                                 ),
