@@ -6,6 +6,10 @@ import 'package:user_support_mobile/providers/provider.dart';
 import '../pages/login_page.dart';
 
 class SplashScreen extends StatefulWidget {
+
+    final bool? isAuth;
+
+  const SplashScreen({Key? key, this.isAuth}) : super(key: key);
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -17,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => const LoginPage(),
+          builder: (_) =>  LoginPage(isAuth: widget.isAuth,),
         ),
       );
     });

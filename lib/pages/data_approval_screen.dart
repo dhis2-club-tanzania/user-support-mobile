@@ -31,7 +31,8 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
       body: RefreshIndicator(
         onRefresh: () async {
           // context.read<MessageModel>().initialValue();
-          await context.read<MessageModel>().fetchTicketMessages;
+          // await context.read<MessageModel>().fetchTicketMessages;
+          await context.read<MessageModel>().fetchDataApproval;
         },
         child: SafeArea(
           child: Center(
@@ -173,8 +174,7 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Navigator.pushNamed(context, ComposePainter.routeName),
+        onPressed: () => Navigator.pushNamed(context, ComposePainter.routeName),
         child: const Icon(Icons.add),
       ),
       drawer: const NavigationDrawer(),

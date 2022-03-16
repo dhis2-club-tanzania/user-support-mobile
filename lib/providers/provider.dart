@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dhis2_flutter_sdk/shared/utilities/http_client.util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -332,6 +333,53 @@ class MessageModel with ChangeNotifier {
       } else {
         throw Exception("Failed to Load Data");
       }
+    } catch (e) {
+      print("error $e catched");
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> get fetchDataApproval async {
+    try {
+      // final res = await HttpClient.get('dataStore/dhis2-user-support');
+
+      // final res2 =
+      //     await HttpClient.get('dataStore/dhis2-user-support/configurations');
+
+      // print(res.body);
+      // print(res2.body);
+
+      print('Http=======.');
+      final response = await http.get(
+        Uri.parse('$baseUrl/dataStore/dhis2-user-support/configurations'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+
+      final response2 = await http.get(
+        Uri.parse('$baseUrl/dataStore/dhis2-user-support/'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+      );
+      print(response2.body);
+
+      print(response.body);
+
+      // final finalResults = await Future.wait(
+      //     (res.body is String ? [res.body.split(',')[0]] : [res.body[0]])
+      //         .map<Future<dynamic>>((id) async {
+      //   print('HERE WE ARE $id');
+      //   final oneRes = await HttpClient.get('dataStore/dhis2-user-support/$id');
+
+      //   return oneRes.body;
+      // }).toList());
+
+      // print('DATASTORE RESULTS ${finalResults}');
     } catch (e) {
       print("error $e catched");
     }
