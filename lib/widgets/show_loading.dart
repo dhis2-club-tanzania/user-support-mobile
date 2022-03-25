@@ -92,7 +92,6 @@ class _LoadingListPageState extends State<LoadingListPage> {
           ],
         ),
       ),
-      
     );
   }
 }

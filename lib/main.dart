@@ -16,6 +16,7 @@ void main() async {
   //     username: 'admin',
   //     password: 'district');
   // print(loginRes);
+
   var isAuth = await D2Touch.isAuthenticated();
   print(isAuth);
 
@@ -23,7 +24,9 @@ void main() async {
   // print(logOut);
 
   runApp(
-    MyApp(isAuth: isAuth,),
+    MyApp(
+      isAuth: isAuth,
+    ),
   );
 }
 
@@ -42,14 +45,12 @@ class MyApp extends StatelessWidget {
           textTheme: textTheme,
           primaryColor: const Color(0xFF1D5288),
         ),
-        home: SplashScreen(isAuth: isAuth,),
+        home: SplashScreen(isAuth: isAuth),
         routes: routes,
       ),
     );
   }
 }
-
-
 
 //  final res = await HttpClient.get('dataStore/functions');
 

@@ -178,7 +178,7 @@ class _ValidationPageState extends State<ValidationPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>    Navigator.pushNamed(context, ComposePainter.routeName),
+        onPressed: () => Navigator.pushNamed(context, ComposePainter.routeName),
         child: const Icon(Icons.add),
       ),
       drawer: const NavigationDrawer(),

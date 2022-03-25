@@ -412,11 +412,11 @@ class _MyStatelessWidgetState extends State<MyStatelessWidget> {
                                     ),
                                     Expanded(
                                       child: ButtonWidget(
-                                          isButtonEnabled: isButtonEnabled,
-                                          icon: Icons.attachment_rounded,
-                                          text: '',
-                                          onClicked: selectFile,
-                                          ),
+                                        isButtonEnabled: isButtonEnabled,
+                                        icon: Icons.attachment_rounded,
+                                        text: '',
+                                        onClicked: selectFile,
+                                      ),
                                     )
                                   ],
                                 ),

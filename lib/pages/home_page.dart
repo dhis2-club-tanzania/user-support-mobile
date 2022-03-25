@@ -9,7 +9,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     context.read<MessageModel>().fetchTicketMessages;
     context.read<MessageModel>().fetchSystemMessage;
 

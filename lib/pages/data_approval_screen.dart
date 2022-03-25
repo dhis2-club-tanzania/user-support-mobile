@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:dhis2_flutter_sdk/d2_touch.dart';
 
 import '../models/message_conversation.dart';
 import '../providers/provider.dart';
@@ -21,7 +22,8 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
   List<MessageConversation> _searchResult = [];
   @override
   Widget build(BuildContext context) {
-    context.read<MessageModel>().fetchTicketMessages;
+    context.read<MessageModel>().fetchDataApproval;
+
     final size = MediaQuery.of(context).size;
     return Scaffold(
       // appBar: AppBar(
@@ -32,6 +34,8 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
         onRefresh: () async {
           // context.read<MessageModel>().initialValue();
           // await context.read<MessageModel>().fetchTicketMessages;
+          //  final res = await HttpClient.get('dataStore/functions');
+
           await context.read<MessageModel>().fetchDataApproval;
         },
         child: SafeArea(
@@ -68,12 +72,10 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
                                 shrinkWrap: true,
                                 physics: const ScrollPhysics(),
                                 itemCount: _searchResult.isEmpty
-                                    ? value.ticketMessage.length
+                                    ? value.dataApproval.length
                                     : _searchResult.length,
                                 itemBuilder: (context, index) {
-                                  final messageData = _searchResult.isEmpty
-                                      ? value.ticketMessage[index]
-                                      : _searchResult[index];
+                                  final messageData = value.dataApproval[index];
                                   return Slidable(
                                     actionPane:
                                         const SlidableDrawerActionPane(),
@@ -152,15 +154,16 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
                                       ),
                                     ],
                                     child: MessageBox(
-                                        lastMessage: messageData.lastMessage,
-                                        subject: messageData.subject,
-                                        displayName:
-                                            messageData.lastSender != null
-                                                ? messageData
-                                                    .lastSender!.displayName
-                                                : 'System',
+                                        lastMessage:
+                                            messageData.datetime.toString(),
+                                        subject:
+                                            messageData.data.message.message,
+                                        displayName: messageData
+                                            .data.message.subject
+                                            .split("-")
+                                            .last,
                                         read: value.ticketMessage[index].read,
-                                        messageId: messageData.id),
+                                        messageId: messageData.data.id),
                                   );
                                 },
                               ),
@@ -173,10 +176,10 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, ComposePainter.routeName),
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => Navigator.pushNamed(context, ComposePainter.routeName),
+      //   child: const Icon(Icons.add),
+      // ),
       drawer: const NavigationDrawer(),
     );
   }

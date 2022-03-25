@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:dhis2_flutter_sdk/shared/utilities/http_client.util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:user_support_mobile/models/data_approval.dart';
 
 import '/constants/constants.dart';
 import '/models/message_conversation.dart';
@@ -13,6 +15,7 @@ class MessageModel with ChangeNotifier {
   late List<User> _listOfUsers;
   late MessageConversation _fetchedThread;
   List<MessageConversation> _privateMessages = [];
+  List<DataApproval> _dataApproval = [];
   List<MessageConversation> _validationMessages = [];
   List<MessageConversation> _ticketMessage = [];
   List<MessageConversation> _systemMessages = [];
@@ -29,6 +32,7 @@ class MessageModel with ChangeNotifier {
   List<MessageConversation> get allMessageConversation =>
       _allMessageConversation;
   List<MessageConversation> get ticketMessage => _ticketMessage;
+  List<DataApproval> get dataApproval => _dataApproval;
   List<MessageConversation> get systemMessage => _systemMessages;
   List<User> get listOfUsers => _listOfUsers;
   List<MessageConversation> get privateMessages => _privateMessages;
@@ -342,46 +346,30 @@ class MessageModel with ChangeNotifier {
 
   Future<void> get fetchDataApproval async {
     try {
-      // final res = await HttpClient.get('dataStore/dhis2-user-support');
+      final res = await HttpClient.get('sqlViews/bYBByKamlr7/data/');
 
-      // final res2 =
-      //     await HttpClient.get('dataStore/dhis2-user-support/configurations');
-
-      // print(res.body);
-      // print(res2.body);
-
-      print('Http=======.');
-      final response = await http.get(
-        Uri.parse('$baseUrl/dataStore/dhis2-user-support/configurations'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      );
-
-      final response2 = await http.get(
-        Uri.parse('$baseUrl/dataStore/dhis2-user-support/'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-      );
-      print(response2.body);
-
-      print(response.body);
-
-      // final finalResults = await Future.wait(
-      //     (res.body is String ? [res.body.split(',')[0]] : [res.body[0]])
-      //         .map<Future<dynamic>>((id) async {
-      //   print('HERE WE ARE $id');
-      //   final oneRes = await HttpClient.get('dataStore/dhis2-user-support/$id');
-
-      //   return oneRes.body;
-      // }).toList());
-
-      // print('DATASTORE RESULTS ${finalResults}');
+      // print("This is a response : ${res.body['listGrid']['rows']}");
+      final list = res.body['listGrid']['rows'] as List;
+      // print("This is a runtype : ${list.length}");
+      // print("This is a runtype : ${list.length}");
+      list.removeAt(0);
+      List<Map<String, dynamic>> allMap = [];
+      list.forEach((element) {
+        Map<String, dynamic> newMap = {
+          "name": element[0],
+          "key": element[1],
+          "data": jsonDecode(element[2]),
+          "datetime": element[3]
+        };
+        allMap.add(newMap);
+      });
+      // final newMap = {"data": list[0][2]};
+      log(allMap[0].toString());
+      _dataApproval =
+          allMap.map((model) => DataApproval.fromJson(model)).toList();
+      print("This was successful created : ${_dataApproval.first.name}");
     } catch (e) {
-      print("error $e catched");
+      print("error : $e");
     }
 
     notifyListeners();

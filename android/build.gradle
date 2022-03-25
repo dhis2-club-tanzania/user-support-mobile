@@ -4,7 +4,7 @@ buildscript {
         google()
         jcenter()
         maven {
-            url 'http://storage.googleapis.com/r8-releases/raw'
+            url 'https://storage.googleapis.com/r8-releases/raw'
         }
     }
 

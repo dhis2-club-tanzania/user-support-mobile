@@ -176,8 +176,7 @@ class _InboxPageState extends State<InboxPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Navigator.pushNamed(context, ComposePainter.routeName),
+        onPressed: () => Navigator.pushNamed(context, ComposePainter.routeName),
         child: const Icon(Icons.add),
       ),
       drawer: const NavigationDrawer(),

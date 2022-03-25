@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:user_support_mobile/pages/data_approval_detail.dart';
+import 'package:clock/clock.dart';
 
 import 'package:user_support_mobile/pages/message_conversation_page.dart';
 import 'package:user_support_mobile/pages/testing_page.dart';
@@ -36,7 +38,9 @@ class MessageBox extends StatelessWidget {
 
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
-            return  isDataApproval==false ?  const AbsorpPainterPage() : DataApprovalDetailPage();
+            return isDataApproval == false
+                ? const AbsorpPainterPage()
+                : DataApprovalDetailPage();
           },
         ));
       },
@@ -86,7 +90,10 @@ class MessageBox extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          lastMessage.substring(0, 10),
+                          DateFormat("yyyy-MM-dd")
+                              .parse(lastMessage)
+                              .toString()
+                              .substring(0, 10),
                           style: const TextStyle(
                               fontWeight: FontWeight.w400,
                               color: Colors.black54,
