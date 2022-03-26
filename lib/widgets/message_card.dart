@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/models/data_approval.dart';
 import 'package:user_support_mobile/pages/data_approval_detail.dart';
 import 'package:clock/clock.dart';
 
@@ -12,7 +13,8 @@ import 'package:user_support_mobile/providers/provider.dart';
 class MessageBox extends StatelessWidget {
   MessageBox(
       {required this.lastMessage,
-      this.isDataApproval,
+      this.isDataApproval = false,
+      this.dataApproval,
       required this.messageId,
       required this.read,
       required this.displayName,
@@ -21,7 +23,8 @@ class MessageBox extends StatelessWidget {
       : super(key: key);
   final String messageId;
   final bool read;
-  bool? isDataApproval = false;
+  bool? isDataApproval;
+  DataApproval? dataApproval;
   final String subject;
   final String displayName;
   final String lastMessage;
@@ -40,7 +43,9 @@ class MessageBox extends StatelessWidget {
           builder: (context) {
             return isDataApproval == false
                 ? const AbsorpPainterPage()
-                : DataApprovalDetailPage();
+                : DataApprovalDetailPage(
+                    dataApproval: dataApproval,
+                  );
           },
         ));
       },
@@ -48,19 +53,20 @@ class MessageBox extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(8, 20, 10, 1),
         child: Row(
           children: [
-            Container(
-              width: 45,
-              height: 45,
-              child: CircleAvatar(
-                child: Text(
-                  firstLetter(displayName),
-                  style: const TextStyle(
-                    fontSize: 29,
-                    fontWeight: FontWeight.w500,
+            if (!isDataApproval!)
+              Container(
+                width: 45,
+                height: 45,
+                child: CircleAvatar(
+                  child: Text(
+                    firstLetter(displayName),
+                    style: const TextStyle(
+                      fontSize: 29,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),
-            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(

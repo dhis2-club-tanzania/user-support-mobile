@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:dhis2_flutter_sdk/shared/utilities/http_client.util.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:user_support_mobile/models/data_approval.dart';
@@ -354,6 +355,7 @@ class MessageModel with ChangeNotifier {
       // print("This is a runtype : ${list.length}");
       list.removeAt(0);
       List<Map<String, dynamic>> allMap = [];
+      if (list.length == 0) return;
       list.forEach((element) {
         Map<String, dynamic> newMap = {
           "name": element[0],
@@ -372,6 +374,21 @@ class MessageModel with ChangeNotifier {
       print("error : $e");
     }
 
+    notifyListeners();
+  }
+
+  Future<void> approvalRequest(DataApproval dataApproval) async {
+    var url = dataApproval.data.url.split('/').reversed.toList();
+    print(dataApproval.data.url);
+    log(dataApproval.data.payload.toJson().toString());
+    final res = await HttpClient.post(
+        dataApproval.data.url, dataApproval.data.payload.toJson());
+
+    // Dio dio = Dio();
+    // final res2 =
+    //     await dio.delete("$baseUrl/${dataApproval.name}/${dataApproval.key}");
+    print("This is a post request : ${res.statusCode}");
+    // print("This is a deletion request : ${res2.statusCode}");
     notifyListeners();
   }
 

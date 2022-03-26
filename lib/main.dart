@@ -20,9 +20,6 @@ void main() async {
   var isAuth = await D2Touch.isAuthenticated();
   print(isAuth);
 
-  // var logOut = await D2Touch.logOut();
-  // print(logOut);
-
   runApp(
     MyApp(
       isAuth: isAuth,
@@ -51,14 +48,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-//  final res = await HttpClient.get('dataStore/functions');
-
-//   final finalResults =
-//       await Future.wait(res.body.map<Future<dynamic>>((id) async {
-//     final oneRes = await HttpClient.get('dataStore/functions/$id');
-
-//     return oneRes.body;
-//   }).toList());
-
-//   print('DATASTORE RESULTS ${finalResults}');

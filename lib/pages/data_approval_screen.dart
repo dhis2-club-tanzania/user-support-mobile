@@ -76,95 +76,18 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
                                     : _searchResult.length,
                                 itemBuilder: (context, index) {
                                   final messageData = value.dataApproval[index];
-                                  return Slidable(
-                                    actionPane:
-                                        const SlidableDrawerActionPane(),
-                                    actions: <Widget>[
-                                      IconSlideAction(
-                                        caption: 'Approve',
-                                        color: Colors.blue,
-                                        icon: Icons.approval,
-                                        onTap: () {},
-                                      ),
-                                    ],
-                                    secondaryActions: <Widget>[
-                                      IconSlideAction(
-                                        caption: 'Reject',
-                                        color: Colors.black45,
-                                        icon: Icons.block,
-                                        onTap: () {},
-                                      ),
-                                      IconSlideAction(
-                                        caption: 'Delete',
-                                        color: Colors.red,
-                                        icon: Icons.delete,
-                                        onTap: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (_) {
-                                              return AlertDialog(
-                                                title:
-                                                    const Text('Are you sure?'),
-                                                content: const Text(
-                                                  'Do you want to delete?',
-                                                ),
-                                                actions: <Widget>[
-                                                  ElevatedButton(
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop(false);
-                                                    },
-                                                    child: const Text('No'),
-                                                  ),
-                                                  OutlinedButton(
-                                                    onPressed: () {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .hideCurrentSnackBar();
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                        SnackBar(
-                                                          content: const Text(
-                                                              'deleted message'),
-                                                          duration:
-                                                              const Duration(
-                                                                  seconds: 2),
-                                                          action:
-                                                              SnackBarAction(
-                                                            label: 'UNDO',
-                                                            onPressed: () {},
-                                                          ),
-                                                        ),
-                                                      );
-                                                      value.deleteMessage(value
-                                                          .ticketMessage[index]
-                                                          .id);
-
-                                                      Navigator.of(context)
-                                                          .pop(true);
-                                                    },
-                                                    child: const Text('Yes'),
-                                                  )
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                    child: MessageBox(
-                                        lastMessage:
-                                            messageData.datetime.toString(),
-                                        subject:
-                                            messageData.data.message.message,
-                                        displayName: messageData
-                                            .data.message.subject
-                                            .split("-")
-                                            .last,
-                                        read: value.ticketMessage[index].read,
-                                        messageId: messageData.data.id),
-                                  );
+                                  return MessageBox(
+                                      dataApproval: messageData,
+                                      isDataApproval: true,
+                                      lastMessage:
+                                          messageData.datetime.toString(),
+                                      subject: messageData.data.message.message,
+                                      displayName: messageData
+                                          .data.message.subject
+                                          .split("-")
+                                          .last,
+                                      read: value.ticketMessage[index].read,
+                                      messageId: messageData.data.id);
                                 },
                               ),
                             ],
