@@ -270,12 +270,12 @@ class MessageModel with ChangeNotifier {
       for (var i = 1; i < list.length; i++) {
         print(list[i]);
         res2 = await HttpClient.get('dataStore/dhis2-user-support/${list[i]}');
-        // print(res2.body);s
+  
       }
 
       print(res2.body);
-      _dataApproval =
-          res2.body.map((model) => ApproveModel.fromMap(model)).toList();
+      _dataApproval = json.decode(res2.body).map((x) => approveModelFromMap(x)).toList();
+          // res2.body.map((model) => approveModelFromMap(model<String,dynamic>)).toList();
       // print("This was successful created : ${_dataApproval.first.name}");
     } catch (e) {
       print("error : $e");
