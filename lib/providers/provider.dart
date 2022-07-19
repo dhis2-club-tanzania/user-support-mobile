@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:dhis2_flutter_sdk/shared/utilities/http_client.util.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:user_support_mobile/models/data_approval.dart';
 
 import '/constants/constants.dart';
 import '/models/message_conversation.dart';
 import '/models/user.dart';
+import '../models/data_approval.dart';
 
 class MessageModel with ChangeNotifier {
   final List<MessageConversation> _allMessageConversation = [];
@@ -63,20 +63,6 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
-  uploadImageWithHttp(File imageFile, int serialno) async {
-    final postBody =
-        imageFile != null ? base64Encode(imageFile.readAsBytesSync()) : '';
-
-    final response = await http.post(
-      Uri.parse('$baseUrl/messageConversations/internal=false'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: json.encode(postBody),
-    );
-    final responseJson = json.decode(response.body);
-    print(responseJson);
-  }
 
   Future<void> addFeedbackMessage(String subject, String text) async {
     _isLoading = true;
@@ -191,76 +177,6 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> queryUser(String query) async {
-    final url =
-        "$baseUrl/userGroups?fields=id%2C%20displayName&pageSize=10&filter=displayName%3Atoken%3A$query";
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    );
-    print(response.body);
-  }
-
-  Future<void> queryOrgarnizationUnits(String query) async {
-    final url =
-        "$baseUrl/organisationUnits?fields=id,displayName&pageSize=10&filter=displayName%3Atoken%3A$query&filter=users%3Agte%3A1";
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    );
-
-    // if (response.statusCode==200) {
-
-    // } else {
-    // }
-  }
-
-  Future<void> queryUserGroups(String query) async {
-    final url =
-        "$baseUrl/userGroups?fields=id%2C%20displayName&pageSize=10&filter=displayName%3Atoken%3A$query";
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    );
-  }
-
-  //add participant
-  Future<void> addParticipant() async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/messageConversation/id/recepients'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: json.encode({
-        "users": [
-          {
-            "id": "Onf73mPD6sL",
-            "username": "keita",
-            "firstName": "Seydou",
-            "surname": "Keita",
-            "displayName": "Seydou Keita",
-            "type": "user"
-          }
-        ],
-        "userGroups": [],
-        "organisationUnits": [],
-      }),
-    );
-
-    notifyListeners();
-  }
-
-  //fetch system message
   Future<void> get fetchSystemMessage async {
     final response = await http.get(
       Uri.parse(
@@ -469,3 +385,74 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 }
+
+  // Future<void> queryUser(String query) async {
+  //   final url =
+  //       "$baseUrl/userGroups?fields=id%2C%20displayName&pageSize=10&filter=displayName%3Atoken%3A$query";
+  //   final response = await http.get(
+  //     Uri.parse(url),
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Accept': 'application/json',
+  //     },
+  //   );
+  //   print(response.body);
+  // }
+
+  // Future<void> queryOrgarnizationUnits(String query) async {
+  //   final url =
+  //       "$baseUrl/organisationUnits?fields=id,displayName&pageSize=10&filter=displayName%3Atoken%3A$query&filter=users%3Agte%3A1";
+  //   final response = await http.get(
+  //     Uri.parse(url),
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Accept': 'application/json',
+  //     },
+  //   );
+
+    // if (response.statusCode==200) {
+
+    // } else {
+    // }
+  // }
+
+  // Future<void> queryUserGroups(String query) async {
+  //   final url =
+  //       "$baseUrl/userGroups?fields=id%2C%20displayName&pageSize=10&filter=displayName%3Atoken%3A$query";
+  //   final response = await http.get(
+  //     Uri.parse(url),
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Accept': 'application/json',
+  //     },
+  //   );
+  // }
+
+  //add participant
+  // Future<void> addParticipant() async {
+  //   final response = await http.post(
+  //     Uri.parse('$baseUrl/messageConversation/id/recepients'),
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Accept': 'application/json',
+  //     },
+  //     body: json.encode({
+  //       "users": [
+  //         {
+  //           "id": "Onf73mPD6sL",
+  //           "username": "keita",
+  //           "firstName": "Seydou",
+  //           "surname": "Keita",
+  //           "displayName": "Seydou Keita",
+  //           "type": "user"
+  //         }
+  //       ],
+  //       "userGroups": [],
+  //       "organisationUnits": [],
+  //     }),
+  //   );
+
+  //   notifyListeners();
+  // }
+
+  //fetch system message

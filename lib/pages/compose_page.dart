@@ -1,13 +1,13 @@
 import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/widgets/search.dart';
 
 import '../providers/provider.dart';
 import '../widgets/attachment_button.dart';
+import '../widgets/search.dart';
 
 class ComposePage extends StatefulWidget {
   static const routeName = '/compose-page';
@@ -113,13 +113,13 @@ class _ComposePageState extends State<ComposePage> {
                           child: TextFormField(
                             controller: _textEditingController2,
                             onChanged: (query) {
-                              fetchedData.queryUserGroups(query).whenComplete(
-                                    () => fetchedData
-                                        .queryOrgarnizationUnits(query)
-                                        .whenComplete(
-                                          () => fetchedData.queryUser(query),
-                                        ),
-                                  );
+                              // fetchedData.queryUserGroups(query).whenComplete(
+                              //       () => fetchedData
+                              //           .queryOrgarnizationUnits(query)
+                              //           .whenComplete(
+                              //             () => fetchedData.queryUser(query),
+                              //           ),
+                              //     );
                             },
                             decoration: const InputDecoration(
                               hintText: "Add New Participant",
@@ -151,7 +151,7 @@ class _ComposePageState extends State<ComposePage> {
 
                               setState(() {});
                             } else {
-                              fetchedData.addParticipant();
+                              // fetchedData.addParticipant();
                             }
                           },
                           child: Icon(Icons.add),

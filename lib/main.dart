@@ -11,11 +11,12 @@ import 'main.reflectable.dart';
 void main() async {
   initializeReflectable();
 
-  // var loginRes = await D2Touch.logIn(
-  //     url: 'https://play.dhis2.org/2.36.9',
-  //     username: 'admin',
-  //     password: 'district');
-  // print(loginRes);
+  var loginRes = await D2Touch.logIn(
+      url: 'https://tland.dhis2.udsm.ac.tz/',
+      username: 'pt',
+      password: 'Dhis.2022');
+
+  print(loginRes);
 
   var isAuth = await D2Touch.isAuthenticated();
   print(isAuth);
