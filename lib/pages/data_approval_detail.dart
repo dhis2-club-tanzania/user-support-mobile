@@ -5,13 +5,14 @@ import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:user_support_mobile/models/data_approval.dart';
 
+import '../models/approve_model.dart';
 import '../models/message_conversation.dart';
 import '../providers/provider.dart';
 
 class DataApprovalDetailPage extends StatefulWidget {
   const DataApprovalDetailPage({Key? key, required this.dataApproval})
       : super(key: key);
-  final DataApproval? dataApproval;
+  final ApproveModel? dataApproval;
 
   @override
   DataApprovalDetailPageState createState() => DataApprovalDetailPageState();
@@ -30,7 +31,7 @@ class DataApprovalDetailPageState extends State<DataApprovalDetailPage> {
 
 class PageContent extends StatefulWidget {
   const PageContent({Key? key, required this.dataApproval}) : super(key: key);
-  final DataApproval dataApproval;
+  final ApproveModel dataApproval;
 
   @override
   State<PageContent> createState() => _PageContentState();
@@ -90,7 +91,7 @@ class _PageContentState extends State<PageContent> {
                   child: ListView(
                     children: [
                       Text(
-                        widget.dataApproval.data.action,
+                        widget.dataApproval.message!.subject,
                         style: const TextStyle(
                             color: Colors.black,
                             fontSize: 18,
@@ -100,7 +101,7 @@ class _PageContentState extends State<PageContent> {
                         height: 20,
                       ),
                       Text(
-                        widget.dataApproval.data.message.subject,
+                        widget.dataApproval.message!.subject,
                         style: const TextStyle(
                             color: Colors.black,
                             fontSize: 16,
@@ -110,7 +111,7 @@ class _PageContentState extends State<PageContent> {
                         height: 20,
                       ),
                       Text(
-                        widget.dataApproval.data.message.message,
+                        widget.dataApproval.message!.message,
                         style: const TextStyle(
                             color: Colors.black,
                             fontSize: 16,
@@ -162,9 +163,9 @@ class _PageContentState extends State<PageContent> {
                                       Color(0xFF235EA0)),
                                 ),
                                 onPressed: () {
-                                  context
-                                      .read<MessageModel>()
-                                      .approvalRequest(widget.dataApproval);
+                                  // context
+                                  //     .read<MessageModel>()
+                                  //     .approvalRequest(widget.dataApproval);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),

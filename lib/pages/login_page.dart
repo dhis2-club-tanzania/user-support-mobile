@@ -126,11 +126,13 @@ class _LoginPageState extends State<LoginPage> {
                                   _passwordEditingController.text.trim());
                               LoginResponseStatus loginRes =
                                   await D2Touch.logIn(
-                                      url: 'https://play.dhis2.org/2.36.9',
+                                      url: 'https://tland.dhis2.udsm.ac.tz',
                                       username: _usernameEditingController.text
                                           .trim(),
                                       password: _passwordEditingController.text
                                           .trim());
+
+                              print(loginRes);
                               if (loginRes ==
                                       LoginResponseStatus
                                           .ONLINE_LOGIN_SUCCESS ||

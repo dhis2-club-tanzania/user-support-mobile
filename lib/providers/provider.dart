@@ -5,18 +5,18 @@ import 'dart:io';
 import 'package:d2_touch/shared/utilities/http_client.util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:user_support_mobile/models/approve_model.dart';
 
 import '/constants/constants.dart';
 import '/models/message_conversation.dart';
 import '/models/user.dart';
-import '../models/data_approval.dart';
 
 class MessageModel with ChangeNotifier {
   final List<MessageConversation> _allMessageConversation = [];
   late List<User> _listOfUsers;
   late MessageConversation _fetchedThread;
   List<MessageConversation> _privateMessages = [];
-  List<DataApproval> _dataApproval = [];
+  List<ApproveModel> _dataApproval = [];
   List<MessageConversation> _validationMessages = [];
   List<MessageConversation> _ticketMessage = [];
   List<MessageConversation> _systemMessages = [];
@@ -33,7 +33,7 @@ class MessageModel with ChangeNotifier {
   List<MessageConversation> get allMessageConversation =>
       _allMessageConversation;
   List<MessageConversation> get ticketMessage => _ticketMessage;
-  List<DataApproval> get dataApproval => _dataApproval;
+  List<ApproveModel> get dataApproval => _dataApproval;
   List<MessageConversation> get systemMessage => _systemMessages;
   List<User> get listOfUsers => _listOfUsers;
   List<MessageConversation> get privateMessages => _privateMessages;
@@ -62,7 +62,6 @@ class MessageModel with ChangeNotifier {
     }
     notifyListeners();
   }
-
 
   Future<void> addFeedbackMessage(String subject, String text) async {
     _isLoading = true;
@@ -263,29 +262,21 @@ class MessageModel with ChangeNotifier {
 
   Future<void> get fetchDataApproval async {
     try {
-      final res = await HttpClient.get('sqlViews/bYBByKamlr7/data/');
+      var res2;
+      final res = await HttpClient.get('dataStore/dhis2-user-support');
+      print(res.body);
+      var list = res.body;
 
-      // print("This is a response : ${res.body['listGrid']['rows']}");
-      final list = res.body['listGrid']['rows'] as List;
-      // print("This is a runtype : ${list.length}");
-      // print("This is a runtype : ${list.length}");
-      list.removeAt(0);
-      List<Map<String, dynamic>> allMap = [];
-      if (list.length == 0) return;
-      list.forEach((element) {
-        Map<String, dynamic> newMap = {
-          "name": element[0],
-          "key": element[1],
-          "data": jsonDecode(element[2]),
-          "datetime": element[3]
-        };
-        allMap.add(newMap);
-      });
-      // final newMap = {"data": list[0][2]};
-      log(allMap[0].toString());
+      for (var i = 1; i < list.length; i++) {
+        print(list[i]);
+        res2 = await HttpClient.get('dataStore/dhis2-user-support/${list[i]}');
+        // print(res2.body);s
+      }
+
+      print(res2.body);
       _dataApproval =
-          allMap.map((model) => DataApproval.fromJson(model)).toList();
-      print("This was successful created : ${_dataApproval.first.name}");
+          res2.body.map((model) => ApproveModel.fromMap(model)).toList();
+      // print("This was successful created : ${_dataApproval.first.name}");
     } catch (e) {
       print("error : $e");
     }
@@ -293,20 +284,20 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> approvalRequest(DataApproval dataApproval) async {
-    var url = dataApproval.data.url.split('/').reversed.toList();
-    print(dataApproval.data.url);
-    log(dataApproval.data.payload.toJson().toString());
-    final res = await HttpClient.post(
-        dataApproval.data.url, dataApproval.data.payload.toJson());
+  // Future<void> approvalRequest(ApproveModel dataApproval) async {
+  //   var url = dataApproval.data.url.split('/').reversed.toList();
+  //   print(dataApproval.data.url);
+  //   log(dataApproval.data.payload.toJson().toString());
+  //   final res = await HttpClient.post(
+  //       dataApproval.data.url, dataApproval.data.payload.toJson());
 
-    // Dio dio = Dio();
-    // final res2 =
-    //     await dio.delete("$baseUrl/${dataApproval.name}/${dataApproval.key}");
-    print("This is a post request : ${res.statusCode}");
-    // print("This is a deletion request : ${res2.statusCode}");
-    notifyListeners();
-  }
+  //   // Dio dio = Dio();
+  //   // final res2 =
+  //   //     await dio.delete("$baseUrl/${dataApproval.name}/${dataApproval.key}");
+  //   print("This is a post request : ${res.statusCode}");
+  //   // print("This is a deletion request : ${res2.statusCode}");
+  //   notifyListeners();
+  // }
 
   // fetch validation message
   Future<void> get fetchValidationMessages async {
@@ -386,73 +377,73 @@ class MessageModel with ChangeNotifier {
   }
 }
 
-  // Future<void> queryUser(String query) async {
-  //   final url =
-  //       "$baseUrl/userGroups?fields=id%2C%20displayName&pageSize=10&filter=displayName%3Atoken%3A$query";
-  //   final response = await http.get(
-  //     Uri.parse(url),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json',
-  //     },
-  //   );
-  //   print(response.body);
-  // }
+// Future<void> queryUser(String query) async {
+//   final url =
+//       "$baseUrl/userGroups?fields=id%2C%20displayName&pageSize=10&filter=displayName%3Atoken%3A$query";
+//   final response = await http.get(
+//     Uri.parse(url),
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Accept': 'application/json',
+//     },
+//   );
+//   print(response.body);
+// }
 
-  // Future<void> queryOrgarnizationUnits(String query) async {
-  //   final url =
-  //       "$baseUrl/organisationUnits?fields=id,displayName&pageSize=10&filter=displayName%3Atoken%3A$query&filter=users%3Agte%3A1";
-  //   final response = await http.get(
-  //     Uri.parse(url),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json',
-  //     },
-  //   );
+// Future<void> queryOrgarnizationUnits(String query) async {
+//   final url =
+//       "$baseUrl/organisationUnits?fields=id,displayName&pageSize=10&filter=displayName%3Atoken%3A$query&filter=users%3Agte%3A1";
+//   final response = await http.get(
+//     Uri.parse(url),
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Accept': 'application/json',
+//     },
+//   );
 
-    // if (response.statusCode==200) {
+// if (response.statusCode==200) {
 
-    // } else {
-    // }
-  // }
+// } else {
+// }
+// }
 
-  // Future<void> queryUserGroups(String query) async {
-  //   final url =
-  //       "$baseUrl/userGroups?fields=id%2C%20displayName&pageSize=10&filter=displayName%3Atoken%3A$query";
-  //   final response = await http.get(
-  //     Uri.parse(url),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json',
-  //     },
-  //   );
-  // }
+// Future<void> queryUserGroups(String query) async {
+//   final url =
+//       "$baseUrl/userGroups?fields=id%2C%20displayName&pageSize=10&filter=displayName%3Atoken%3A$query";
+//   final response = await http.get(
+//     Uri.parse(url),
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Accept': 'application/json',
+//     },
+//   );
+// }
 
-  //add participant
-  // Future<void> addParticipant() async {
-  //   final response = await http.post(
-  //     Uri.parse('$baseUrl/messageConversation/id/recepients'),
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Accept': 'application/json',
-  //     },
-  //     body: json.encode({
-  //       "users": [
-  //         {
-  //           "id": "Onf73mPD6sL",
-  //           "username": "keita",
-  //           "firstName": "Seydou",
-  //           "surname": "Keita",
-  //           "displayName": "Seydou Keita",
-  //           "type": "user"
-  //         }
-  //       ],
-  //       "userGroups": [],
-  //       "organisationUnits": [],
-  //     }),
-  //   );
+//add participant
+// Future<void> addParticipant() async {
+//   final response = await http.post(
+//     Uri.parse('$baseUrl/messageConversation/id/recepients'),
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Accept': 'application/json',
+//     },
+//     body: json.encode({
+//       "users": [
+//         {
+//           "id": "Onf73mPD6sL",
+//           "username": "keita",
+//           "firstName": "Seydou",
+//           "surname": "Keita",
+//           "displayName": "Seydou Keita",
+//           "type": "user"
+//         }
+//       ],
+//       "userGroups": [],
+//       "organisationUnits": [],
+//     }),
+//   );
 
-  //   notifyListeners();
-  // }
+//   notifyListeners();
+// }
 
-  //fetch system message
+//fetch system message

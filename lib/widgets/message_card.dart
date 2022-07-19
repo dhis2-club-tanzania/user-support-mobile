@@ -10,6 +10,8 @@ import 'package:user_support_mobile/pages/message_conversation_page.dart';
 import 'package:user_support_mobile/pages/testing_page.dart';
 import 'package:user_support_mobile/providers/provider.dart';
 
+import '../models/approve_model.dart';
+
 class MessageBox extends StatelessWidget {
   MessageBox(
       {required this.lastMessage,
@@ -24,7 +26,7 @@ class MessageBox extends StatelessWidget {
   final String messageId;
   final bool read;
   bool? isDataApproval;
-  DataApproval? dataApproval;
+  ApproveModel? dataApproval;
   final String subject;
   final String displayName;
   final String lastMessage;

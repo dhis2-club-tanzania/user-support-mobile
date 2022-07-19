@@ -34,7 +34,7 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
         onRefresh: () async {
           // context.read<MessageModel>().initialValue();
           // await context.read<MessageModel>().fetchTicketMessages;
-          //  final res = await HttpClient.get('dataStore/functions');
+          //  final res = await D2Touch().get('dataStore/functions');
 
           await context.read<MessageModel>().fetchDataApproval;
         },
@@ -80,14 +80,14 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
                                       dataApproval: messageData,
                                       isDataApproval: true,
                                       lastMessage:
-                                          messageData.datetime.toString(),
-                                      subject: messageData.data.message.message,
+                                         ' messageData.datetime.toString()',
+                                      subject: messageData.message!.message,
                                       displayName: messageData
-                                          .data.message.subject
+                                          .message!.subject
                                           .split("-")
                                           .last,
                                       read: value.ticketMessage[index].read,
-                                      messageId: messageData.data.id);
+                                      messageId: messageData.id!);
                                 },
                               ),
                             ],
