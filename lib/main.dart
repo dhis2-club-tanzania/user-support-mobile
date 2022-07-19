@@ -1,12 +1,12 @@
-import 'package:dhis2_flutter_sdk/d2_touch.dart';
+import 'package:d2_touch/d2_touch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../helpers/text_theme.dart';
+import 'main.reflectable.dart';
 import 'pages/splash_page.dart';
 import 'providers/provider.dart';
 import 'routes/routes.dart';
-import 'main.reflectable.dart';
 
 void main() async {
   initializeReflectable();
@@ -14,9 +14,9 @@ void main() async {
   var loginRes = await D2Touch.logIn(
       url: 'https://tland.dhis2.udsm.ac.tz/',
       username: 'pt',
-      password: 'Dhis.2022');
+      password: 'Dhis.2022',);
 
-  print(loginRes);
+  print(loginRes.index);
 
   var isAuth = await D2Touch.isAuthenticated();
   print(isAuth);
