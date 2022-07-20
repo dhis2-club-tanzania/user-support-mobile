@@ -1,11 +1,6 @@
-// To parse this JSON data, do
-//
-//     final dataApproval = dataApprovalFromJson(jsonString);
-
 import 'dart:convert';
 
-DataApproval dataApprovalFromJson(String str) =>
-    DataApproval.fromJson(json.decode(str));
+DataApproval dataApprovalFromJson(String str) => DataApproval.fromJson(json.decode(str));
 
 String dataApprovalToJson(DataApproval data) => json.encode(data.toJson());
 

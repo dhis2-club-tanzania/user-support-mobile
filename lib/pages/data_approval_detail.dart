@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/models/data_approval.dart';
 
 import '../models/approve_model.dart';
 import '../models/message_conversation.dart';
@@ -91,7 +89,7 @@ class _PageContentState extends State<PageContent> {
                   child: ListView(
                     children: [
                       Text(
-                        widget.dataApproval.message!.subject,
+                        widget.dataApproval.message!.subject!,
                         style: const TextStyle(
                             color: Colors.black,
                             fontSize: 18,
@@ -101,7 +99,7 @@ class _PageContentState extends State<PageContent> {
                         height: 20,
                       ),
                       Text(
-                        widget.dataApproval.message!.subject,
+                        widget.dataApproval.message!.subject!,
                         style: const TextStyle(
                             color: Colors.black,
                             fontSize: 16,
@@ -111,7 +109,7 @@ class _PageContentState extends State<PageContent> {
                         height: 20,
                       ),
                       Text(
-                        widget.dataApproval.message!.message,
+                        widget.dataApproval.message!.message!,
                         style: const TextStyle(
                             color: Colors.black,
                             fontSize: 16,

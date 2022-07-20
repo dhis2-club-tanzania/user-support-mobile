@@ -1,5 +1,7 @@
+// To parse this JSON data, do
+//
+//      approveModel = approveModelFromMap(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 ApproveModel approveModelFromMap(String str) => ApproveModel.fromMap(json.decode(str));
@@ -8,43 +10,43 @@ String approveModelToMap(ApproveModel data) => json.encode(data.toMap());
 
 class ApproveModel {
     ApproveModel({
-        required this.id,
-        required this.url,
-        required this.user,
-        required this.action,
-        required this.method,
-        required this.status,
-        required this.message,
-        required this.payload,
-        required this.actionType,
-        required this.shouldAlert,
-        required this.replyMessage,
-        required this.ticketNumber,
-        required this.messageConversation,
-        required this.timeSinceResponseSent,
-        required this.rejectionReasonMessage,
+        this.id,
+        this.url,
+        this.user,
+        this.action,
+        this.method,
+        this.status,
+        this.message,
+        this.payload,
+        this.actionType,
+        this.shouldAlert,
+        this.replyMessage,
+        this.ticketNumber,
+        this.messageConversation,
+        this.timeSinceResponseSent,
+        this.rejectionReasonMessage,
     });
 
-    String? id;
-    String? url;
-    UserData? user;
-    String? action;
-    String? method;
-    String? status;
-    Message? message;
-    Payload? payload;
-    String? actionType;
-    bool? shouldAlert;
-    String? replyMessage;
-    String? ticketNumber;
-    MessageConvo? messageConversation;
-    String? timeSinceResponseSent;
-    String? rejectionReasonMessage;
+     String? id;
+     String? url;
+     String? action;
+     String? method;
+     String? status;
+     String? actionType;
+     String? ticketNumber;
+     String? replyMessage;
+     UserModel? user;
+     Message? message;
+     Payload? payload;
+     bool? shouldAlert;
+     MessageConv? messageConversation;
+     String? timeSinceResponseSent;
+     String? rejectionReasonMessage;
 
     factory ApproveModel.fromMap(Map<String, dynamic> json) => ApproveModel(
         id: json["id"] == null ? null : json["id"],
         url: json["url"] == null ? null : json["url"],
-        user: json["user"] == null ? null : UserData.fromMap(json["user"]),
+        user: json["user"] == null ? null : UserModel.fromMap(json["user"]),
         action: json["action"] == null ? null : json["action"],
         method: json["method"] == null ? null : json["method"],
         status: json["status"] == null ? null : json["status"],
@@ -54,7 +56,7 @@ class ApproveModel {
         shouldAlert: json["shouldAlert"] == null ? null : json["shouldAlert"],
         replyMessage: json["replyMessage"] == null ? null : json["replyMessage"],
         ticketNumber: json["ticketNumber"] == null ? null : json["ticketNumber"],
-        messageConversation: json["messageConversation"] == null ? null : MessageConvo.fromMap(json["messageConversation"]),
+        messageConversation: json["messageConversation"] == null ? null : MessageConv.fromMap(json["messageConversation"]),
         timeSinceResponseSent: json["timeSinceResponseSent"] == null ? null : json["timeSinceResponseSent"],
         rejectionReasonMessage: json["rejectionReasonMessage"] == null ? null : json["rejectionReasonMessage"],
     );
@@ -80,14 +82,14 @@ class ApproveModel {
 
 class Message {
     Message({
-        required this.message,
-        required this.subject,
-        required this.messageContentsLength,
+        this.message,
+        this.subject,
+        this.messageContentsLength,
     });
 
-    final String message;
-    final String subject;
-    final int messageContentsLength;
+     String? message;
+     String? subject;
+     int? messageContentsLength;
 
     factory Message.fromMap(Map<String, dynamic> json) => Message(
         message: json["message"] == null ? null : json["message"],
@@ -102,16 +104,16 @@ class Message {
     };
 }
 
-class MessageConvo {
-    MessageConvo({
-        required this.id,
-        required this.displayName,
+class MessageConv {
+    MessageConv({
+        this.id,
+        this.displayName,
     });
 
-    final String id;
-    final String displayName;
+     String? id;
+     String? displayName;
 
-    factory MessageConvo.fromMap(Map<String, dynamic> json) => MessageConvo(
+    factory MessageConv.fromMap(Map<String, dynamic> json) => MessageConv(
         id: json["id"] == null ? null : json["id"],
         displayName: json["displayName"] == null ? null : json["displayName"],
     );
@@ -124,12 +126,12 @@ class MessageConvo {
 
 class Payload {
     Payload({
-        required this.additions,
-        required this.deletions,
+        this.additions,
+        this.deletions,
     });
 
-    final List<Addition>? additions;
-    final List<Addition>? deletions;
+     List<Addition>? additions;
+     List<Addition>? deletions;
 
     factory Payload.fromMap(Map<String, dynamic> json) => Payload(
         additions: json["additions"] == null ? null : List<Addition>.from(json["additions"].map((x) => Addition.fromMap(x))),
@@ -144,12 +146,12 @@ class Payload {
 
 class Addition {
     Addition({
-        required this.id,
-        required this.name,
+        this.id,
+        this.name,
     });
 
-    final String id;
-    final String name;
+     String? id;
+     String? name;
 
     factory Addition.fromMap(Map<String, dynamic> json) => Addition(
         id: json["id"] == null ? null : json["id"],
@@ -162,26 +164,26 @@ class Addition {
     };
 }
 
-class UserData {
-    UserData({
-        required this.id,
-        required this.email,
-        required this.jobTitle,
-        required this.userName,
-        required this.displayName,
-        required this.phoneNumber,
-        required this.organisationUnits,
+class UserModel {
+    UserModel({
+        this.id,
+        this.email,
+        this.jobTitle,
+        this.userName,
+        this.displayName,
+        this.phoneNumber,
+        this.organisationUnits,
     });
 
-    final String id;
-    final String email;
-    final String jobTitle;
-    final String userName;
-    final String displayName;
-    final String phoneNumber;
-    final List<Addition>? organisationUnits;
+     String? id;
+     String? email;
+     String? jobTitle;
+     String? userName;
+     String? displayName;
+     String? phoneNumber;
+     List<Addition>? organisationUnits;
 
-    factory UserData.fromMap(Map<String, dynamic> json) => UserData(
+    factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
         id: json["id"] == null ? null : json["id"],
         email: json["email"] == null ? null : json["email"],
         jobTitle: json["jobTitle"] == null ? null : json["jobTitle"],

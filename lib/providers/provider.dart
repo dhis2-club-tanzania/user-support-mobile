@@ -1,15 +1,13 @@
 import 'dart:convert';
-import 'dart:developer';
-import 'dart:io';
 
 import 'package:d2_touch/shared/utilities/http_client.util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:user_support_mobile/models/approve_model.dart';
 
 import '/constants/constants.dart';
 import '/models/message_conversation.dart';
 import '/models/user.dart';
+import '../models/approve_model.dart';
 
 class MessageModel with ChangeNotifier {
   final List<MessageConversation> _allMessageConversation = [];
@@ -262,19 +260,23 @@ class MessageModel with ChangeNotifier {
 
   Future<void> get fetchDataApproval async {
     try {
+      var response = [];
       var res2;
       final res = await HttpClient.get('dataStore/dhis2-user-support');
-      print(res.body);
+      // print(res.body);
       var list = res.body;
 
       for (var i = 1; i < list.length; i++) {
-        print(list[i]);
-        res2 = await HttpClient.get('dataStore/dhis2-user-support/${list[i]}');
+        print('dataStore/dhis2-user-support/${list[i]}');
+
+        res2 = await HttpClient.get('dataStore/dhis2-user-support/${list[i].toString()}');
+        response.add(res2.body);
   
       }
+      // inspect(response);
 
-      print(res2.body);
-      _dataApproval = json.decode(res2.body).map((x) => approveModelFromMap(x)).toList();
+      print('is Successfully');
+      _dataApproval = response.map((x) => ApproveModel.fromMap(x as Map<String, dynamic>)).toList();
           // res2.body.map((model) => approveModelFromMap(model<String,dynamic>)).toList();
       // print("This was successful created : ${_dataApproval.first.name}");
     } catch (e) {

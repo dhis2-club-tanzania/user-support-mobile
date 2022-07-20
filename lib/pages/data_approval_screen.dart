@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:d2_touch/d2_touch.dart';
 
 import '../models/message_conversation.dart';
 import '../providers/provider.dart';
 import '../widgets/drawer_nav.dart';
 import '../widgets/message_card.dart';
 import '../widgets/show_loading.dart';
-import 'compose_painter.dart';
 
 class DataApprovalScreen extends StatefulWidget {
   const DataApprovalScreen({Key? key}) : super(key: key);
@@ -79,11 +76,10 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
                                   return MessageBox(
                                       dataApproval: messageData,
                                       isDataApproval: true,
-                                      lastMessage:
-                                         ' messageData.datetime.toString()',
-                                      subject: messageData.message!.message,
+                                      lastMessage: DateTime.now().toString(),
+                                      subject: messageData.message!.message!,
                                       displayName: messageData
-                                          .message!.subject
+                                          .message!.subject!
                                           .split("-")
                                           .last,
                                       read: value.ticketMessage[index].read,
