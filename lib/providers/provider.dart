@@ -273,12 +273,7 @@ class MessageModel with ChangeNotifier {
         response.add(res2.body);
   
       }
-      // inspect(response);
-
-      print('is Successfully');
       _dataApproval = response.map((x) => ApproveModel.fromMap(x as Map<String, dynamic>)).toList();
-          // res2.body.map((model) => approveModelFromMap(model<String,dynamic>)).toList();
-      // print("This was successful created : ${_dataApproval.first.name}");
     } catch (e) {
       print("error : $e");
     }
@@ -286,20 +281,23 @@ class MessageModel with ChangeNotifier {
     notifyListeners();
   }
 
-  // Future<void> approvalRequest(ApproveModel dataApproval) async {
-  //   var url = dataApproval.data.url.split('/').reversed.toList();
-  //   print(dataApproval.data.url);
-  //   log(dataApproval.data.payload.toJson().toString());
-  //   final res = await HttpClient.post(
-  //       dataApproval.data.url, dataApproval.data.payload.toJson());
+  Future<void> approvalRequest(ApproveModel dataApproval) async {
 
-  //   // Dio dio = Dio();
-  //   // final res2 =
-  //   //     await dio.delete("$baseUrl/${dataApproval.name}/${dataApproval.key}");
-  //   print("This is a post request : ${res.statusCode}");
-  //   // print("This is a deletion request : ${res2.statusCode}");
-  //   notifyListeners();
-  // }
+    
+    // var url = dataApproval.data.url.split('/').reversed.toList();
+    // print(dataApproval.data.url);
+
+    // log(dataApproval.data.payload.toJson());
+    // final res = await HttpClient.post(
+    //     dataApproval.data.url, dataApproval.data.payload.toJson());
+
+    // Dio dio = Dio();
+    // final res2 =
+    //     await dio.delete("$baseUrl/${dataApproval.name}/${dataApproval.key}");
+    // print("This is a post request : ${res.statusCode}");
+    // print("This is a deletion request : ${res2.statusCode}");
+    notifyListeners();
+  }
 
   // fetch validation message
   Future<void> get fetchValidationMessages async {
