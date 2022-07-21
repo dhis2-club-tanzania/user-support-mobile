@@ -144,10 +144,7 @@ class _PageContentState extends State<PageContent> {
                                   ),
                                 ),
                                 onPressed: () {
-
-                                      context.read<MessageModel>()
-                                      .approvalRequest(widget.dataApproval);
-                                 
+                              showDataAlert(isAccept: true);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
@@ -219,7 +216,7 @@ class _PageContentState extends State<PageContent> {
     );
   }
 
-  showDataAlert() {
+  showDataAlert({bool isAccept = false}) {
     showDialog(
         context: context,
         builder: (context) {
@@ -241,28 +238,44 @@ class _PageContentState extends State<PageContent> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        controller: _textEditingController,
-                        minLines: 3,
-                        maxLines: 8,
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Reasons',
+                    if (!isAccept)
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: _textEditingController,
+                          minLines: 3,
+                          maxLines: 8,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Reasons',
+                          ),
                         ),
                       ),
-                    ),
+                        if (isAccept)
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                       'You are about to accept.',
+                          
+                        ),
+                      ),
                     Container(
                       width: double.infinity,
                       height: 60,
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
                         onPressed: () {
-                           context
-                                      .read<MessageModel>()
-                                      .approvalRequest(widget.dataApproval, message: _textEditingController.text.trim() );
-                          Navigator.of(context).pop();
+                          if (isAccept) {
+                            context
+                                .read<MessageModel>()
+                                .approvalRequest(widget.dataApproval);
+                            Navigator.of(context).pop();
+                          } else {
+                            context.read<MessageModel>().approvalRequest(
+                                widget.dataApproval,
+                                message: _textEditingController.text.trim());
+                            Navigator.of(context).pop();
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                             // primary: Colors.black,
