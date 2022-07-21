@@ -261,7 +261,7 @@ class _PageContentState extends State<PageContent> {
                         onPressed: () {
                            context
                                       .read<MessageModel>()
-                                      .approvalRequest(widget.dataApproval);
+                                      .approvalRequest(widget.dataApproval, message: _textEditingController.text.trim() );
                           Navigator.of(context).pop();
                         },
                         style: ElevatedButton.styleFrom(

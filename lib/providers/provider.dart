@@ -41,6 +41,97 @@ class MessageModel with ChangeNotifier {
   MessageConversation get userReply => _reply;
   MessageConversation get fetchedThread => _fetchedThread;
 
+  Future<void> get fetchDataApproval async {
+    try {
+      var response = [];
+      var res2;
+      final res = await HttpClient.get('dataStore/dhis2-user-support');
+      // print(res.body);
+      var list = res.body;
+
+      for (var i = 1; i < list.length; i++) {
+        print('dataStore/dhis2-user-support/${list[i]}');
+
+        res2 = await HttpClient.get(
+            'dataStore/dhis2-user-support/${list[i].toString()}');
+        response.add(res2.body);
+      }
+      _dataApproval = response
+          .map((x) => ApproveModel.fromMap(x as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print("error : $e");
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> approvalRequest(ApproveModel dataApproval,
+      {String? message}) async {
+    var id = dataApproval.id!.substring(0, 15);
+    Dio dio = Dio();
+
+    String createBasicAuthToken(username, password) {
+      return 'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    }
+
+    print(id);
+    // var url = dataApproval.data.url.split('/').reversed.toList();
+    // print(dataApproval.data.url);
+
+    // log(dataApproval.payload.toJson());
+    //fetch message conversation data
+    final res = await
+      HttpClient.get(
+          'messageConversations?messageType=TICKET&filter=subject:ilike:${id}');
+  
+
+    var convId = res.body['messageConversations'][0]['id'].toString();
+
+    if(message==null){
+print('This is inside if statement');
+      final response = await Future.wait([
+        HttpClient.post(dataApproval.url!, dataApproval.payload!.toMap()),
+        http.delete(
+            Uri.parse("https://tland.dhis2.udsm.ac.tz/api/dataStore/dhis2-user-support/${dataApproval.id}"),
+            headers: <String, String>{
+              'Authorization': createBasicAuthToken('pt', 'Dhis.2022')
+            }),
+        HttpClient.post('messageConversations/${convId}',
+            'Ombi lako limeshughulikiwa Karibu!'),
+        HttpClient.post(
+            'messageConversations/${convId}/status?messageConversationStatus=SOLVED', ''),
+      ]);
+    }else{
+print('This is inside else');
+
+      final response = await Future.wait([
+        http.delete(
+            Uri.parse("https://tland.dhis2.udsm.ac.tz/api/dataStore/dhis2-user-support/${dataApproval.id}"),
+            headers: <String, String>{
+              'Authorization': createBasicAuthToken('pt', 'Dhis.2022')
+            }),
+        HttpClient.post('messageConversations/${convId}',
+            message),
+        HttpClient.post(
+            'messageConversations/${convId}/status?messageConversationStatus=SOLVED',
+            ''),
+      ]);
+      inspect(response.first);
+      inspect(response[1]);
+      inspect(response[2].toString());
+    }
+
+    // inspect(res[0].body);
+    // inspect(response.first);
+    // inspect(response[1].body);
+
+    // final res2 =
+    // print("This is a post request : ${res.statusCode}");
+    // print("This is a deletion request : ${res2.statusCode}");
+    notifyListeners();
+  }
+
   //send message to the message conversation
   Future<void> sendMessages(String id, String message) async {
     if (message.isNotEmpty) {
@@ -257,70 +348,6 @@ class MessageModel with ChangeNotifier {
       print("error $e catched");
     }
 
-    notifyListeners();
-  }
-
-  Future<void> get fetchDataApproval async {
-    try {
-      var response = [];
-      var res2;
-      final res = await HttpClient.get('dataStore/dhis2-user-support');
-      // print(res.body);
-      var list = res.body;
-
-      for (var i = 1; i < list.length; i++) {
-        print('dataStore/dhis2-user-support/${list[i]}');
-
-        res2 = await HttpClient.get(
-            'dataStore/dhis2-user-support/${list[i].toString()}');
-        response.add(res2.body);
-      }
-      _dataApproval = response
-          .map((x) => ApproveModel.fromMap(x as Map<String, dynamic>))
-          .toList();
-    } catch (e) {
-      print("error : $e");
-    }
-
-    notifyListeners();
-  }
-
-  Future<void> approvalRequest(ApproveModel dataApproval) async {
-    var id = dataApproval.id!.substring(0, 15);
-    Dio dio = Dio();
-
-    print(id);
-
-    // var url = dataApproval.data.url.split('/').reversed.toList();
-    // print(dataApproval.data.url);
-
-    // log(dataApproval.payload.toJson());
-    //fetch message conversation data
-    final res = await Future.wait([
-      HttpClient.get(
-          'messageConversations?messageType=TICKET&filter=subject:ilike:${id}'),
-      HttpClient.post(dataApproval.url!, dataApproval.payload!.toMap()),
-    ]);
-
-    inspect(res[0].body);
-    var convId = res[0].body['messageConversations'][0]['id'].toString();
-
-    //delete and send message to the message conversation
-    final response = await Future.wait([
-      // dio.delete("$baseUrl/dataStore/dhis2-user-support/${dataApproval.id}"),
-      HttpClient.post('messageConversations/${convId}', 'Ombi lako limeshughulikiwa Karibu!'),
-      HttpClient.post('messageConversations/${convId}/status?messageConversationStatus=SOLVED', 'Ombi lako limeshughulikiwa Karibu!'),
-    ]);
-
-    // inspect(response[0].body);
-    // inspect(response[1].body);
-
-
-
-
-    // final res2 =
-    // print("This is a post request : ${res.statusCode}");
-    // print("This is a deletion request : ${res2.statusCode}");
     notifyListeners();
   }
 

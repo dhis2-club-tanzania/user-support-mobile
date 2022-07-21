@@ -2,11 +2,9 @@ import 'package:d2_touch/d2_touch.dart';
 import 'package:d2_touch/modules/auth/user/models/login-response.model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/pages/inbox_page.dart';
 
-import '../pages/home_page.dart';
-import '../pages/signup_page.dart';
 import '../providers/provider.dart';
+import 'data_approval_screen.dart';
 
 class LoginPage extends StatefulWidget {
   final bool? isAuth;
@@ -29,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     Widget nextWidget = Container();
 
     if (widget.isAuth == true) {
-      nextWidget = InboxPage();
+      nextWidget = DataApprovalScreen();
       return nextWidget;
     }
     return Scaffold(
@@ -139,8 +137,11 @@ class _LoginPageState extends State<LoginPage> {
                                   loginRes ==
                                       LoginResponseStatus
                                           .OFFLINE_LOGIN_SUCCESS) {
-                                Navigator.pushReplacementNamed(
-                                    context, InboxPage.routeName);
+                                // Navigator.pushReplacementNamed(
+                                //     context, InboxPage.routeName);
+                                  Navigator.pushReplacementNamed(
+                                    context, DataApprovalScreen.routeName);
+                                
                                 if (loginRes ==
                                     LoginResponseStatus.WRONG_CREDENTIALS) {
                                   //wrong credential was provided

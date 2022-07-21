@@ -10,7 +10,7 @@ import '../widgets/show_loading.dart';
 class DataApprovalScreen extends StatefulWidget {
   const DataApprovalScreen({Key? key}) : super(key: key);
 
-  static const routeName = '/data-approval-page';
+  static const routeName = '/approve-page';
   @override
   _DataApprovalScreenState createState() => _DataApprovalScreenState();
 }
