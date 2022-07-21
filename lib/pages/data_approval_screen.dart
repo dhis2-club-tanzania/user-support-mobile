@@ -82,7 +82,7 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
                                           .message!.subject!
                                           .split("-")
                                           .last,
-                                      read: value.ticketMessage[index].read,
+                                      read:false,
                                       messageId: messageData.id!);
                                 },
                               ),

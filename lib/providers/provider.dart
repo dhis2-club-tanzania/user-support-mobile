@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:d2_touch/shared/utilities/http_client.util.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -269,11 +271,13 @@ class MessageModel with ChangeNotifier {
       for (var i = 1; i < list.length; i++) {
         print('dataStore/dhis2-user-support/${list[i]}');
 
-        res2 = await HttpClient.get('dataStore/dhis2-user-support/${list[i].toString()}');
+        res2 = await HttpClient.get(
+            'dataStore/dhis2-user-support/${list[i].toString()}');
         response.add(res2.body);
-  
       }
-      _dataApproval = response.map((x) => ApproveModel.fromMap(x as Map<String, dynamic>)).toList();
+      _dataApproval = response
+          .map((x) => ApproveModel.fromMap(x as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       print("error : $e");
     }
@@ -282,18 +286,39 @@ class MessageModel with ChangeNotifier {
   }
 
   Future<void> approvalRequest(ApproveModel dataApproval) async {
+    var id = dataApproval.id!.substring(0, 15);
+    Dio dio = Dio();
 
-    
+    print(id);
+
     // var url = dataApproval.data.url.split('/').reversed.toList();
     // print(dataApproval.data.url);
 
-    // log(dataApproval.data.payload.toJson());
-    // final res = await HttpClient.post(
-    //     dataApproval.data.url, dataApproval.data.payload.toJson());
+    // log(dataApproval.payload.toJson());
+    //fetch message conversation data
+    final res = await Future.wait([
+      HttpClient.get(
+          'messageConversations?messageType=TICKET&filter=subject:ilike:${id}'),
+      HttpClient.post(dataApproval.url!, dataApproval.payload!.toMap()),
+    ]);
 
-    // Dio dio = Dio();
+    inspect(res[0].body);
+    var convId = res[0].body['messageConversations'][0]['id'].toString();
+
+    //delete and send message to the message conversation
+    final response = await Future.wait([
+      // dio.delete("$baseUrl/dataStore/dhis2-user-support/${dataApproval.id}"),
+      HttpClient.post('messageConversations/${convId}', 'Ombi lako limeshughulikiwa Karibu!'),
+      HttpClient.post('messageConversations/${convId}/status?messageConversationStatus=SOLVED', 'Ombi lako limeshughulikiwa Karibu!'),
+    ]);
+
+    // inspect(response[0].body);
+    // inspect(response[1].body);
+
+
+
+
     // final res2 =
-    //     await dio.delete("$baseUrl/${dataApproval.name}/${dataApproval.key}");
     // print("This is a post request : ${res.statusCode}");
     // print("This is a deletion request : ${res2.statusCode}");
     notifyListeners();

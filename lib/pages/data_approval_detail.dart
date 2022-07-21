@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/approve_model.dart';
-import '../models/message_conversation.dart';
 import '../providers/provider.dart';
 
 class DataApprovalDetailPage extends StatefulWidget {
@@ -42,25 +41,8 @@ class _PageContentState extends State<PageContent> {
   bool isButtonEnabled = false;
   final TextEditingController _textEditingController = TextEditingController();
 
-  bool isEmpty() {
-    setState(() {
-      if (_textEditingController.text.trim() != "") {
-        isButtonEnabled = true;
-      } else {
-        isButtonEnabled = false;
-      }
-    });
-    return isButtonEnabled;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<MessageModel>(context);
-    // final datas = fetchedData.fetchedThread;
-    // final messageId = datas.id;
-    // bool isLoading = fetchedData.isLoading;
-
-    // final Size size = MediaQuery.of(context).size;
     final Size size = MediaQuery.of(context).size;
     return Stack(
       alignment: AlignmentDirectional.center,
@@ -158,14 +140,14 @@ class _PageContentState extends State<PageContent> {
                               child: ElevatedButton(
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all(
-                                      Color(0xFF235EA0)),
+                                    Color(0xFF235EA0),
+                                  ),
                                 ),
                                 onPressed: () {
 
-                                  showDataAlert();
-                                  context
-                                      .read<MessageModel>()
+                                      context.read<MessageModel>()
                                       .approvalRequest(widget.dataApproval);
+                                 
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
@@ -187,7 +169,7 @@ class _PageContentState extends State<PageContent> {
                                       MaterialStateProperty.all(Colors.red),
                                 ),
                                 onPressed: () {
-                                  showDataAlert( );
+                                  showDataAlert();
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.all(10.0),
@@ -235,115 +217,64 @@ class _PageContentState extends State<PageContent> {
         //   Container(),
       ],
     );
-
-    
   }
+
   showDataAlert() {
-  showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                20.0,
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  20.0,
+                ),
               ),
             ),
-          ),
-          contentPadding: EdgeInsets.only(
-            top: 10.0,
-          ),
-       
-          content: Container(
-            height: 300,
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                 
-                  Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                       minLines: 5,
-              maxLines: 8, 
-                      decoration: InputDecoration(
-                        
+            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+            content: Container(
+              // height: 300,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: _textEditingController,
+                        minLines: 3,
+                        maxLines: 8,
+                        decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          hintText: 'Reasons',),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 60,
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        // primary: Colors.black,
-                        // fixedSize: Size(250, 50),
-                      ),
-                      child: Text(
-                        "Confirm",
+                          hintText: 'Reasons',
+                        ),
                       ),
                     ),
-                  ),
-              
-                ],
-              ),
-            ),
-          ),
-        );
-      });
-}
-
-
-  Widget _messageThread(MessageConversation messagesData) {
-    return ListView.builder(
-        physics: const ScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: messagesData.messageCount.isNotEmpty
-            ? messagesData.messages!.length
-            : 0,
-        itemBuilder: (context, index) {
-          String messageFrom;
-          if (messagesData.messages![index].sender != null) {
-            messageFrom = messagesData.messages![index].sender!.displayName;
-          } else {
-            messageFrom = "System";
-          }
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 15.0),
-            child: Card(
-              child: ListTile(
-                // trailing: Text(
-                //     messagesData.messages![index].lastUpdated.substring(0, 10)),
-                title: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Message from $messageFrom'),
-                      Text(messagesData.messages![index].lastUpdated
-                          .substring(0, 10)),
-                    ],
-                  ),
-                ),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    messagesData.messages![index].text,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
+                    Container(
+                      width: double.infinity,
+                      height: 60,
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                           context
+                                      .read<MessageModel>()
+                                      .approvalRequest(widget.dataApproval);
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                            // primary: Colors.black,
+                            // fixedSize: Size(250, 50),
+                            ),
+                        child: Text(
+                          "Confirm",
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                isThreeLine: true,
               ),
             ),
           );
