@@ -75,11 +75,6 @@ class MessageModel with ChangeNotifier {
     }
 
     print(id);
-    // var url = dataApproval.data.url.split('/').reversed.toList();
-    // print(dataApproval.data.url);
-
-    // log(dataApproval.payload.toJson());
-    //fetch message conversation data
     final res = await
       HttpClient.get(
           'messageConversations?messageType=TICKET&filter=subject:ilike:${id}');
