@@ -1,15 +1,14 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:d2_touch/shared/utilities/http_client.util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:d2_touch/shared/utilities/http_client.util.dart';
 
 import '/constants/constants.dart';
 import '/models/message_conversation.dart';
-import '/models/user.dart';
-import '../models/approve_model.dart';
+import '/models/user.dart';import '../models/approve_model.dart';
 
 class MessageModel with ChangeNotifier {
   final List<MessageConversation> _allMessageConversation = [];
@@ -115,7 +114,7 @@ print('This is inside else');
             message),
         HttpClient.post(
             'messageConversations/${convId}/status?messageConversationStatus=SOLVED',
-            ''),
+            '')
       ]);
       inspect(response.first);
       inspect(response[1]);

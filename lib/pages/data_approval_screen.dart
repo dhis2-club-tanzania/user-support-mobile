@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../models/message_conversation.dart';
 import '../providers/provider.dart';
-import '../widgets/drawer_nav.dart';
 import '../widgets/message_card.dart';
 import '../widgets/show_loading.dart';
 
@@ -23,15 +22,12 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
 
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   title: const Text('Inbox'),
-      // ),
+      appBar: AppBar(
+        elevation: 0,
+        title: const Text('User Feedback'),
+      ),
       body: RefreshIndicator(
         onRefresh: () async {
-          // context.read<MessageModel>().initialValue();
-          // await context.read<MessageModel>().fetchTicketMessages;
-          //  final res = await D2Touch().get('dataStore/functions');
 
           await context.read<MessageModel>().fetchDataApproval;
         },
@@ -39,32 +35,25 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
           child: Center(
             child: Consumer<MessageModel>(
               builder: (context, value, child) {
-                if (value.map.isEmpty && !value.error) {
+                if (value.map.isEmpty && value.dataApproval.isEmpty) {
                   return LoadingListPage();
                 } else {
-                  return value.error
-                      ? Text(
-                          'Oops Somthing is wrong ${value.errorMessage}',
-                          textAlign: TextAlign.center,
-                        )
-                      : SizedBox(
-                          width: size.width * 0.95,
+                  return SizedBox(
+                          width: size.width * 0.99,
                           child: ListView(
                             // crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              searchBarWidget(context, value),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 8.0, top: 8.0),
-                                child: Text(
-                                  'Data Approval',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
+                            
+                              // searchBarWidget(context, value),
+                              // const Padding(
+                              //   padding: EdgeInsets.only(left: 8.0, top: 8.0),
+                              //   child: Text(
+                              //     'Pending Requests',
+                              //     style: TextStyle(
+                              //         fontSize: 20,
+                              //         fontWeight: FontWeight.w500),
+                              //   ),
+                              // ),
                               ListView.builder(
                                 shrinkWrap: true,
                                 physics: const ScrollPhysics(),
@@ -99,7 +88,7 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
       //   onPressed: () => Navigator.pushNamed(context, ComposePainter.routeName),
       //   child: const Icon(Icons.add),
       // ),
-      drawer: const NavigationDrawer(),
+      // drawer: const NavigationDrawer(),
     );
   }
 

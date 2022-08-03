@@ -1,12 +1,12 @@
 name: User Support App
 on:
-  pull_request:
+  push:
     branches:
       - main
 jobs:
   release-apk:
     name: Android APK
-    runs-on: macos-latest
+    runs-on: linux-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-java@v1

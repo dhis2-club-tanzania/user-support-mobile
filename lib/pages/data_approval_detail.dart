@@ -70,16 +70,16 @@ class _PageContentState extends State<PageContent> {
                   width: size.width * 0.9,
                   child: ListView(
                     children: [
-                      Text(
-                        widget.dataApproval.message!.subject!,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w300),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      // Text(
+                      //   widget.dataApproval.message!.subject!,
+                      //   style: const TextStyle(
+                      //       color: Colors.black,
+                      //       fontSize: 18,
+                      //       fontWeight: FontWeight.w300),
+                      // ),
+                      // SizedBox(
+                      //   height: 20,
+                      // ),
                       Text(
                         widget.dataApproval.message!.subject!,
                         style: const TextStyle(
@@ -95,42 +95,12 @@ class _PageContentState extends State<PageContent> {
                         style: const TextStyle(
                             color: Colors.black,
                             fontSize: 16,
-                            fontWeight: FontWeight.w300),
+                            fontWeight: FontWeight.w300,
+                            ),
                       ),
                       SizedBox(
                         height: 20,
                       ),
-                      // Container(
-                      //   padding:
-                      //       EdgeInsets.only(left: size.width * 0.05),
-                      //   width: size.width,
-                      //   height: 100,
-                      //   decoration: BoxDecoration(
-                      //       borderRadius: BorderRadius.circular(1),
-                      //       border: Border.all(color: Colors.black26)),
-                      //   child: TextFormField(
-                      //     onFieldSubmitted: null,
-                      //     controller: _textEditingController,
-                      //     maxLines: null,
-                      //     keyboardType: TextInputType.multiline,
-                      //     expands: true,
-                      //     style: const TextStyle(
-                      //       fontSize: 18,
-                      //       color: Colors.black,
-                      //     ),
-                      //     onChanged: (val) {
-                      //       isEmpty();
-                      //     },
-                      //     decoration: const InputDecoration(
-                      //       border: InputBorder.none,
-                      //       hintText: "Compose reply",
-                      //     ),
-                      //   ),
-                      // ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-
                       const SizedBox(height: 8),
                       Container(
                         child: Row(
@@ -144,7 +114,7 @@ class _PageContentState extends State<PageContent> {
                                   ),
                                 ),
                                 onPressed: () {
-                              showDataAlert(isAccept: true);
+                                  showDataAlert(isAccept: true);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
@@ -251,12 +221,11 @@ class _PageContentState extends State<PageContent> {
                           ),
                         ),
                       ),
-                        if (isAccept)
+                    if (isAccept)
                       Container(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                       'You are about to accept.',
-                          
+                          'You are about to accept.',
                         ),
                       ),
                     Container(
@@ -264,7 +233,7 @@ class _PageContentState extends State<PageContent> {
                       height: 60,
                       padding: const EdgeInsets.all(8.0),
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (isAccept) {
                             context
                                 .read<MessageModel>()
@@ -276,6 +245,8 @@ class _PageContentState extends State<PageContent> {
                                 message: _textEditingController.text.trim());
                             Navigator.of(context).pop();
                           }
+                          await context.read<MessageModel>().fetchDataApproval;
+                          Navigator.of(context).pop();
                         },
                         style: ElevatedButton.styleFrom(
                             // primary: Colors.black,
