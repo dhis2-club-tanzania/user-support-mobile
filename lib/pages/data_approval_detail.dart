@@ -70,18 +70,10 @@ class _PageContentState extends State<PageContent> {
                   width: size.width * 0.9,
                   child: ListView(
                     children: [
-                      // Text(
-                      //   widget.dataApproval.message!.subject!,
-                      //   style: const TextStyle(
-                      //       color: Colors.black,
-                      //       fontSize: 18,
-                      //       fontWeight: FontWeight.w300),
-                      // ),
-                      // SizedBox(
-                      //   height: 20,
-                      // ),
+              
                       Text(
-                        widget.dataApproval.message!.subject!,
+                        widget.dataApproval.message!.subject!.split("-")
+                                          .last,
                         style: const TextStyle(
                             color: Colors.black,
                             fontSize: 16,
