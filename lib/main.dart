@@ -10,12 +10,12 @@ import 'routes/routes.dart';
 
 void main() async {
   initializeReflectable();
-  // D2Touch.initialize();
+  D2Touch.initialize();
 
   var loginRes = await D2Touch.logIn(
     url: 'https://tland.dhis2.udsm.ac.tz',
     username: 'pt',
-    password: 'Dhis.2022',
+    password: 'Dhis.2022'
   );
 
   print(loginRes);

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/pages/data_approval_screen.dart';
 
 import '../models/approve_model.dart';
 import '../providers/provider.dart';
@@ -16,6 +17,9 @@ class DataApprovalDetailPage extends StatefulWidget {
 }
 
 class DataApprovalDetailPageState extends State<DataApprovalDetailPage> {
+
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +62,8 @@ class _PageContentState extends State<PageContent> {
                   color: Colors.black,
                   size: 25,
                 ),
-                onPressed: () {
+                onPressed: () async {
+                     await context.read<MessageModel>().fetchDataApproval;
                   Navigator.of(context).pop();
                 },
               ),
@@ -70,10 +75,8 @@ class _PageContentState extends State<PageContent> {
                   width: size.width * 0.9,
                   child: ListView(
                     children: [
-              
                       Text(
-                        widget.dataApproval.message!.subject!.split("-")
-                                          .last,
+                        widget.dataApproval.message!.subject!.split("-").last,
                         style: const TextStyle(
                             color: Colors.black,
                             fontSize: 16,
@@ -85,10 +88,10 @@ class _PageContentState extends State<PageContent> {
                       Text(
                         widget.dataApproval.message!.message!,
                         style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w300,
-                            ),
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                       SizedBox(
                         height: 20,
@@ -238,7 +241,10 @@ class _PageContentState extends State<PageContent> {
                             Navigator.of(context).pop();
                           }
                           await context.read<MessageModel>().fetchDataApproval;
-                          Navigator.of(context).pop();
+                        Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => DataApprovalScreen()),
+  );
                         },
                         style: ElevatedButton.styleFrom(
                             // primary: Colors.black,
