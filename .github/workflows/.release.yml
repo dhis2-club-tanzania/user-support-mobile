@@ -1,6 +1,6 @@
 name: User Support App
 on:
-  pull_request:
+  push:
     branches:
       - main
 jobs:
