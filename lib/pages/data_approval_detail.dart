@@ -17,9 +17,6 @@ class DataApprovalDetailPage extends StatefulWidget {
 }
 
 class DataApprovalDetailPageState extends State<DataApprovalDetailPage> {
-
-
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +60,7 @@ class _PageContentState extends State<PageContent> {
                   size: 25,
                 ),
                 onPressed: () async {
-                     await context.read<MessageModel>().fetchDataApproval;
+                  //  await context.read<MessageModel>().fetchDataApproval;
                   Navigator.of(context).pop();
                 },
               ),
@@ -109,7 +106,7 @@ class _PageContentState extends State<PageContent> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  showDataAlert(isAccept: true);
+                                  showDataAlert(context, isAccept: true);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
@@ -131,7 +128,7 @@ class _PageContentState extends State<PageContent> {
                                       MaterialStateProperty.all(Colors.red),
                                 ),
                                 onPressed: () {
-                                  showDataAlert();
+                                  showDataAlert(context);
                                 },
                                 child: Padding(
                                   padding: EdgeInsets.all(10.0),
@@ -181,7 +178,7 @@ class _PageContentState extends State<PageContent> {
     );
   }
 
-  showDataAlert({bool isAccept = false}) {
+  showDataAlert(BuildContext context, {bool isAccept = false}) {
     showDialog(
         context: context,
         builder: (context) {
@@ -233,18 +230,18 @@ class _PageContentState extends State<PageContent> {
                             context
                                 .read<MessageModel>()
                                 .approvalRequest(widget.dataApproval);
-                            Navigator.of(context).pop();
+                            // Navigator.of(context).pop();
                           } else {
                             context.read<MessageModel>().approvalRequest(
                                 widget.dataApproval,
                                 message: _textEditingController.text.trim());
-                            Navigator.of(context).pop();
                           }
                           await context.read<MessageModel>().fetchDataApproval;
-                        Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => DataApprovalScreen()),
-  );
+                          Navigator.of(context).pop();
+                          Future.delayed(const Duration(milliseconds: 500), () {
+                            Navigator.pushNamed(
+                              context,  DataApprovalScreen.routeName);
+                          });
                         },
                         style: ElevatedButton.styleFrom(
                             // primary: Colors.black,
