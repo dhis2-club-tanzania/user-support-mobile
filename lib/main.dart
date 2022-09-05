@@ -1,6 +1,7 @@
 import 'package:d2_touch/d2_touch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../helpers/text_theme.dart';
 import 'main.reflectable.dart';
@@ -46,6 +47,7 @@ class MyApp extends StatelessWidget {
         ),
         home: SplashScreen(isAuth: isAuth),
         routes: routes,
+        builder: EasyLoading.init(),
       ),
     );
   }

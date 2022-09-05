@@ -67,6 +67,7 @@ class MessageModel with ChangeNotifier {
 
   Future<void> approvalRequest(ApproveModel dataApproval,
       {String? message}) async {
+        _isLoading = true;
     var id = dataApproval.id!.substring(0, 15);
     Dio dio = Dio();
 
@@ -95,7 +96,7 @@ print('This is inside if statement');
             'Ombi lako limeshughulikiwa Karibu!'),
         HttpClient.post(
             'messageConversations/${convId}/status?messageConversationStatus=SOLVED', ''),
-      ]);
+      ]).whenComplete(() => _isLoading = false);
     }else{
 print('This is inside else');
 
@@ -110,11 +111,12 @@ print('This is inside else');
         HttpClient.post(
             'messageConversations/${convId}/status?messageConversationStatus=SOLVED',
             '')
-      ]);
+      ]).whenComplete(() => _isLoading = false);
       inspect(response.first);
       inspect(response[1]);
       inspect(response[2].toString());
     }
+
 
     // inspect(res[0].body);
     // inspect(response.first);

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:user_support_mobile/pages/data_approval_screen.dart';
 
 import '../models/approve_model.dart';
@@ -106,7 +107,8 @@ class _PageContentState extends State<PageContent> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  showDataAlert(context, isAccept: true);
+                                  // showDataAlert(context, isAccept: true);
+                                  _loading();
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
@@ -178,6 +180,30 @@ class _PageContentState extends State<PageContent> {
     );
   }
 
+  void _loading({bool isAccept = false}) async {
+    EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black); // code to show modal with masking
+    if (isAccept) {
+      await context.read<MessageModel>().approvalRequest(widget.dataApproval);
+      // Navigator.of(context).pop();
+    } else {
+      await context.read<MessageModel>().approvalRequest(widget.dataApproval,
+          message: _textEditingController.text.trim());
+    }
+    await context.read<MessageModel>().approvalRequest(widget.dataApproval);
+    bool loading = context.read<MessageModel>().isLoading;
+    // var data = await LoginAPI.connectToAPI(
+    //     emailController.text, passwordController.text);
+    if (!loading) {
+      EasyLoading.showSuccess(
+          'Success!'); // code to show modal without masking and auto close
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          DataApprovalScreen.routeName, (Route<dynamic> route) => false);
+    }
+  }
+// .
+
   showDataAlert(BuildContext context, {bool isAccept = false}) {
     showDialog(
         context: context,
@@ -231,17 +257,20 @@ class _PageContentState extends State<PageContent> {
                                 .read<MessageModel>()
                                 .approvalRequest(widget.dataApproval);
                             // Navigator.of(context).pop();
-                          } else {
-                            context.read<MessageModel>().approvalRequest(
-                                widget.dataApproval,
-                                message: _textEditingController.text.trim());
+                          } else {            // context.read<MessageModel>().approvalRequest(
+                            //     widget.dataApproval,
+                            //     message: _textEditingController.text.trim());
+                            // context.read<MessageModel>().approvalRequest(
+                            //     widget.dataApproval,
+                            //     message: _textEditingController.text.trim());
+                            _loading();
                           }
                           await context.read<MessageModel>().fetchDataApproval;
-                          Navigator.of(context).pop();
-                          Future.delayed(const Duration(milliseconds: 500), () {
-                            Navigator.pushNamed(
-                              context,  DataApprovalScreen.routeName);
-                          });
+                          // Navigator.of(context).pop();
+                          // Future.delayed(const Duration(milliseconds: 500), () {
+                          //   Navigator.pushNamed(
+                          //       context, DataApprovalScreen.routeName);
+                          // });
                         },
                         style: ElevatedButton.styleFrom(
                             // primary: Colors.black,
