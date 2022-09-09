@@ -21,6 +21,7 @@ void main() async {
 
   print(loginRes);
 
+
   var isAuth = await D2Touch.isAuthenticated();
 
   runApp(

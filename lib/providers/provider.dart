@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:d2_touch/d2_touch.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -67,6 +68,8 @@ class MessageModel with ChangeNotifier {
 
   Future<void> approvalRequest(ApproveModel dataApproval,
       {String? message}) async {
+          var user = await D2Touch.userModule.user.getOne();
+  print(user!.username);
         _isLoading = true;
     var id = dataApproval.id!.substring(0, 15);
     Dio dio = Dio();
@@ -90,10 +93,10 @@ print('This is inside if statement');
         http.delete(
             Uri.parse("https://tland.dhis2.udsm.ac.tz/api/dataStore/dhis2-user-support/${dataApproval.id}"),
             headers: <String, String>{
-              'Authorization': createBasicAuthToken('pt', 'Dhis.2022')
+              'Authorization': createBasicAuthToken(user.username, user.password)
             }),
         HttpClient.post('messageConversations/${convId}',
-            'Ombi lako limeshughulikiwa Karibu!'),
+            'Ombi lako limeshughulikiwa karibu!'),
         HttpClient.post(
             'messageConversations/${convId}/status?messageConversationStatus=SOLVED', ''),
       ]).whenComplete(() => _isLoading = false);
@@ -104,7 +107,7 @@ print('This is inside else');
         http.delete(
             Uri.parse("https://tland.dhis2.udsm.ac.tz/api/dataStore/dhis2-user-support/${dataApproval.id}"),
             headers: <String, String>{
-              'Authorization': createBasicAuthToken('pt', 'Dhis.2022')
+              'Authorization': createBasicAuthToken(user.username, user.password)
             }),
         HttpClient.post('messageConversations/${convId}',
             message),
