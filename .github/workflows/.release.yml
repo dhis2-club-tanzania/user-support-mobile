@@ -2,7 +2,7 @@ name: User Support App
 on:
   push:
     branches:
-      - main
+      - test
 jobs:
   release-apk:
     name: Android APK
