@@ -52,9 +52,12 @@ class MessageModel with ChangeNotifier {
       for (var i = 1; i < list.length; i++) {
         print('dataStore/dhis2-user-support/${list[i]}');
 
+        if (list[i].toString() != "configurations"){
+
         res2 = await HttpClient.get(
             'dataStore/dhis2-user-support/${list[i].toString()}');
         response.add(res2.body);
+        }
       }
       _dataApproval = response
           .map((x) => ApproveModel.fromMap(x as Map<String, dynamic>))
