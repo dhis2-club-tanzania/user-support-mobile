@@ -1,5 +1,5 @@
 # User Support Mobile App
-A brief description of the project.
+
 
 # Getting Started
 To get started with the project, follow these steps:
@@ -38,7 +38,7 @@ The APK file will be generated in the build/app/outputs/flutter-apk directory.
 # Contributing
 Contributions are welcome! If you have a bug report or a feature request, please open an issue on GitHub. If you want to contribute code, please fork the repository and submit a pull request.
 
-License
+# License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 Note: You may also want to add instructions for running the project in the README.md file, depending on the nature of your project.
