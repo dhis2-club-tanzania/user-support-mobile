@@ -17,17 +17,22 @@ cd user-support-mobile
 code .  
 ```
 
-3. Install the dependencies:
+3. Clean project:
+```
+flutter clean
+```
+
+4. Install the dependencies:
 ```
 flutter pub get
 ```
 
-4. Run database builder
+5. Run database builder
 ```
-sh database_builder.sh
+flutter packages pub run build_runner build --delete-conflicting-outputs
 ```
 
-5. Build the APK file:
+6. Build the APK file:
 
 ```
 flutter build apk
