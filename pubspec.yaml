@@ -16,15 +16,16 @@ dependencies:
     sdk: flutter
   flutter_slidable: ^0.6.0
   flutter_svg: ^0.22.0
-  google_fonts: ^2.1.0
+  google_fonts: ^4.0.1
   http: ^0.13.3
   shimmer: ^2.0.0
-  d2_touch: ^1.0.0-beta.9
-  dio: ^4.0.4
+  d2_touch:
+    path: ../d2-touch
+  dio: ^5.1.1
   freezed_annotation: ^0.15.0
   intl: ^0.17.0
   provider: ^6.0.3
-  reflectable: ^3.0.9
+  reflectable: ^4.0.5
   flutter_easyloading: ^3.0.5
 
 dev_dependencies:

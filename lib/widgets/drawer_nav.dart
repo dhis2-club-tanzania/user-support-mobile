@@ -1,6 +1,7 @@
 import 'package:d2_touch/d2_touch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:user_support_mobile/constants/d2-repository.dart';
 import 'package:user_support_mobile/pages/data_approval_screen.dart';
 import 'package:user_support_mobile/pages/login_page.dart';
 
@@ -103,7 +104,7 @@ class NavigationDrawer extends StatelessWidget {
               isDataApproval: true),
           TextButton.icon(
               onPressed: () async {
-                var logOut = await D2Touch.logOut();
+                var logOut = await d2repository.authModule.logOut();
                 if (logOut) {
                   Navigator.pushNamed(context, LoginPage.routeName);
                 }
