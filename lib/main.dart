@@ -1,57 +1,65 @@
 import 'package:d2_touch/d2_touch.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:user_support_mobile/constants/d2-repository.dart';
+import 'package:user_support_mobile/modules/module-authentication/login/login-page.dart';
+import 'package:user_support_mobile/pages/home_page.dart';
+import 'package:user_support_mobile/routes_generator.dart';
 
-import '../helpers/text_theme.dart';
 import 'main.reflectable.dart';
-import 'pages/splash_page.dart';
-import 'providers/provider.dart';
-import 'routes/routes.dart';
 
 void main() async {
   initializeReflectable();
   WidgetsFlutterBinding.ensureInitialized();
   d2repository = await D2Touch.init();
+  await d2repository.authModule.logOut();
+  bool isAuth = await d2repository.authModule.isAuthenticated();
+  RenderErrorBox.backgroundColor = Colors.white;
+  ErrorWidget.builder = (FlutterErrorDetails details) => const Scaffold(
+        body: Center(child: Text('There is an error')),
+      );
 
-  // for development purposes
-  var loginRes = await d2repository.authModule.logIn(
-    url: 'http://41.59.227.69/tland',
-    username: 'pt',
-    password: 'Dhis.2022',
-  );
-
-  print(loginRes);
-
-  var isAuth = await d2repository.authModule.isAuthenticated();
-
-  runApp(
-    MyApp(
-      isAuth: isAuth,
-    ),
-  );
+  runApp(MyApp(
+    authenticated: isAuth,
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  final bool? isAuth;
+class MyApp extends StatefulWidget {
+  final bool authenticated;
+  const MyApp({Key? key, required this.authenticated}) : super(key: key);
 
-  const MyApp({Key? key, this.isAuth}) : super(key: key);
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<MessageModel>(
-      create: (_) => MessageModel(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'User Support App',
-        theme: ThemeData(
-          textTheme: textTheme,
-          primaryColor: const Color(0xFF1D5288),
-        ),
-        home: SplashScreen(isAuth: isAuth),
-        routes: routes,
-        builder: EasyLoading.init(),
+    return GetMaterialApp(
+      title: 'User support app',
+      debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: scaffoldMessengerKey, // add this
+      theme: ThemeData(
+        colorScheme: const ColorScheme(
+            background: Colors.blueAccent,
+            onBackground: Colors.white,
+            primary: Colors.blueAccent,
+            onPrimary: Colors.white,
+            secondary: Colors.teal,
+            onSecondary: Colors.white,
+            surface: Colors.white,
+            onSurface: Colors.teal,
+            error: Colors.red,
+            onError: Colors.white,
+            brightness: Brightness.light),
+        // fontFamily: 'Montserrat'
       ),
+      initialRoute: widget.authenticated ? HomePage.routeName : HomeLogin.routeName,
+      onGenerateRoute: RoutesGenerator.generateRoute,
     );
   }
 }

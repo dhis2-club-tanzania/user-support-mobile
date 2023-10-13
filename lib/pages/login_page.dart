@@ -11,7 +11,7 @@ class LoginPage extends StatefulWidget {
   final bool? isAuth;
 
   const LoginPage({Key? key, this.isAuth}) : super(key: key);
-  static const String routeName = '/login-page';
+  static const String routeName = '/login-page32';
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -140,9 +140,9 @@ class _LoginPageState extends State<LoginPage> {
                                           .OFFLINE_LOGIN_SUCCESS) {
                                 // Navigator.pushReplacementNamed(
                                 //     context, InboxPage.routeName);
-                                  Navigator.pushReplacementNamed(
+                                Navigator.pushReplacementNamed(
                                     context, DataApprovalScreen.routeName);
-                                
+
                                 if (loginRes ==
                                     LoginResponseStatus.WRONG_CREDENTIALS) {
                                   //wrong credential was provided

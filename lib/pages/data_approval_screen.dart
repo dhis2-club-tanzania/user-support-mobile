@@ -24,11 +24,10 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text('User Feedback'),
+        title: const Text('Form requests'),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-
           await context.read<MessageModel>().fetchDataApproval;
         },
         child: SafeArea(
@@ -39,45 +38,43 @@ class _DataApprovalScreenState extends State<DataApprovalScreen> {
                   return LoadingListPage();
                 } else {
                   return SizedBox(
-                          width: size.width * 0.99,
-                          child: ListView(
-                            // crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                            
-                              // searchBarWidget(context, value),
-                              // const Padding(
-                              //   padding: EdgeInsets.only(left: 8.0, top: 8.0),
-                              //   child: Text(
-                              //     'Pending Requests',
-                              //     style: TextStyle(
-                              //         fontSize: 20,
-                              //         fontWeight: FontWeight.w500),
-                              //   ),
-                              // ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: const ScrollPhysics(),
-                                itemCount: _searchResult.isEmpty
-                                    ? value.dataApproval.length
-                                    : _searchResult.length,
-                                itemBuilder: (context, index) {
-                                  final messageData = value.dataApproval[index];
-                                  return MessageBox(
-                                      dataApproval: messageData,
-                                      isDataApproval: true,
-                                      lastMessage: DateTime.now().toString(),
-                                      subject: messageData.message!.message!,
-                                      displayName: messageData
-                                          .message!.subject!
-                                          .split("-")
-                                          .last,
-                                      read:false,
-                                      messageId: messageData.id!);
-                                },
-                              ),
-                            ],
-                          ),
-                        );
+                    width: size.width * 0.99,
+                    child: ListView(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // searchBarWidget(context, value),
+                        // const Padding(
+                        //   padding: EdgeInsets.only(left: 8.0, top: 8.0),
+                        //   child: Text(
+                        //     'Pending Requests',
+                        //     style: TextStyle(
+                        //         fontSize: 20,
+                        //         fontWeight: FontWeight.w500),
+                        //   ),
+                        // ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const ScrollPhysics(),
+                          itemCount: _searchResult.isEmpty
+                              ? value.dataApproval.length
+                              : _searchResult.length,
+                          itemBuilder: (context, index) {
+                            final messageData = value.dataApproval[index];
+                            return MessageBox(
+                                dataApproval: messageData,
+                                isDataApproval: true,
+                                lastMessage: DateTime.now().toString(),
+                                subject: messageData.message!.message!,
+                                displayName: messageData.message!.subject!
+                                    .split("-")
+                                    .last,
+                                read: false,
+                                messageId: messageData.id!);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
                 }
               },
             ),

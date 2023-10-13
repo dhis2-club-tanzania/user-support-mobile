@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:d2_touch/d2_touch.dart';
+import 'package:d2_touch/modules/data/data_store/queries/data_store.query.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +11,8 @@ import 'package:user_support_mobile/constants/d2-repository.dart';
 
 import '/constants/constants.dart';
 import '/models/message_conversation.dart';
-import '/models/user.dart';import '../models/approve_model.dart';
+import '/models/user.dart';
+import '../models/approve_model.dart';
 
 class MessageModel with ChangeNotifier {
   final List<MessageConversation> _allMessageConversation = [];
@@ -42,39 +44,55 @@ class MessageModel with ChangeNotifier {
   MessageConversation get userReply => _reply;
   MessageConversation get fetchedThread => _fetchedThread;
 
+  // new codes
+
   Future<void> get fetchDataApproval async {
-    try {
-      var response = [];
-      var res2;
-      final res = await HttpClient.get('dataStore/dhis2-user-support');
-      // print(res.body);
-      var list = res.body;
+    // try {
+    var response = [];
+    var res2;
+    await d2repository.dataStore.dataStoreQuery
+        .byNamespace('dhis2-user-support')
+        .byKey('DS1688537278902_HdBtVMD7OwE')
+        .download((p0, p1) {
+      var processPercent = (p0.percentage + 200) / 800;
+      var currentSubProcess = p0.message;
 
-      for (var i = 1; i < list.length; i++) {
-        print('dataStore/dhis2-user-support/${list[i]}');
+      print("$processPercent and $currentSubProcess");
+    });
+    // final res = await HttpClient.get('dataStore/dhis2-user-support');
+    DataStoreQuery test =
+        d2repository.dataStore.dataStoreQuery.byNamespace('dhis2-user-support');
+    log(test.namespace.toString());
+    // var res = await d2repository.dataStore.dataStoreQuery.dhisUrl();
+    // log(res.toString());
+    log(test.toString());
+    // var list = res.body;
 
-        if (list[i].toString() != "configurations"){
-          
-        res2 = await HttpClient.get(
-            'dataStore/dhis2-user-support/${list[i].toString()}');
-        response.add(res2.body);
-        }
-      }
-      _dataApproval = response
-          .map((x) => ApproveModel.fromMap(x as Map<String, dynamic>))
-          .toList();
-    } catch (e) {
-      print("error : $e");
-    }
+    //   for (var i = 1; i < list.length; i++) {
+    //     print('dataStore/dhis2-user-support/${list[i]}');
+
+    //     if (list[i].toString() != "configurations"){
+
+    //     res2 = await HttpClient.get(
+    //         'dataStore/dhis2-user-support/${list[i].toString()}');
+    //     response.add(res2.body);
+    //     }
+    //   }
+    //   _dataApproval = response
+    //       .map((x) => ApproveModel.fromMap(x as Map<String, dynamic>))
+    //       .toList();
+    // } catch (e) {
+    //   print("error : $e");
+    // }
 
     notifyListeners();
   }
 
   Future<void> approvalRequest(ApproveModel dataApproval,
       {String? message}) async {
-          var user = await d2repository.userModule.user.getOne();
-  print(user!.username);
-        _isLoading = true;
+    var user = await d2repository.userModule.user.getOne();
+    print(user!.username);
+    _isLoading = true;
     var id = dataApproval.id!.substring(0, 15);
     Dio dio = Dio();
 
@@ -83,38 +101,40 @@ class MessageModel with ChangeNotifier {
     }
 
     print(id);
-    final res = await
-      HttpClient.get(
-          'messageConversations?messageType=TICKET&filter=subject:ilike:${id}');
-  
+    final res = await HttpClient.get(
+        'messageConversations?messageType=TICKET&filter=subject:ilike:${id}');
 
     var convId = res.body['messageConversations'][0]['id'].toString();
 
-    if(message==null){
-print('This is inside if statement');
+    if (message == null) {
+      print('This is inside if statement');
       final response = await Future.wait([
         HttpClient.post(dataApproval.url!, dataApproval.payload!.toMap()),
         http.delete(
-            Uri.parse("https://tland.dhis2.udsm.ac.tz/api/dataStore/dhis2-user-support/${dataApproval.id}"),
+            Uri.parse(
+                "https://tland.dhis2.udsm.ac.tz/api/dataStore/dhis2-user-support/${dataApproval.id}"),
             headers: <String, String>{
-              'Authorization': createBasicAuthToken(user.username, user.password)
+              'Authorization':
+                  createBasicAuthToken(user.username, user.password)
             }),
         HttpClient.post('messageConversations/${convId}',
             'Ombi lako limeshughulikiwa karibu!'),
         HttpClient.post(
-            'messageConversations/${convId}/status?messageConversationStatus=SOLVED', ''),
+            'messageConversations/${convId}/status?messageConversationStatus=SOLVED',
+            ''),
       ]).whenComplete(() => _isLoading = false);
-    }else{
-print('This is inside else');
+    } else {
+      print('This is inside else');
 
       final response = await Future.wait([
         http.delete(
-            Uri.parse("https://tland.dhis2.udsm.ac.tz/api/dataStore/dhis2-user-support/${dataApproval.id}"),
+            Uri.parse(
+                "https://tland.dhis2.udsm.ac.tz/api/dataStore/dhis2-user-support/${dataApproval.id}"),
             headers: <String, String>{
-              'Authorization': createBasicAuthToken(user.username, user.password)
+              'Authorization':
+                  createBasicAuthToken(user.username, user.password)
             }),
-        HttpClient.post('messageConversations/${convId}',
-            message),
+        HttpClient.post('messageConversations/${convId}', message),
         HttpClient.post(
             'messageConversations/${convId}/status?messageConversationStatus=SOLVED',
             '')
@@ -123,7 +143,6 @@ print('This is inside else');
       inspect(response[1]);
       inspect(response[2].toString());
     }
-
 
     // inspect(res[0].body);
     // inspect(response.first);
