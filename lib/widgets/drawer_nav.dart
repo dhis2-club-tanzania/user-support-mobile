@@ -1,9 +1,9 @@
 import 'package:d2_touch/d2_touch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/constants/d2-repository.dart';
-import 'package:user_support_mobile/pages/data_approval_screen.dart';
-import 'package:user_support_mobile/pages/login_page.dart';
+import '../constants/d2-repository.dart';
+import '../pages/data_approval_screen.dart';
+import '../pages/login_page.dart';
 
 import '../providers/provider.dart';
 import '/pages/inbox_page.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:user_support_mobile/pages/home_page.dart';
+import 'pages/home_page.dart';
 import '../pages/compose_page.dart';
 import '../pages/compose_painter.dart';
 import '../pages/inbox_page.dart';

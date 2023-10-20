@@ -1,4 +1,4 @@
-import 'package:user_support_mobile/models/access.dart';
+import 'access.dart';
 
 import 'sharing.dart';
 import 'user.dart';

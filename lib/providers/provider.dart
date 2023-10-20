@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:d2_touch/shared/utilities/http_client.util.dart';
-import 'package:user_support_mobile/constants/d2-repository.dart';
+import '../constants/d2-repository.dart';
 
 import '/constants/constants.dart';
 import '/models/message_conversation.dart';
@@ -47,43 +47,34 @@ class MessageModel with ChangeNotifier {
   // new codes
 
   Future<void> get fetchDataApproval async {
-    // try {
-    var response = [];
-    var res2;
-    await d2repository.dataStore.dataStoreQuery
-        .byNamespace('dhis2-user-support')
-        .byKey('DS1688537278902_HdBtVMD7OwE')
-        .download((p0, p1) {
-      var processPercent = (p0.percentage + 200) / 800;
-      var currentSubProcess = p0.message;
+    try {
+      var response = [];
+      var res2;
 
-      print("$processPercent and $currentSubProcess");
-    });
-    // final res = await HttpClient.get('dataStore/dhis2-user-support');
-    DataStoreQuery test =
-        d2repository.dataStore.dataStoreQuery.byNamespace('dhis2-user-support');
-    log(test.namespace.toString());
-    // var res = await d2repository.dataStore.dataStoreQuery.dhisUrl();
-    // log(res.toString());
-    log(test.toString());
-    // var list = res.body;
+      final res =
+          await d2repository.httpClient.get('dataStore/dhis2-user-support');
+      DataStoreQuery test = d2repository.dataStore.dataStoreQuery
+          .byNamespace('dhis2-user-support');
+      log(test.namespace.toString());
+      // log(res.toString());
+      log(test.toString());
+      var list = res.body;
 
-    //   for (var i = 1; i < list.length; i++) {
-    //     print('dataStore/dhis2-user-support/${list[i]}');
+      for (var i = 1; i < list.length; i++) {
+        print('dataStore/dhis2-user-support/${list[i]}');
 
-    //     if (list[i].toString() != "configurations"){
-
-    //     res2 = await HttpClient.get(
-    //         'dataStore/dhis2-user-support/${list[i].toString()}');
-    //     response.add(res2.body);
-    //     }
-    //   }
-    //   _dataApproval = response
-    //       .map((x) => ApproveModel.fromMap(x as Map<String, dynamic>))
-    //       .toList();
-    // } catch (e) {
-    //   print("error : $e");
-    // }
+        if (list[i].toString() != "configurations") {
+          res2 = await HttpClient.get(
+              'dataStore/dhis2-user-support/${list[i].toString()}');
+          response.add(res2.body);
+        }
+      }
+      _dataApproval = response
+          .map((x) => ApproveModel.fromMap(x as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print("error : $e");
+    }
 
     notifyListeners();
   }

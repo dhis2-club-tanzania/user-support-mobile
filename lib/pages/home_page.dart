@@ -1,9 +1,13 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:user_support_mobile/constants/constants.dart';
-import 'package:user_support_mobile/constants/d2-repository.dart';
+import 'package:get/get.dart';
+import '../models/request.dart';
+import '../controller/controllers.dart';
+import '../constants/constants.dart';
+import '../constants/d2-repository.dart';
+
+import 'organisation_unit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,6 +19,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final HomeController homeController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,13 +219,14 @@ class MyWrapView extends StatelessWidget {
   }
 
   getRoute(String item) {
-    log(jsonEncode(d2repository.organisationUnitModule.organisationUnit));
-    return item;
+    if (item.contains("Organisation")) Get.to(() => OrgUnitPage());
   }
 
-  getData(){
-    // key form a namespace
-
+  getData() async {
+    // key from a namespace
+    final res =
+        await d2repository.httpClient.get('dataStore/dhis2-user-support');
+    print(jsonEncode(res.body));
 
     // org unit level
 
@@ -228,7 +235,7 @@ class MyWrapView extends StatelessWidget {
     // datasets
 
     // programs
-    
+
     return null;
   }
 }

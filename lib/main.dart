@@ -2,10 +2,11 @@ import 'package:d2_touch/d2_touch.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:user_support_mobile/constants/d2-repository.dart';
-import 'package:user_support_mobile/modules/module-authentication/login/login-page.dart';
-import 'package:user_support_mobile/pages/home_page.dart';
-import 'package:user_support_mobile/routes_generator.dart';
+import 'app_binding.dart';
+import 'constants/d2-repository.dart';
+import 'modules/module-authentication/login/login-page.dart';
+import 'pages/home_page.dart';
+import 'routes_generator.dart';
 
 import 'main.reflectable.dart';
 
@@ -58,8 +59,10 @@ class _MyAppState extends State<MyApp> {
             brightness: Brightness.light),
         // fontFamily: 'Montserrat'
       ),
-      initialRoute: widget.authenticated ? HomePage.routeName : HomeLogin.routeName,
+      initialRoute:
+          widget.authenticated ? HomePage.routeName : HomeLogin.routeName,
       onGenerateRoute: RoutesGenerator.generateRoute,
+      initialBinding: AppBindings(),
     );
   }
 }

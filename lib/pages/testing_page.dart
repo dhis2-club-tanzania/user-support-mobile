@@ -206,7 +206,6 @@ class _MyStatelessWidgetState extends State<MyStatelessWidget> {
                                         controller: _textEditingController1,
                                         onChanged: (query) {
                                           // fetchedData
-                                       
                                         },
                                         decoration: const InputDecoration(
                                           hintText: "Add New Participant",

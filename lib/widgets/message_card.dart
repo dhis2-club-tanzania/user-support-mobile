@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/pages/data_approval_detail.dart';
+import '../pages/data_approval_detail.dart';
 
-import 'package:user_support_mobile/pages/testing_page.dart';
-import 'package:user_support_mobile/providers/provider.dart';
+import '../pages/testing_page.dart';
+import '../providers/provider.dart';
 
 import '../models/approve_model.dart';
 
@@ -29,7 +29,6 @@ class MessageBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
     final fetchedData = Provider.of<MessageModel>(context);
     final Size size = MediaQuery.of(context).size;
     return GestureDetector(
@@ -95,8 +94,7 @@ class MessageBox extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style: TextStyle(
-                        fontWeight:
-                            read ? FontWeight.w400 : FontWeight.bold,
+                        fontWeight: read ? FontWeight.w400 : FontWeight.bold,
                         color: Colors.black87,
                         fontSize: 15.5,
                       ),

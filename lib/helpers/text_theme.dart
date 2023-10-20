@@ -14,7 +14,10 @@ final TextTheme textTheme = TextTheme(
     fontSize: 34,
     fontWeight: FontWeight.w400,
   ),
-  headlineSmall: GoogleFonts.lato(fontSize: 24, fontWeight: FontWeight.w400),
+  headlineSmall: GoogleFonts.lato(
+    fontSize: 24,
+    fontWeight: FontWeight.w400,
+  ),
   titleLarge: GoogleFonts.lato(
     fontSize: 20,
     fontWeight: FontWeight.w500,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart' hide NavigationDrawer;
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:user_support_mobile/pages/compose_painter.dart';
-import 'package:user_support_mobile/widgets/show_loading.dart';
+import 'compose_painter.dart';
+import '../widgets/show_loading.dart';
 
 import '../models/message_conversation.dart';
 import '../pages/compose_page.dart';

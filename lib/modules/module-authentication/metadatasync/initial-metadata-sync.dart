@@ -75,14 +75,9 @@ class _HomeMetadataSyncState extends State<HomeMetadataSync>
     });
 
     try {
-      List<String> keys = [
-        'DS1688537278902_HdBtVMD7OwE',
-        'DS1692022027674_rbjpb3doxIG',
-        'DS1692022027674_rbjpb3doxIG',
-        'DS1692022027674_rbjpb3doxIG',
-        'DS1692022027674_rbjpb3doxIG',
-        'DS1688537339513_VN8Jjz61jOE'
-      ]; // Add your keys here
+      var response =
+          await d2repository.httpClient.get('dataStore/dhis2-user-support');
+      List<String> keys = response.body;
 
       for (String key in keys) {
         await d2repository.dataStore.dataStoreQuery

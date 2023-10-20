@@ -1,4 +1,4 @@
-import 'package:user_support_mobile/models/user_messages.dart';
+import 'user_messages.dart';
 
 import 'access.dart';
 import 'message.dart';
