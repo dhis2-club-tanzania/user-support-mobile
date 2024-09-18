@@ -47,125 +47,125 @@ class _InboxPageState extends State<InboxPage> {
 
                   return value.error
                       ? Text(
-                          'Oops Somthing is wrong ${value.errorMessage}',
-                          textAlign: TextAlign.center,
-                        )
+                    'Oops Somthing is wrong ${value.errorMessage}',
+                    textAlign: TextAlign.center,
+                  )
                       : Container(
-                          width: size.width * 0.95,
-                          child: ListView(
-                            // crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              searchBarWidget(context, value),
-                              const Padding(
-                                padding: EdgeInsets.only(left: 8.0, top: 8.0),
-                                child: Text(
-                                  'Inbox',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: ScrollPhysics(),
-                                itemCount: _searchResult.isEmpty
-                                    ? value.privateMessages.length
-                                    : _searchResult.length,
-                                itemBuilder: (context, index) {
-                                  var messageData = _searchResult.isEmpty
-                                      ? value.privateMessages[index]
-                                      : _searchResult[index];
-                                  return Slidable(
-  // Replacing 'actionPane' with 'startActionPane' and 'endActionPane'
-  startActionPane: ActionPane(
-    motion: const DrawerMotion(),
-    extentRatio: 0.25,
-    children: <Widget>[
-      SlidableAction(
-        onPressed: (context) {
-          // Handle approve action
-        },
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        icon: Icons.approval,
-        label: 'Approve',
-      ),
-    ],
-  ),
-  endActionPane: ActionPane(
-    motion: const DrawerMotion(),
-    extentRatio: 0.25,
-    children: <Widget>[
-      SlidableAction(
-        onPressed: (context) {
-          // Handle reject action
-        },
-        backgroundColor: Colors.black45,
-        foregroundColor: Colors.white,
-        icon: Icons.block,
-        label: 'Reject',
-      ),
-      SlidableAction(
-        onPressed: (context) {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: const Text('Are you sure?'),
-                content: const Text('Do you want to delete?'),
-                actions: <Widget>[
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    },
-                    child: const Text('No'),
-                  ),
-                  OutlinedButton(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('deleted message'),
-                          duration: const Duration(seconds: 2),
-                          action: SnackBarAction(
-                            label: 'UNDO',
-                            onPressed: () {},
+                    width: size.width * 0.95,
+                    child: ListView(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        searchBarWidget(context, value),
+                        const Padding(
+                          padding: EdgeInsets.only(left: 8.0, top: 8.0),
+                          child: Text(
+                            'Inbox',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500),
                           ),
                         ),
-                      );
-                      value.deleteMessage(value.privateMessages[index].id);
-                      Navigator.of(context).pop(true);
-                    },
-                    child: const Text('Yes'),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-        backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
-        icon: Icons.delete,
-        label: 'Delete',
-      ),
-    ],
-  ),
-  child: MessageBox(
-    lastMessage: messageData.lastMessage,
-    subject: messageData.subject,
-    displayName: messageData.lastSender!.displayName,
-    read: value.privateMessages[index].read,
-    messageId: messageData.id,
-  ),
-);
-                                },
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: ScrollPhysics(),
+                          itemCount: _searchResult.isEmpty
+                              ? value.privateMessages.length
+                              : _searchResult.length,
+                          itemBuilder: (context, index) {
+                            var messageData = _searchResult.isEmpty
+                                ? value.privateMessages[index]
+                                : _searchResult[index];
+                            return Slidable(
+                              // Replacing 'actionPane' with 'startActionPane' and 'endActionPane'
+                              startActionPane: ActionPane(
+                                motion: const DrawerMotion(),
+                                extentRatio: 0.25,
+                                children: <Widget>[
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      // Handle approve action
+                                    },
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.approval,
+                                    label: 'Approve',
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        );
+                              endActionPane: ActionPane(
+                                motion: const DrawerMotion(),
+                                extentRatio: 0.25,
+                                children: <Widget>[
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      // Handle reject action
+                                    },
+                                    backgroundColor: Colors.black45,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.block,
+                                    label: 'Reject',
+                                  ),
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          return AlertDialog(
+                                            title: const Text('Are you sure?'),
+                                            content: const Text('Do you want to delete?'),
+                                            actions: <Widget>[
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop(false);
+                                                },
+                                                child: const Text('No'),
+                                              ),
+                                              OutlinedButton(
+                                                onPressed: () {
+                                                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    SnackBar(
+                                                      content: const Text('deleted message'),
+                                                      duration: const Duration(seconds: 2),
+                                                      action: SnackBarAction(
+                                                        label: 'UNDO',
+                                                        onPressed: () {},
+                                                      ),
+                                                    ),
+                                                  );
+                                                  value.deleteMessage(value.privateMessages[index].id);
+                                                  Navigator.of(context).pop(true);
+                                                },
+                                                child: const Text('Yes'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: 'Delete',
+                                  ),
+                                ],
+                              ),
+                              child: MessageBox(
+                                lastMessage: messageData.lastMessage,
+                                subject: messageData.subject,
+                                displayName: messageData.lastSender!.displayName,
+                                read: value.privateMessages[index].read,
+                                messageId: messageData.id,
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  );
                 }
               },
             ),

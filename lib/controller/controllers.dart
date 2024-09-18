@@ -5,13 +5,14 @@ import '../constants/d2-repository.dart';
 import '../models/approve_model.dart';
 import '../models/org_unit_model/org_unit_model.dart';
 
+
 class HomeController extends GetxController {
   Future<List<ApproveModel>> fetchData() async {
     try {
       var response = <dynamic>[];
 
       final res =
-          await d2repository.httpClient.get('dataStore/dhis2-user-support');
+      await d2repository.httpClient.get('dataStore/dhis2-user-support');
 
       var list = res.body;
 
@@ -32,7 +33,6 @@ class HomeController extends GetxController {
       return dataApprovalList;
     } catch (e) {
       print("error message: $e");
-      // You may want to handle the error gracefully and return an empty list or throw an exception
       return [];
     }
   }
@@ -40,6 +40,7 @@ class HomeController extends GetxController {
 
 class DatastoreController extends GetxController {
   var dataApproval = <ApproveModel>[].obs;
+  var userApproval = <UserModel>[].obs; // Added for UserModel
   var isLoading = false.obs;
   var currentPage = 1;
 
@@ -55,7 +56,7 @@ class DatastoreController extends GetxController {
     try {
       isLoading.value = true;
       final res =
-          await d2repository.httpClient.get('dataStore/dhis2-user-support');
+      await d2repository.httpClient.get('dataStore/dhis2-user-support');
 
       var list = res.body;
 
@@ -69,26 +70,31 @@ class DatastoreController extends GetxController {
           // Parse the JSON response
           final jsonResponse = res2.body;
 
-          // Ensure the response is a List if it's an array, or a Map if it's an object
           if (jsonResponse is List) {
-            // If it's a List, you can map it directly
+            // If it's a List, map it to both ApproveModel and UserModel if applicable
             dataApproval.addAll(
                 jsonResponse.map((x) => ApproveModel.fromMap(x)).toList());
+
+            userApproval.addAll(
+                jsonResponse.map((x) => UserModel.fromMap(x)).toList());
           } else if (jsonResponse is Map) {
             print('dataStore/dhis2-user-support/${list[i]}');
-            // If it's a Map, you can add it directly or map a specific key if needed
+
+            // Add to ApproveModel list
             dataApproval.add(
                 ApproveModel.fromMap(jsonResponse as Map<String, dynamic>));
+
+            // Add to UserModel list
+            userApproval.add(
+                UserModel.fromMap(jsonResponse));
           }
         }
       }
 
       isLoading.value = false;
-      // currentPage++;
-      // Increment the page for the next pagination request.
     } catch (e) {
       print("error message: $e");
-      // You may want to handle the error gracefully.
+      isLoading.value = false;
     }
   }
 }
@@ -108,11 +114,9 @@ class OrganizationUnitController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Replace the following with your actual API call to fetch organization units
       final apiResponse = await d2repository.httpClient.get(
           "organisationUnits.json?page=$currentPage&pageSize=50&filter=level:eq:4&fields=id,name,dataSets~size,programs~size,closedDate,parent[id,name,level,parent[id,name,level]]&filter=path:ilike:m0frOspS7JY");
       organizationUnits.value = OrgUnitModel.fromJson(apiResponse.body);
-      
 
       isLoading.value = false;
       currentPage++;

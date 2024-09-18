@@ -62,8 +62,8 @@ class _PageContentState extends State<PageContent> {
                   size: 25,
                 ),
                 onPressed: () async {
-                  //  await context.read<MessageModel>().fetchDataApproval;
-                  Navigator.of(context).pop();
+                  //await context.read<MessageModel>().fetchDataApproval;
+                  context.go('/home/dataset');
                 },
               ),
             ),
@@ -128,7 +128,7 @@ class _PageContentState extends State<PageContent> {
                               child: OutlinedButton(
                                 style: ButtonStyle(
                                   backgroundColor:
-                                      MaterialStateProperty.all(Colors.red),
+                                  MaterialStateProperty.all(Colors.red),
                                 ),
                                 onPressed: () {
                                   showDataAlert(context);
@@ -277,9 +277,9 @@ class _PageContentState extends State<PageContent> {
                           // });
                         },
                         style: ElevatedButton.styleFrom(
-                            // primary: Colors.black,
-                            // fixedSize: Size(250, 50),
-                            ),
+                          // primary: Colors.black,
+                          // fixedSize: Size(250, 50),
+                        ),
                         child: Text(
                           "Confirm",
                         ),

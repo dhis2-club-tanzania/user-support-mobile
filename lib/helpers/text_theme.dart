@@ -2,51 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final TextTheme textTheme = TextTheme(
-  displayLarge: GoogleFonts.lato(
+  displayLarge: GoogleFonts.rubik(
     fontSize: 97,
     fontWeight: FontWeight.w300,
   ),
-  displayMedium: GoogleFonts.lato(
+  displayMedium: GoogleFonts.rubik(
     fontSize: 61,
     fontWeight: FontWeight.w300,
   ),
-  displaySmall: GoogleFonts.lato(
+  displaySmall: GoogleFonts.rubik(
     fontSize: 34,
     fontWeight: FontWeight.w400,
   ),
-  headlineSmall: GoogleFonts.lato(
+  headlineSmall: GoogleFonts.rubik(
     fontSize: 24,
     fontWeight: FontWeight.w400,
   ),
-  titleLarge: GoogleFonts.lato(
+  titleLarge: GoogleFonts.rubik(
     fontSize: 20,
     fontWeight: FontWeight.w500,
   ),
-  titleMedium: GoogleFonts.lato(
+  titleMedium: GoogleFonts.rubik(
     fontSize: 16,
     fontWeight: FontWeight.w400,
   ),
-  titleSmall: GoogleFonts.lato(
+  titleSmall: GoogleFonts.rubik(
     fontSize: 14,
     fontWeight: FontWeight.w500,
   ),
-  bodyLarge: GoogleFonts.lato(
+  bodyLarge: GoogleFonts.rubik(
     fontSize: 16,
     fontWeight: FontWeight.w400,
   ),
-  bodyMedium: GoogleFonts.lato(
+  bodyMedium: GoogleFonts.rubik(
     fontSize: 14,
     fontWeight: FontWeight.w400,
   ),
-  labelLarge: GoogleFonts.lato(
+  labelLarge: GoogleFonts.rubik(
     fontSize: 14,
     fontWeight: FontWeight.w500,
   ),
-  bodySmall: GoogleFonts.lato(
+  bodySmall: GoogleFonts.rubik(
     fontSize: 12,
     fontWeight: FontWeight.w400,
   ),
-  labelSmall: GoogleFonts.lato(
+  labelSmall: GoogleFonts.rubik(
     fontSize: 10,
     fontWeight: FontWeight.w400,
   ),

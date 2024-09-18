@@ -18,9 +18,15 @@ dependencies:
   google_fonts: ^4.0.4
   http: ^0.13.3
   shimmer: ^3.0.0
+<<<<<<< HEAD
+  d2_touch: 1.1.6
+  dio: ^5.4.3+1
+  draggable_scrollbar: ^0.1.0
+=======
   d2_touch: 
     path: ../d2-touch
   dio: ^5.4.3+1
+>>>>>>> upstream/dev
   freezed_annotation: ^2.4.1
   intl: ^0.18.1
   provider: ^6.0.3
@@ -33,6 +39,10 @@ dependencies:
   json_annotation: ^4.8.1
   flutter_slidable: ^3.1.0
   go_router: ^14.2.1
+<<<<<<< HEAD
+  flutter_html: ^3.0.0-beta.2
+=======
+>>>>>>> upstream/dev
 
 dev_dependencies:
   flutter_test:

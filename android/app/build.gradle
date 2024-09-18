@@ -1,3 +1,12 @@
+<<<<<<< HEAD
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+=======
+>>>>>>> upstream/dev
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -6,10 +15,14 @@ if (localPropertiesFile.exists()) {
     }
 }
 
+<<<<<<< HEAD
+
+=======
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
+>>>>>>> upstream/dev
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
@@ -21,9 +34,12 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+<<<<<<< HEAD
+=======
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+>>>>>>> upstream/dev
 
 android {
     compileSdkVersion 34
@@ -47,6 +63,13 @@ android {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
         }
+<<<<<<< HEAD
+        debug {
+            debuggable true
+            // Optionally add other debug-specific configurations
+        }
+=======
+>>>>>>> upstream/dev
     }
 }
 
@@ -54,6 +77,9 @@ flutter {
     source '../..'
 }
 
+<<<<<<< HEAD
+=======
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
+>>>>>>> upstream/dev

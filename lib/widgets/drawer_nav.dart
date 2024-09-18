@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:user_support_mobile/pages/data_approval_screen.dart';
+import 'package:user_support_mobile/pages/user_approval_screen.dart';
 import 'package:user_support_mobile/pages/login_page.dart';
 
 import '../providers/provider.dart';
@@ -29,7 +30,7 @@ class NavigationDrawer extends StatelessWidget {
                   shape: BoxShape.rectangle,
                   border: Border(
                       bottom:
-                          BorderSide(color: Colors.grey.shade500, width: .2))),
+                      BorderSide(color: Colors.grey.shade500, width: .2))),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
@@ -63,7 +64,7 @@ class NavigationDrawer extends StatelessWidget {
                 .length,
             Icons.inbox,
             Colors.green.shade200,
-            () => const InboxPage(),
+                () => const InboxPage(),
           ),
           _listTileWidget(
               context,
@@ -73,7 +74,7 @@ class NavigationDrawer extends StatelessWidget {
                   .length,
               Icons.verified_sharp,
               Colors.blue.shade200,
-              () => const ValidationPage()),
+                  () => const ValidationPage()),
           _listTileWidget(
               context,
               'Ticket',
@@ -82,7 +83,7 @@ class NavigationDrawer extends StatelessWidget {
                   .length,
               Icons.scanner,
               Colors.red.shade200,
-              () => const TicketPage()),
+                  () => const TicketPage()),
           _listTileWidget(
               context,
               'System',
@@ -91,7 +92,7 @@ class NavigationDrawer extends StatelessWidget {
                   .length,
               Icons.system_update,
               Colors.pinkAccent,
-              () => const SystemPage()),
+                  () => const SystemPage()),
           _listTileWidget(
               context,
               'Data Approval',
@@ -100,8 +101,18 @@ class NavigationDrawer extends StatelessWidget {
                   .length,
               Icons.done,
               Colors.pinkAccent,
-              () => const DataApprovalScreen(),
+                  () => const DataApprovalScreen(),
               isDataApproval: true),
+          _listTileWidget(
+              context,
+              'User Approval',
+              fetchedData.systemMessage
+                  .where((product) => product.read == false)
+                  .length,
+              Icons.done,
+              Colors.pinkAccent,
+                  () => const UserApprovalScreen(),
+              isUserApproval: true),
           TextButton.icon(
               onPressed: () async {
                 var logOut = await D2Touch.logOut();
@@ -118,7 +129,7 @@ class NavigationDrawer extends StatelessWidget {
 
   Widget _listTileWidget(BuildContext context, String title, int count,
       IconData icon, Color? color, Widget Function() page,
-      {bool? isDataApproval = false}) {
+      {bool? isDataApproval = false, bool isUserApproval = false}) {
     return ListTile(
         title: Text(title),
         leading: Icon(icon),

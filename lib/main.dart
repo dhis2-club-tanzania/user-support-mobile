@@ -1,3 +1,4 @@
+
 import 'dart:core';
 
 import 'package:d2_touch/d2_touch.dart';
@@ -19,7 +20,7 @@ void main() async {
   // for development purposes
   // await d2repository.authModule.logIn(
   //     url: 'http://41.59.227.69/tland-upgrade',
-  //     username: 'wgoodluck',
+  //     username: 'pt2024',
   //     password: 'Hmis@2024');
 
   bool isAuth = await d2repository.authModule.isAuthenticated();
@@ -50,17 +51,18 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<MessageModel>(
-        create: (_) => MessageModel(),
-        child: MaterialApp.router(
-          routerConfig: router,
-          debugShowCheckedModeBanner: false,
-          title: 'User Support App',
-          theme: ThemeData(
-            useMaterial3: false,
-            textTheme: textTheme,
-            primaryColor: const Color(0xFF1D5288),
-          ),
-          builder: EasyLoading.init(),
-        ));
+          create: (_) => MessageModel(),
+          child: MaterialApp.router(
+            routerConfig: router,
+            debugShowCheckedModeBanner: false,
+            title: 'User Support App',
+            theme: ThemeData(
+              useMaterial3: false,
+              textTheme: textTheme,
+              primaryColor: const Color(0xFF1D5288),
+            ),
+            builder: EasyLoading.init(),
+          ));
   }
 }
+
